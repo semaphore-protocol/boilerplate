@@ -1,0 +1,50 @@
+{
+    "name": "semaphore-boilerplate",
+    "version": "1.0.0",
+    "description": "A simple Next.js/Hardhat privacy application with Semaphore.",
+    "license": "GPL-3.0",
+    "private": true,
+    "scripts": {
+        "dev": "npm-run-all -p next:dev hardhat:node",
+        "next:dev": "next dev",
+        "hardhat:node": "hardhat node",
+        "compile": "hardhat compile",
+        "test:contracts": "hardhat test",
+        "report-gas": "REPORT_GAS=true hardhat test",
+        "deploy:greeters": "hardhat deploy:greeters",
+        "start": "next start",
+        "build": "next build",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@metamask/detect-provider": "^1.2.0",
+        "@zk-kit/identity": "^1.4.1",
+        "@zk-kit/protocols": "^1.5.0",
+        "next": "11.1.2",
+        "react": "17.0.2",
+        "react-dom": "17.0.2"
+    },
+    "devDependencies": {
+        "@appliedzkp/semaphore-contracts": "^0.1.0",
+        "@nomiclabs/hardhat-ethers": "^2.0.4",
+        "@nomiclabs/hardhat-waffle": "^2.0.2",
+        "@openzeppelin/contracts": "^4.5.0",
+        "@types/chai": "^4.3.0",
+        "@types/mocha": "^9.1.0",
+        "@types/node": "17.0.17",
+        "@types/react": "17.0.39",
+        "@zk-kit/incremental-merkle-tree": "^0.4.2",
+        "chai": "^4.3.5",
+        "circomlib": "0.0.8",
+        "dotenv": "^16.0.0",
+        "eslint": "8.8.0",
+        "eslint-config-next": "12.0.10",
+        "ethereum-waffle": "^3.4.0",
+        "ethers": "^5.5.3",
+        "hardhat": "^2.8.3",
+        "hardhat-gas-reporter": "^1.0.7",
+        "npm-run-all": "^4.1.5",
+        "ts-node": "^10.4.0",
+        "typescript": "4.5.5"
+    }
+}

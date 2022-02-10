@@ -1,2 +1,3 @@
-# semaphore-boilerplate
-A simple Next.js/Hardhat decentralized application with Semaphore. 
+# Semaphore Boilerplate
+
+A simple Next.js/Hardhat privacy application with Semaphore.
