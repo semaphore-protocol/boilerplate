@@ -52,7 +52,7 @@ yarn dev
 #### 3. Deploy the contract
 
 ```bash
-yarn deploy
+yarn deploy --network localhost
 ```
 
 #### 4. Open the app
