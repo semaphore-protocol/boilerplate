@@ -9,9 +9,9 @@
         "next:dev": "next dev",
         "hardhat:node": "hardhat node",
         "compile": "hardhat compile",
+        "deploy": "hardhat deploy:greeters",
         "test:contracts": "hardhat test",
         "report-gas": "REPORT_GAS=true hardhat test",
-        "deploy:greeters": "hardhat deploy:greeters",
         "start": "next start",
         "build": "next build",
         "lint": "next lint"
