@@ -26,8 +26,6 @@ export default function Home() {
             BigInt("19706772421195815860043593475869058320994241404138740034486179990871964981523")
         ]
 
-        console.log(identityCommitment)
-
         const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, identityCommitment)
         const witness = Semaphore.genWitness(
             identity.getTrapdoor(),
