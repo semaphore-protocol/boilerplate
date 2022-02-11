@@ -3,10 +3,15 @@ import { Strategy, ZkIdentity } from "@zk-kit/identity"
 import { Semaphore, generateMerkleProof } from "@zk-kit/protocols"
 import { providers } from "ethers"
 import Head from "next/head"
+import React from "react"
 import styles from "../styles/Home.module.css"
 
 export default function Home() {
+    const [logs, setLogs] = React.useState("Connect your wallet and greet!")
+
     async function greet() {
+        setLogs("Creating your Semaphore identity...")
+
         const provider = (await detectEthereumProvider()) as any
 
         await provider.request({ method: "eth_requestAccounts" })
@@ -18,8 +23,6 @@ export default function Home() {
         const identity = new ZkIdentity(Strategy.MESSAGE, message)
         const identityCommitment = identity.genIdentityCommitment()
 
-        const greeting = "Hello world"
-
         const identityCommitments = [
             BigInt("9426253249246138013650573474062059446203468399013007463704855436559640562175"),
             BigInt("6200634377081441056179822649025268043304989981899916286941956069781421654881"),
@@ -27,6 +30,11 @@ export default function Home() {
         ]
 
         const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, identityCommitment)
+
+        setLogs("Creating your Semaphore proof...")
+
+        const greeting = "Hello world"
+
         const witness = Semaphore.genWitness(
             identity.getTrapdoor(),
             identity.getNullifier(),
@@ -40,7 +48,7 @@ export default function Home() {
 
         const nullifierHash = Semaphore.genNullifierHash(merkleProof.root, identity.getNullifier())
 
-        await fetch("/api/greet", {
+        const response = await fetch("/api/greet", {
             method: "POST",
             body: JSON.stringify({
                 greeting,
@@ -48,6 +56,14 @@ export default function Home() {
                 solidityProof: solidityProof.map((v) => v.toString())
             })
         })
+
+        if (response.status === 500) {
+            const errorMessage = await response.text()
+
+            setLogs(errorMessage)
+        } else {
+            setLogs("Your anonymous greeting is onchain :)")
+        }
     }
 
     return (
@@ -61,18 +77,9 @@ export default function Home() {
             <main className={styles.main}>
                 <h1 className={styles.title}>Greetings</h1>
 
-                <p className={styles.description}>
-                    Connect your{" "}
-                    <a
-                        href="https://hardhat.org/hardhat-network/reference/#accounts"
-                        className={styles.link}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        Hardhat wallet
-                    </a>{" "}
-                    and greet :)
-                </p>
+                <p className={styles.description}>A simple Next.js/Hardhat privacy application with Semaphore.</p>
+
+                <div className={styles.logs}>{logs}</div>
 
                 <div onClick={() => greet()} className={styles.button}>
                     Greet

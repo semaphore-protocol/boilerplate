@@ -14,7 +14,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const contractOwner = contract.connect(provider.getSigner())
 
-    await contractOwner.greet(greeting, nullifierHash, solidityProof)
+    try {
+        await contractOwner.greet(greeting, nullifierHash, solidityProof)
 
-    res.status(200).end()
+        res.status(200).end()
+    } catch (error: any) {
+        const { message } = JSON.parse(error.body).error
+        const reason = message.substring(message.indexOf("'") + 1, message.lastIndexOf("'"))
+
+        res.status(500).send(reason || "Unknown error!")
+    }
 }

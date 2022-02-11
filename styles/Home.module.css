@@ -12,6 +12,15 @@
     align-items: center;
 }
 
+.logs {
+    color: #A3E5BA;
+    font-weight: bold;
+    margin-top: 0;
+    line-height: 1.5;
+    font-size: 1.2rem;
+    height: 70px;
+}
+
 .button {
     padding: 10px 16px;
     border: 1px solid white;
@@ -22,7 +31,7 @@
 }
 
 .button:hover {
-    background-color: rgba(0, 0, 0, .08);
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
 .button:active {
@@ -42,7 +51,7 @@
 }
 
 .description {
-    margin: 4rem 0;
+    margin: 2rem 0;
     line-height: 1.5;
     font-size: 1.5rem;
 }
