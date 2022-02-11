@@ -18,6 +18,8 @@
     </a>
 </p>
 
+The code can be divided into contracts, frontend and backend. [Greeters.sol](https://github.com/cedoor/semaphore-boilerplate/blob/main/contracts/Greeters.sol) contains the root of an offchain Merkle tree to represent the greeters (tree leaves), i.e. the identity commitments generated using the first 3 Ethereum accounts on the Hardhat testing wallet. The contract then only allows these accounts to greet.
+
 ## 🛠 Install
 
 Clone this repository and install the dependencies:
@@ -30,9 +32,12 @@ yarn
 
 ## 📜 Usage
 
-#### 1. Install Metamask and connect the Hardhat wallet.
+#### 1. Compile & test the contract
 
-You can find the mnemonic phrase [here](https://hardhat.org/hardhat-network/reference/#accounts).
+```bash
+yarn compile
+yarn test
+```
 
 #### 2. Run Next.js server & Hardhat network
 
@@ -40,12 +45,22 @@ You can find the mnemonic phrase [here](https://hardhat.org/hardhat-network/refe
 yarn dev
 ```
 
-#### 3. Deploy contracts
+#### 3. Deploy the contract
 
 ```bash
 yarn deploy
 ```
 
-#### 4. Try to greet
+#### 4. Open the app
 
-You can open the web app on http://localhost:3000. 
+You can open the web app on http://localhost:3000.
+
+#### 5. Install Metamask and connect the Hardhat wallet
+
+You can find the mnemonic phrase [here](https://hardhat.org/hardhat-network/reference/#accounts).
+
+#### 6. Create your proof
+
+You must use one of the first 3 Hardhat accounts.
+
+
