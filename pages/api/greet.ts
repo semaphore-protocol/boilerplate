@@ -1,4 +1,4 @@
-import Greeter from "artifacts/contracts/Greeter.sol/Greeters.json"
+import Greeter from "artifacts/contracts/Greeters.sol/Greeters.json"
 import { Contract, providers } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
 

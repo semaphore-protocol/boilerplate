@@ -3,7 +3,7 @@ import "@nomiclabs/hardhat-waffle"
 import * as dotenv from "dotenv"
 import "hardhat-gas-reporter"
 import { HardhatUserConfig } from "hardhat/config"
-import "./tasks/deploy-greeters"
+import "./tasks/deploy"
 
 dotenv.config()
 

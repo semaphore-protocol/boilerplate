@@ -3,7 +3,7 @@ import { poseidon } from "circomlibjs"
 import { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
-task("deploy:greeters", "Deploy a Greeters contract")
+task("deploy", "Deploy a Greeters contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs }, { ethers }): Promise<Contract> => {
         const ContractFactory = await ethers.getContractFactory("Greeters")
