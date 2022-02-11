@@ -18,7 +18,11 @@
     </a>
 </p>
 
-The code can be divided into contracts, frontend and backend. [Greeters.sol](https://github.com/cedoor/semaphore-boilerplate/blob/main/contracts/Greeters.sol) contains the root of an offchain Merkle tree to represent the greeters (tree leaves), i.e. the identity commitments generated using the first 3 Ethereum accounts on the Hardhat testing wallet. The contract then only allows these accounts to greet.
+The code can be divided into contracts, frontend and backend.
+
+* [Greeters.sol](https://github.com/cedoor/semaphore-boilerplate/blob/main/contracts/Greeters.sol) contains the root of an offchain Merkle tree to represent the greeters (tree leaves), i.e. the identity commitments generated using the first 3 Ethereum accounts of the Hardhat testing wallet. It also contains a simple function to allow greeters to greet, only once and only if they create a valid Semaphore proof.
+* The [frontend code](https://github.com/cedoor/semaphore-boilerplate/blob/main/pages/index.tsx) allows greeters to create a Semaphore identity with a signed Metamask message (using one of the first 3 Hardhat accounts) and a valid zero-knowledge proof.
+* The [backend code](https://github.com/cedoor/semaphore-boilerplate/blob/main/pages/api/greet.ts) is an API that sends a `greet` transaction signed by the contract owner with the zero-knowledge proof of a greeter.
 
 ## 🛠 Install
 
