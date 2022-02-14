@@ -24,9 +24,10 @@ describe("Greeters", function () {
             const message = await contractOwner.signMessage("Sign this message to create your identity!")
 
             const identity = new ZkIdentity(Strategy.MESSAGE, message)
+            const identityCommitment = identity.genIdentityCommitment()
             const greeting = "Hello world"
 
-            const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, 0)
+            const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, identityCommitment)
             const witness = Semaphore.genWitness(
                 identity.getTrapdoor(),
                 identity.getNullifier(),

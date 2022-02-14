@@ -22,11 +22,9 @@ export default function Home() {
 
         const identity = new ZkIdentity(Strategy.MESSAGE, message)
         const identityCommitment = identity.genIdentityCommitment()
-
         const identityCommitments = await (await fetch("./identityCommitments.json")).json()
-        const leafIndex = identityCommitments.indexOf(identityCommitment.toString())
 
-        const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, leafIndex)
+        const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, identityCommitment)
 
         setLogs("Creating your Semaphore proof...")
 
