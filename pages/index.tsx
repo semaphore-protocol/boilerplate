@@ -23,13 +23,10 @@ export default function Home() {
         const identity = new ZkIdentity(Strategy.MESSAGE, message)
         const identityCommitment = identity.genIdentityCommitment()
 
-        const identityCommitments = [
-            BigInt("9426253249246138013650573474062059446203468399013007463704855436559640562175"),
-            BigInt("6200634377081441056179822649025268043304989981899916286941956069781421654881"),
-            BigInt("19706772421195815860043593475869058320994241404138740034486179990871964981523")
-        ]
+        const identityCommitments = await (await fetch("./identityCommitments.json")).json()
+        const leafIndex = identityCommitments.indexOf(identityCommitment.toString())
 
-        const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, identityCommitment)
+        const merkleProof = generateMerkleProof(20, BigInt(0), 5, identityCommitments, leafIndex)
 
         setLogs("Creating your Semaphore proof...")
 
