@@ -9,7 +9,7 @@ task("deploy", "Deploy a Greeters contract")
     .setAction(async ({ logs }, { ethers }): Promise<Contract> => {
         const ContractFactory = await ethers.getContractFactory("Greeters")
 
-        const tree = new IncrementalMerkleTree(poseidon, 20, BigInt(0), 5)
+        const tree = new IncrementalMerkleTree(poseidon, 20, BigInt(0), 2)
 
         for (const identityCommitment of identityCommitments) {
             tree.insert(identityCommitment)
