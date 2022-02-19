@@ -7,7 +7,14 @@ import identityCommitments from "../public/identityCommitments.json"
 task("deploy", "Deploy a Greeters contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs }, { ethers }): Promise<Contract> => {
-        const ContractFactory = await ethers.getContractFactory("Greeters")
+        const VerifierContract = await ethers.getContractFactory("Verifier")
+        const verifier = await VerifierContract.deploy()
+
+        await verifier.deployed()
+
+        logs && console.log(`Verifier contract has been deployed to: ${verifier.address}`)
+
+        const GreetersContract = await ethers.getContractFactory("Greeters")
 
         const tree = new IncrementalMerkleTree(poseidon, 20, BigInt(0), 2)
 
@@ -15,11 +22,11 @@ task("deploy", "Deploy a Greeters contract")
             tree.insert(identityCommitment)
         }
 
-        const contract = await ContractFactory.deploy(tree.root)
+        const greeters = await GreetersContract.deploy(tree.root, verifier.address)
 
-        await contract.deployed()
+        await greeters.deployed()
 
-        logs && console.log(`Greeters contract has been deployed to: ${contract.address}`)
+        logs && console.log(`Greeters contract has been deployed to: ${greeters.address}`)
 
-        return contract
+        return greeters
     })

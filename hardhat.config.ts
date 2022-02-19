@@ -2,6 +2,7 @@ import "@nomiclabs/hardhat-ethers"
 import "@nomiclabs/hardhat-waffle"
 import * as dotenv from "dotenv"
 import "hardhat-gas-reporter"
+import "hardhat-dependency-compiler"
 import { HardhatUserConfig } from "hardhat/config"
 import "./tasks/deploy"
 
@@ -12,6 +13,9 @@ dotenv.config()
 
 const config: HardhatUserConfig = {
     solidity: "0.8.4",
+    dependencyCompiler: {
+        paths: ["@appliedzkp/semaphore-contracts/base/Verifier.sol"]
+    },
     networks: {
         ropsten: {
             url: process.env.ROPSTEN_URL || "",

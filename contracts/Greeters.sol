@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 
+import "@appliedzkp/semaphore-contracts/interfaces/IVerifier.sol";
 import "@appliedzkp/semaphore-contracts/base/SemaphoreCore.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -14,8 +15,12 @@ contract Greeters is SemaphoreCore, Ownable {
     // The offchain Merkle tree contains the greeters' identity commitments.
     uint256 public greeters;
 
-    constructor(uint256 _greeters) {
+    // The external verifier used to verify Semaphore proofs.
+    IVerifier public verifier;
+
+    constructor(uint256 _greeters, address _verifier) {
         greeters = _greeters;
+        verifier = IVerifier(_verifier);
     }
 
     // Only users who create valid proofs can greet.
@@ -28,7 +33,7 @@ contract Greeters is SemaphoreCore, Ownable {
         uint256[8] calldata _proof
     ) external onlyOwner {
         require(
-            _isValidProof(_greeting, greeters, _nullifierHash, greeters, _proof),
+            _isValidProof(_greeting, greeters, _nullifierHash, greeters, _proof, verifier),
             "Greeters: the proof is not valid"
         );
 
