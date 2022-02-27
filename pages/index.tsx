@@ -24,7 +24,7 @@ export default function Home() {
         const identityCommitment = identity.genIdentityCommitment()
         const identityCommitments = await (await fetch("./identityCommitments.json")).json()
 
-        const merkleProof = generateMerkleProof(20, BigInt(0), 2, identityCommitments, identityCommitment)
+        const merkleProof = generateMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
 
         setLogs("Creating your Semaphore proof...")
 

@@ -27,7 +27,7 @@ describe("Greeters", function () {
             const identityCommitment = identity.genIdentityCommitment()
             const greeting = "Hello world"
 
-            const merkleProof = generateMerkleProof(20, BigInt(0), 2, identityCommitments, identityCommitment)
+            const merkleProof = generateMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
             const witness = Semaphore.genWitness(
                 identity.getTrapdoor(),
                 identity.getNullifier(),
