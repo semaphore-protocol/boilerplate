@@ -39,7 +39,7 @@ export default function Home() {
         )
 
         const fullProof = await Semaphore.genProof(witness, "./semaphore.wasm", "./semaphore_final.zkey")
-        const solidityProof = Semaphore.packToSolidityProof(fullProof)
+        const solidityProof = Semaphore.packToSolidityProof(fullProof.proof)
 
         const nullifierHash = Semaphore.genNullifierHash(merkleProof.root, identity.getNullifier())
 
