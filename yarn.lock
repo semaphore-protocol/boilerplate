@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@appliedzkp/semaphore-contracts@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@appliedzkp/semaphore-contracts/-/semaphore-contracts-0.3.0.tgz#df16678fc3ca7b512d6be81181305449421adf86"
-  integrity sha512-9Sw5rfKAkwkKPD0d5UdU87Ut2khrLaYUt06nJ3vXhVgukOW1hdbqkrfjNGRD0/TKMMruZrdvZZq6q71XkdKx2w==
+"@appliedzkp/semaphore-contracts@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@appliedzkp/semaphore-contracts/-/semaphore-contracts-0.6.0.tgz#cbc21b2212485d156eacdbac4b488b6c2a8f3553"
+  integrity sha512-rx2Iq8+cWBfpmZs3bxHarHjR68fknQfdUUgyoGdie7O6gjl1PKKGI9Ufsu+Pyt67T7katlHiFZvXYqIncU9KgQ==
   dependencies:
     "@openzeppelin/contracts" "^4.4.2"
     "@zk-kit/incremental-merkle-tree.sol" "^0.3.0"
@@ -1113,10 +1113,10 @@
   resolved "https://registry.yarnpkg.com/@zk-kit/incremental-merkle-tree/-/incremental-merkle-tree-0.4.3.tgz#197f72102d35dd9c546a6a432896d6d6f6de05f4"
   integrity sha512-2qHfrJXtPx8/UmF0wFAUr4VqCLr3J/P859fk/e3fwKLUnf3baeIUAO6inY4wrh0NGy4bzpKUWYjDph0yTbPz6A==
 
-"@zk-kit/protocols@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@zk-kit/protocols/-/protocols-1.10.0.tgz#eb017f19e4e191095be98d061d5fe5f5f37e40ca"
-  integrity sha512-sK8g9lwM69zYqPmksJhkWTQMYSAiCCNmpDUMvveEphhXA4DgvyM8yzgBqvakdNoX66pVg6lxwacjZb47oeBibQ==
+"@zk-kit/protocols@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@zk-kit/protocols/-/protocols-1.11.0.tgz#21aa6298819b2f05c8c3f232fba33a1a32b22d4f"
+  integrity sha512-WfjLL1kaasOb0GkTfB3o/jgom8y93qCI4/T+r1nAcNa/RTxX1hkXWs9bhL/ZaKbFmKMesaMCFev89wpBeHCxkg==
   dependencies:
     "@ethersproject/bytes" "^5.5.0"
     "@ethersproject/solidity" "^5.5.0"

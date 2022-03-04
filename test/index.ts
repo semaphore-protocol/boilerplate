@@ -26,6 +26,7 @@ describe("Greeters", function () {
             const identity = new ZkIdentity(Strategy.MESSAGE, message)
             const identityCommitment = identity.genIdentityCommitment()
             const greeting = "Hello world"
+            const bytes32Greeting = ethers.utils.formatBytes32String(greeting)
 
             const merkleProof = generateMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
             const witness = Semaphore.genWitness(
@@ -41,9 +42,9 @@ describe("Greeters", function () {
 
             const nullifierHash = Semaphore.genNullifierHash(merkleProof.root, identity.getNullifier())
 
-            const transaction = contract.greet(greeting, nullifierHash, solidityProof)
+            const transaction = contract.greet(bytes32Greeting, nullifierHash, solidityProof)
 
-            await expect(transaction).to.emit(contract, "NewGreeting").withArgs(greeting)
+            await expect(transaction).to.emit(contract, "NewGreeting").withArgs(bytes32Greeting)
         })
     })
 })

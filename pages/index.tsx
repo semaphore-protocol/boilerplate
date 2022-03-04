@@ -1,6 +1,6 @@
 import detectEthereumProvider from "@metamask/detect-provider"
 import { Strategy, ZkIdentity } from "@zk-kit/identity"
-import { Semaphore, generateMerkleProof } from "@zk-kit/protocols"
+import { generateMerkleProof, Semaphore } from "@zk-kit/protocols"
 import { providers } from "ethers"
 import Head from "next/head"
 import React from "react"
@@ -38,17 +38,15 @@ export default function Home() {
             greeting
         )
 
-        const fullProof = await Semaphore.genProof(witness, "./semaphore.wasm", "./semaphore_final.zkey")
-        const solidityProof = Semaphore.packToSolidityProof(fullProof.proof)
-
-        const nullifierHash = Semaphore.genNullifierHash(merkleProof.root, identity.getNullifier())
+        const { proof, publicSignals } = await Semaphore.genProof(witness, "./semaphore.wasm", "./semaphore_final.zkey")
+        const solidityProof = Semaphore.packToSolidityProof(proof)
 
         const response = await fetch("/api/greet", {
             method: "POST",
             body: JSON.stringify({
                 greeting,
-                nullifierHash: nullifierHash.toString(),
-                solidityProof: solidityProof.map((v) => v.toString())
+                nullifierHash: publicSignals.nullifierHash,
+                solidityProof: solidityProof
             })
         })
 

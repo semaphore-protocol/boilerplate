@@ -1,5 +1,5 @@
 import Greeter from "artifacts/contracts/Greeters.sol/Greeters.json"
-import { Contract, providers } from "ethers"
+import { Contract, providers, utils } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 // This API can represent a backend.
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const contractOwner = contract.connect(provider.getSigner())
 
     try {
-        await contractOwner.greet(greeting, nullifierHash, solidityProof)
+        await contractOwner.greet(utils.formatBytes32String(greeting), nullifierHash, solidityProof)
 
         res.status(200).end()
     } catch (error: any) {
