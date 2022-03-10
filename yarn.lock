@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@appliedzkp/semaphore-contracts@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@appliedzkp/semaphore-contracts/-/semaphore-contracts-0.6.0.tgz#cbc21b2212485d156eacdbac4b488b6c2a8f3553"
-  integrity sha512-rx2Iq8+cWBfpmZs3bxHarHjR68fknQfdUUgyoGdie7O6gjl1PKKGI9Ufsu+Pyt67T7katlHiFZvXYqIncU9KgQ==
+"@appliedzkp/semaphore-contracts@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@appliedzkp/semaphore-contracts/-/semaphore-contracts-0.6.2.tgz#2ba43bb81816d886137e75b4aacf1947a84f8c64"
+  integrity sha512-g9Iv9kSDlN4kCzc2t21juFxRaP46YKq+AIDy0i90fjsBF8ZcmfjdjBM4C3MRpbxhvIYRiIYttTlaUzHwQ4dQNg==
   dependencies:
     "@openzeppelin/contracts" "^4.4.2"
-    "@zk-kit/incremental-merkle-tree.sol" "^0.3.0"
+    "@zk-kit/incremental-merkle-tree.sol" "^0.3.1"
 
 "@babel/runtime-corejs3@^7.10.2":
   version "7.17.2"
@@ -1098,10 +1098,10 @@
     circomlibjs "0.0.8"
     js-sha256 "^0.9.0"
 
-"@zk-kit/incremental-merkle-tree.sol@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@zk-kit/incremental-merkle-tree.sol/-/incremental-merkle-tree.sol-0.3.0.tgz#0b9877b4aa30d00487eb01fcb9f832fdb562eae7"
-  integrity sha512-amRcQL49FmFI1N4PeZIue0VoJFfju/RCSWM2pUoRDOdFYoYB4cafBQXU4yjnb5VtNhkg4NwDJ42KCIrUNTQofQ==
+"@zk-kit/incremental-merkle-tree.sol@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@zk-kit/incremental-merkle-tree.sol/-/incremental-merkle-tree.sol-0.3.1.tgz#904fa76028803f6340e23bd0929d94398659a070"
+  integrity sha512-85rZpeSJGeR0yEiIbJwWrZgA68ovc62XiOHcMvAZmJtISsYMVHqzN6w4ax9Ke6bE70sj5V0OSPZ89vgJZ0zxgg==
 
 "@zk-kit/incremental-merkle-tree@^0.4.2":
   version "0.4.2"
