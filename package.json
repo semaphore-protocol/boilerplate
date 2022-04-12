@@ -2,7 +2,7 @@
     "name": "semaphore-boilerplate",
     "version": "1.0.0",
     "description": "A simple Next.js/Hardhat privacy application with Semaphore.",
-    "license": "GPL-3.0",
+    "license": "MIT",
     "private": true,
     "scripts": {
         "dev": "npm-run-all -p next:dev hardhat:node",
