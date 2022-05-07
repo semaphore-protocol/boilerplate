@@ -1,6 +1,6 @@
 <p align="center">
     <h1 align="center">
-      <img width="40" src="https://github.com/appliedzkp/semaphore/blob/main/docs/static/img/semaphore.png">  
+      <img width="40" src="https://github.com/semaphore-protocol/docs/blob/main/static/img/semaphore-icon.svg">  
       Semaphore Boilerplate
     </h1>
     <p align="center">A simple Next.js/Hardhat privacy application with <a href="https://github.com/appliedzkp/semaphore">Semaphore</a>.</p>
