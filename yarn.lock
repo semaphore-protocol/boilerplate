@@ -2,14 +2,6 @@
 # yarn lockfile v1
 
 
-"@appliedzkp/semaphore-contracts@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@appliedzkp/semaphore-contracts/-/semaphore-contracts-0.8.0.tgz#071c9d85bcc216c9eb606237e8971a42148de5d5"
-  integrity sha512-4fSGv9D8Py6CiYPqyn4+ob0bndv1sdHo0CszCDejWawpFFr0L6MTVZThq026q0DX+tPyVQawpxUn7NvtNGG9eg==
-  dependencies:
-    "@openzeppelin/contracts" "^4.4.2"
-    "@zk-kit/incremental-merkle-tree.sol" "^0.3.1"
-
 "@babel/runtime-corejs3@^7.10.2":
   version "7.17.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.17.2.tgz#fdca2cd05fba63388babe85d349b6801b008fd13"
@@ -739,6 +731,14 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
+
+"@semaphore-protocol/contracts@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/contracts/-/contracts-0.1.0.tgz#18c23e09facf9ef983f0618d3150f5462ad31b2d"
+  integrity sha512-FokPlJWdHo8s4i7yUtVHXOMtX12AqFMNvJPh286B9VuShmes3pz7yFYqJJJjA8LcD4TbPDcShUhf89Q10mCuQw==
+  dependencies:
+    "@openzeppelin/contracts" "^4.4.2"
+    "@zk-kit/incremental-merkle-tree.sol" "^0.3.1"
 
 "@sentry/core@5.30.0":
   version "5.30.0"
