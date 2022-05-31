@@ -7,12 +7,12 @@ import identityCommitments from "../public/identityCommitments.json"
 task("deploy", "Deploy a Greeters contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs }, { ethers }): Promise<Contract> => {
-        const VerifierContract = await ethers.getContractFactory("Verifier")
+        const VerifierContract = await ethers.getContractFactory("Verifier20")
         const verifier = await VerifierContract.deploy()
 
         await verifier.deployed()
 
-        logs && console.log(`Verifier contract has been deployed to: ${verifier.address}`)
+        logs && console.log(`Verifier20 contract has been deployed to: ${verifier.address}`)
 
         const GreetersContract = await ethers.getContractFactory("Greeters")
 

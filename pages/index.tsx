@@ -38,7 +38,7 @@ export default function Home() {
             greeting
         )
 
-        const { proof, publicSignals } = await Semaphore.genProof(witness, "./semaphore.wasm", "./semaphore_final.zkey")
+        const { proof, publicSignals } = await Semaphore.genProof(witness, "./semaphore.wasm", "./semaphore.zkey")
         const solidityProof = Semaphore.packToSolidityProof(proof)
 
         const response = await fetch("/api/greet", {

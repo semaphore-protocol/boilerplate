@@ -732,10 +732,10 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
 
-"@semaphore-protocol/contracts@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@semaphore-protocol/contracts/-/contracts-0.1.0.tgz#18c23e09facf9ef983f0618d3150f5462ad31b2d"
-  integrity sha512-FokPlJWdHo8s4i7yUtVHXOMtX12AqFMNvJPh286B9VuShmes3pz7yFYqJJJjA8LcD4TbPDcShUhf89Q10mCuQw==
+"@semaphore-protocol/contracts@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/contracts/-/contracts-0.2.0.tgz#236cb78bff91e135e5e44f211717b12c5e0a03cf"
+  integrity sha512-eYDnCIdEUnMrhZQ+2Hqtd+OgGD72SW4rxuZnqpcGj2dZNpdmKl4iifXAVGyXBTl7Y6K6BaalAeyYJZTwHLT0kA==
   dependencies:
     "@openzeppelin/contracts" "^4.4.2"
     "@zk-kit/incremental-merkle-tree.sol" "^0.3.1"
