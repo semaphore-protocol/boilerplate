@@ -18,8 +18,8 @@
     },
     "dependencies": {
         "@metamask/detect-provider": "^1.2.0",
-        "@zk-kit/identity": "^1.4.1",
-        "@zk-kit/protocols": "^1.11.0",
+        "@semaphore-protocol/identity": "0.2.2",
+        "@semaphore-protocol/proof": "0.2.2",
         "assert": "^2.0.0",
         "next": "12.0.10",
         "react": "17.0.2",

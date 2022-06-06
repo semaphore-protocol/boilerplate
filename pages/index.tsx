@@ -1,6 +1,6 @@
 import detectEthereumProvider from "@metamask/detect-provider"
-import { Strategy, ZkIdentity } from "@zk-kit/identity"
-import { generateMerkleProof, Semaphore } from "@zk-kit/protocols"
+import { Identity } from "@semaphore-protocol/identity"
+import { createMerkleProof, generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { providers } from "ethers"
 import Head from "next/head"
 import React from "react"
@@ -20,26 +20,21 @@ export default function Home() {
         const signer = ethersProvider.getSigner()
         const message = await signer.signMessage("Sign this message to create your identity!")
 
-        const identity = new ZkIdentity(Strategy.MESSAGE, message)
-        const identityCommitment = identity.genIdentityCommitment()
+        const identity = new Identity(message)
+        const identityCommitment = identity.generateCommitment()
         const identityCommitments = await (await fetch("./identityCommitments.json")).json()
 
-        const merkleProof = generateMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
+        const merkleProof = createMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
 
         setLogs("Creating your Semaphore proof...")
 
         const greeting = "Hello world"
 
-        const witness = Semaphore.genWitness(
-            identity.getTrapdoor(),
-            identity.getNullifier(),
-            merkleProof,
-            merkleProof.root,
-            greeting
-        )
-
-        const { proof, publicSignals } = await Semaphore.genProof(witness, "./semaphore.wasm", "./semaphore.zkey")
-        const solidityProof = Semaphore.packToSolidityProof(proof)
+        const { proof, publicSignals } = await generateProof(identity, merkleProof, merkleProof.root, greeting, {
+            wasmFilePath: "./semaphore.wasm",
+            zkeyFilePath: "./semaphore.zkey"
+        })
+        const solidityProof = packToSolidityProof(proof)
 
         const response = await fetch("/api/greet", {
             method: "POST",

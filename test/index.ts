@@ -1,5 +1,5 @@
-import { Strategy, ZkIdentity } from "@zk-kit/identity"
-import { generateMerkleProof, Semaphore } from "@zk-kit/protocols"
+import { Identity } from "@semaphore-protocol/identity"
+import { createMerkleProof, generateNullifierHash, generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
 import { Contract, Signer } from "ethers"
 import { ethers, run } from "hardhat"
@@ -23,24 +23,20 @@ describe("Greeters", function () {
         it("Should greet", async () => {
             const message = await contractOwner.signMessage("Sign this message to create your identity!")
 
-            const identity = new ZkIdentity(Strategy.MESSAGE, message)
-            const identityCommitment = identity.genIdentityCommitment()
+            const identity = new Identity(message)
+            const identityCommitment = identity.generateCommitment()
             const greeting = "Hello world"
             const bytes32Greeting = ethers.utils.formatBytes32String(greeting)
 
-            const merkleProof = generateMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
-            const witness = Semaphore.genWitness(
-                identity.getTrapdoor(),
-                identity.getNullifier(),
-                merkleProof,
-                merkleProof.root,
-                greeting
-            )
+            const merkleProof = createMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
 
-            const fullProof = await Semaphore.genProof(witness, wasmFilePath, zkeyFilePath)
-            const solidityProof = Semaphore.packToSolidityProof(fullProof.proof)
+            const fullProof = await generateProof(identity, merkleProof, merkleProof.root, greeting, {
+                wasmFilePath,
+                zkeyFilePath
+            })
+            const solidityProof = packToSolidityProof(fullProof.proof)
 
-            const nullifierHash = Semaphore.genNullifierHash(merkleProof.root, identity.getNullifier())
+            const nullifierHash = generateNullifierHash(merkleProof.root, identity.getNullifier())
 
             const transaction = contract.greet(bytes32Greeting, nullifierHash, solidityProof)
 
