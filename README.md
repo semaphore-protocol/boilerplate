@@ -1,70 +1,66 @@
 <p align="center">
     <h1 align="center">
-      <img width="40" src="https://github.com/semaphore-protocol/docs/blob/main/static/img/semaphore-icon.svg">  
-      Semaphore Boilerplate
+      <img width="40" src="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">  
+      Semaphore boilerplate
     </h1>
-    <p align="center">A simple Next.js/Hardhat privacy application with <a href="https://github.com/appliedzkp/semaphore">Semaphore</a>.</p>
 </p>
 
 <p align="center">
-    <a href="https://github.com/cedoor/semaphore-boilerplate/blob/main/LICENSE">
-        <img alt="Github license" src="https://img.shields.io/github/license/cedoor/semaphore-boilerplate.svg?style=flat-square">
+    <a href="https://github.com/semaphore-protocol" target="_blank">
+        <img src="https://img.shields.io/badge/project-Semaphore-blue.svg?style=flat-square">
     </a>
-    <a href="https://nextjs.org/">
-        <img alt="Next.js" src="https://img.shields.io/badge/framework-nextjs-393a2a?style=flat-square">
+    <a href="https://github.com/semaphore-protocol/boilerplate/blob/main/LICENSE">
+        <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/boilerplate.svg?style=flat-square">
     </a>
-    <a href="https://hardhat.org/">
-        <img alt="Hardhat" src="https://img.shields.io/badge/contracts-hardhat-afb719?style=flat-square">
+    <a href="https://eslint.org/">
+        <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
     </a>
+    <a href="https://prettier.io/">
+        <img alt="Code style prettier" src="https://img.shields.io/badge/code%20style-prettier-f8bc45?style=flat-square&logo=prettier">
+    </a>
+
 </p>
 
-The code can be divided into contracts, frontend and backend.
+## 📦 Component
 
-* [Greeters.sol](https://github.com/cedoor/semaphore-boilerplate/blob/main/contracts/Greeters.sol) contains the root of an offchain Merkle tree to represent the greeters (tree leaves), i.e. the identity commitments generated using the first 3 Ethereum accounts of the Hardhat testing wallet. It also contains a simple function to allow greeters to greet, only once and only if they create a valid Semaphore proof.
-* The [frontend code](https://github.com/cedoor/semaphore-boilerplate/blob/main/pages/index.tsx) allows greeters to create a Semaphore identity with a signed Metamask message (using one of the first 3 Hardhat accounts) and a valid zero-knowledge proof.
-* The [backend code](https://github.com/cedoor/semaphore-boilerplate/blob/main/pages/api/greet.ts) is an API that sends a `greet` transaction signed by the contract owner with the zero-knowledge proof of a greeter.
+* [Web App](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/web-app)
+* [Relay](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/relay)
+* [Contracts](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/contracts)
 
 ## 🛠 Install
 
-Clone this repository and install the dependencies:
+Use this repository as [template](https://github.com/semaphore-protocol/boilerplate/generate).
+
+Clone your repository:
 
 ```bash
-git clone https://github.com/cedoor/semaphore-boilerplate.git
-cd semaphore-boilerplate
-yarn
+git clone https://github.com/<your-username>/<your-repo>.git
+```
+
+and install the dependencies:
+
+```bash
+cd <your-repo> && yarn
 ```
 
 ## 📜 Usage
 
-#### 1. Compile & test the contract
+### Code quality and formatting
+
+Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
 
 ```bash
-yarn compile
-yarn test
+yarn lint
 ```
 
-#### 2. Run Next.js server & Hardhat network
+Run [Prettier](https://prettier.io/) to check formatting rules:
 
 ```bash
-yarn dev
+yarn prettier
 ```
 
-#### 3. Deploy the contract
+or to automatically format the code:
 
 ```bash
-yarn deploy --network localhost
+yarn prettier:write
 ```
-
-#### 4. Open the app
-
-You can open the web app on http://localhost:3000.
-
-#### 5. Install Metamask and connect the Hardhat wallet
-
-You can find the mnemonic phrase [here](https://hardhat.org/hardhat-network/reference/#accounts).
-
-#### 6. Create your proof
-
-You must use one of the first 3 Hardhat accounts.
-
-

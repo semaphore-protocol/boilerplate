@@ -11,9 +11,6 @@ coverage.json
 # docs
 docs
 
-# types
-types
-
 # production
 dist
 build

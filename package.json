@@ -1,52 +1,40 @@
 {
     "name": "semaphore-boilerplate",
-    "version": "1.0.0",
-    "description": "A simple Next.js/Hardhat privacy application with Semaphore.",
+    "description": "A simple Dapp to use as a starting point for your project.",
     "license": "MIT",
+    "repository": "git@github.com:semaphore-protocol/boilerplate.git",
+    "homepage": "https://github.com/semaphore-protocol/boilerplate",
+    "bugs": "https://github.com/semaphore-protocol/boilerplate/issues",
     "private": true,
     "scripts": {
-        "dev": "npm-run-all -p next:dev hardhat:node",
-        "next:dev": "next dev",
-        "hardhat:node": "hardhat node",
-        "compile": "hardhat compile",
-        "deploy": "hardhat deploy",
-        "test": "hardhat test",
-        "report-gas": "REPORT_GAS=true hardhat test",
-        "start": "next start",
-        "build": "next build",
-        "lint": "next lint"
+        "lint": "eslint . --ext .js,.ts",
+        "prettier": "prettier -c .",
+        "prettier:write": "prettier -w .",
+        "commit": "cz",
+        "precommit": "lint-staged"
     },
-    "dependencies": {
-        "@metamask/detect-provider": "^1.2.0",
-        "@semaphore-protocol/identity": "0.2.2",
-        "@semaphore-protocol/proof": "0.2.2",
-        "assert": "^2.0.0",
-        "next": "12.0.10",
-        "react": "17.0.2",
-        "react-dom": "17.0.2"
-    },
+    "keywords": [
+        "javascript",
+        "typescript",
+        "monorepo",
+        "zero-knowledge",
+        "semaphore",
+        "boilerplate"
+    ],
+    "workspaces": [
+        "apps/*"
+    ],
+    "packageManager": "yarn@3.2.1",
     "devDependencies": {
-        "@semaphore-protocol/contracts": "^0.2.0",
-        "@nomiclabs/hardhat-ethers": "^2.0.4",
-        "@nomiclabs/hardhat-waffle": "^2.0.2",
-        "@openzeppelin/contracts": "^4.5.0",
-        "@types/chai": "^4.3.0",
-        "@types/mocha": "^9.1.0",
-        "@types/node": "17.0.17",
-        "@types/react": "17.0.39",
-        "@zk-kit/incremental-merkle-tree": "^0.4.2",
-        "chai": "^4.3.5",
-        "circomlibjs": "0.0.8",
-        "dotenv": "^16.0.0",
-        "eslint": "8.8.0",
-        "eslint-config-next": "12.0.10",
-        "ethereum-waffle": "^3.4.0",
-        "ethers": "^5.5.3",
-        "hardhat": "^2.8.3",
-        "hardhat-dependency-compiler": "^1.1.2",
-        "hardhat-gas-reporter": "^1.0.7",
-        "npm-run-all": "^4.1.5",
-        "ts-node": "^10.4.0",
-        "typescript": "4.5.5"
+        "@types/node": "^17.0.9",
+        "@typescript-eslint/eslint-plugin": "^5.9.1",
+        "@typescript-eslint/parser": "^5.9.1",
+        "eslint": "^8.2.0",
+        "eslint-config-airbnb-base": "15.0.0",
+        "eslint-config-airbnb-typescript": "^16.1.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-import": "^2.25.2",
+        "prettier": "^2.5.1",
+        "typescript": "^4.5.4"
     }
 }
