@@ -1,6 +1,6 @@
 {
     "name": "semaphore-boilerplate",
-    "description": "A simple Dapp to use as a starting point for your project.",
+    "description": "A simple DApp to use as a starting point for your project.",
     "license": "MIT",
     "repository": "git@github.com:semaphore-protocol/boilerplate.git",
     "homepage": "https://github.com/semaphore-protocol/boilerplate",
@@ -9,9 +9,7 @@
     "scripts": {
         "lint": "eslint . --ext .js,.ts",
         "prettier": "prettier -c .",
-        "prettier:write": "prettier -w .",
-        "commit": "cz",
-        "precommit": "lint-staged"
+        "prettier:write": "prettier -w ."
     },
     "keywords": [
         "javascript",
@@ -35,6 +33,7 @@
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-import": "^2.25.2",
         "prettier": "^2.5.1",
-        "typescript": "^4.5.4"
+        "ts-node": "^10.8.1",
+        "typescript": "^4.7.3"
     }
 }

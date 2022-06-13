@@ -21,11 +21,11 @@
 
 </p>
 
-## 📦 Component
+## 🧩 Components
 
-* [Web App](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/web-app)
-* [Relay](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/relay)
-* [Contracts](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/contracts)
+-   [Web App](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/web-app)
+-   [Relay](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/relay)
+-   [Contracts](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/contracts)
 
 ## 🛠 Install
 

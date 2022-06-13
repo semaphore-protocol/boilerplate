@@ -52,9 +52,7 @@ node_modules/
 # Generate output
 dist
 build
-docs/*
-!docs/CNAME
-!docs/index.html
+cache
 
 # dotenv environment variable files
 .env
@@ -75,6 +73,3 @@ docs/*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-
-# Other
-snark-artifacts
