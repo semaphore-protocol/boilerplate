@@ -54,6 +54,9 @@ dist
 build
 cache
 
+# Parcel
+.parcel-cache
+
 # dotenv environment variable files
 .env
 .env.development.local

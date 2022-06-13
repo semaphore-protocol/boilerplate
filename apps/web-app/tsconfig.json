@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "strict": true,
+        "target": "ES5",
+        "module": "ESNext",
+        "experimentalDecorators": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true
+    }
+}
