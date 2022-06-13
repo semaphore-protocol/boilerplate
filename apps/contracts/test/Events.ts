@@ -1,15 +1,17 @@
 import { Identity } from "@semaphore-protocol/identity"
 import { createMerkleTree, generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
-import { ethers, run } from "hardhat"
-import { Reviews as ReviewsContract } from "../build/typechain"
+import { formatBytes32String, solidityKeccak256 } from "ethers/lib/utils"
+import { run } from "hardhat"
+import { Events as EventsContract } from "../build/typechain"
 import { config } from "../package.json"
 
-describe("Reviews", () => {
-    let contract: ReviewsContract
+describe("Events", () => {
+    let contract: EventsContract
 
     const treeDepth = Number(process.env.TREE_DEPTH)
-    const groupId = BigInt(1)
+    const eventName = formatBytes32String("Event")
+    const groupId = BigInt(solidityKeccak256(["bytes32"], [eventName])) >> BigInt(8)
     const identity = new Identity()
     const identityCommitment = identity.generateCommitment()
     const tree = createMerkleTree(treeDepth, BigInt(0), [identityCommitment])
@@ -22,22 +24,22 @@ describe("Reviews", () => {
             logs: false
         })
 
-        contract = await run("deploy:reviews", {
+        contract = await run("deploy:events", {
             logs: false,
             verifierAddress
         })
     })
 
-    describe("# createGroup", () => {
-        it("Should create a group", async () => {
-            const transaction = contract.createGroup(groupId)
+    describe("# createEvent", () => {
+        it("Should create an event", async () => {
+            const transaction = contract.createEvent(eventName)
 
-            await expect(transaction).to.emit(contract, "GroupCreated").withArgs(groupId, treeDepth, BigInt(0))
+            await expect(transaction).to.emit(contract, "EventCreated").withArgs(groupId, eventName)
         })
     })
 
     describe("# addMember", () => {
-        it("Should add a member to a group", async () => {
+        it("Should add a member to an existing event", async () => {
             const transaction = contract.addMember(groupId, identityCommitment)
 
             await expect(transaction).to.emit(contract, "MemberAdded").withArgs(groupId, identityCommitment, tree.root)
@@ -47,7 +49,7 @@ describe("Reviews", () => {
     describe("# postReview", () => {
         it("Should post a review anonymously", async () => {
             const review = "Great!"
-            const bytes32Review = ethers.utils.formatBytes32String(review)
+            const bytes32Review = formatBytes32String(review)
 
             const merkleProof = tree.createProof(0)
 

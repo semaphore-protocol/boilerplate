@@ -5,8 +5,9 @@ import "@semaphore-protocol/contracts/interfaces/IVerifier.sol";
 import "@semaphore-protocol/contracts/base/SemaphoreCore.sol";
 import "@semaphore-protocol/contracts/base/SemaphoreGroups.sol";
 
-contract Reviews is SemaphoreCore, SemaphoreGroups {
+contract Events is SemaphoreCore, SemaphoreGroups {
     event ReviewPosted(uint256 indexed groupId, bytes32 signal);
+    event EventCreated(uint256 indexed groupId, bytes32 eventName);
 
     uint8 public treeDepth;
     IVerifier public verifier;
@@ -16,8 +17,12 @@ contract Reviews is SemaphoreCore, SemaphoreGroups {
         verifier = _verifier;
     }
 
-    function createGroup(uint256 groupId) public {
+    function createEvent(bytes32 eventName) public {
+        uint256 groupId = hashEventName(eventName);
+
         _createGroup(groupId, treeDepth, 0);
+
+        emit EventCreated(groupId, eventName);
     }
 
     function addMember(uint256 groupId, uint256 identityCommitment) public {
@@ -35,5 +40,9 @@ contract Reviews is SemaphoreCore, SemaphoreGroups {
         _verifyProof(review, root, nullifierHash, groupId, proof, verifier);
 
         emit ReviewPosted(groupId, review);
+    }
+
+    function hashEventName(bytes32 eventId) private pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(eventId))) >> 8;
     }
 }

@@ -7,7 +7,7 @@
         "compile": "hardhat compile",
         "download:snark-artifacts": "hardhat run scripts/download-snark-artifacts.ts",
         "deploy": "hardhat run scripts/deploy.ts",
-        "deploy:reviews": "hardhat deploy:reviews",
+        "deploy:events": "hardhat deploy:events",
         "deploy:verifier": "hardhat deploy:verifier",
         "test": "hardhat test",
         "test:report-gas": "REPORT_GAS=true hardhat test",
