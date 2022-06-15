@@ -1,5 +1,6 @@
+import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
-import { createMerkleProof, generateNullifierHash, generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
+import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
 import { Contract, Signer } from "ethers"
 import { ethers, run } from "hardhat"
@@ -24,21 +25,20 @@ describe("Greeters", function () {
             const message = await contractOwner.signMessage("Sign this message to create your identity!")
 
             const identity = new Identity(message)
-            const identityCommitment = identity.generateCommitment()
             const greeting = "Hello world"
             const bytes32Greeting = ethers.utils.formatBytes32String(greeting)
 
-            const merkleProof = createMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
+            const group = new Group()
 
-            const fullProof = await generateProof(identity, merkleProof, merkleProof.root, greeting, {
+            group.addMembers(identityCommitments)
+
+            const fullProof = await generateProof(identity, group, group.root, greeting, {
                 wasmFilePath,
                 zkeyFilePath
             })
             const solidityProof = packToSolidityProof(fullProof.proof)
 
-            const nullifierHash = generateNullifierHash(merkleProof.root, identity.getNullifier())
-
-            const transaction = contract.greet(bytes32Greeting, nullifierHash, solidityProof)
+            const transaction = contract.greet(bytes32Greeting, fullProof.publicSignals.nullifierHash, solidityProof)
 
             await expect(transaction).to.emit(contract, "NewGreeting").withArgs(bytes32Greeting)
         })

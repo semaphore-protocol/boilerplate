@@ -1,6 +1,7 @@
 import detectEthereumProvider from "@metamask/detect-provider"
 import { Identity } from "@semaphore-protocol/identity"
-import { createMerkleProof, generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
+import { Group } from "@semaphore-protocol/group"
+import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { providers } from "ethers"
 import Head from "next/head"
 import React from "react"
@@ -21,16 +22,17 @@ export default function Home() {
         const message = await signer.signMessage("Sign this message to create your identity!")
 
         const identity = new Identity(message)
-        const identityCommitment = identity.generateCommitment()
         const identityCommitments = await (await fetch("./identityCommitments.json")).json()
 
-        const merkleProof = createMerkleProof(20, BigInt(0), identityCommitments, identityCommitment)
+        const group = new Group()
+
+        group.addMembers(identityCommitments)
 
         setLogs("Creating your Semaphore proof...")
 
         const greeting = "Hello world"
 
-        const { proof, publicSignals } = await generateProof(identity, merkleProof, merkleProof.root, greeting, {
+        const { proof, publicSignals } = await generateProof(identity, group, group.root, greeting, {
             wasmFilePath: "./semaphore.wasm",
             zkeyFilePath: "./semaphore.zkey"
         })

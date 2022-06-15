@@ -18,8 +18,9 @@
     },
     "dependencies": {
         "@metamask/detect-provider": "^1.2.0",
+        "@semaphore-protocol/group": "0.1.2",
         "@semaphore-protocol/identity": "0.2.2",
-        "@semaphore-protocol/proof": "0.2.2",
+        "@semaphore-protocol/proof": "0.3.3",
         "assert": "^2.0.0",
         "next": "12.0.10",
         "react": "17.0.2",
@@ -34,7 +35,6 @@
         "@types/mocha": "^9.1.0",
         "@types/node": "17.0.17",
         "@types/react": "17.0.39",
-        "@zk-kit/incremental-merkle-tree": "^0.4.2",
         "chai": "^4.3.5",
         "circomlibjs": "0.0.8",
         "dotenv": "^16.0.0",
