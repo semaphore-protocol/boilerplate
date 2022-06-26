@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "start": "hardhat node & yarn compile & yarn deploy --network localhost",
+        "start": "hardhat node & yarn compile && yarn deploy --network localhost",
         "compile": "hardhat compile",
         "download:snark-artifacts": "hardhat run scripts/download-snark-artifacts.ts",
         "deploy": "hardhat run scripts/deploy.ts",
@@ -32,6 +32,7 @@
         "ethereum-waffle": "^3.0.0",
         "ethers": "^5.0.0",
         "hardhat": "^2.8.4",
+        "hardhat-dependency-compiler": "^1.1.2",
         "hardhat-gas-reporter": "^1.0.8",
         "prettier-plugin-solidity": "^1.0.0-beta.19",
         "solhint": "^3.3.6",

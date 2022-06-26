@@ -2,6 +2,7 @@ import "@nomiclabs/hardhat-ethers"
 import "@nomiclabs/hardhat-waffle"
 import "@typechain/hardhat"
 import { config as dotenvConfig } from "dotenv"
+import "hardhat-dependency-compiler"
 import "hardhat-gas-reporter"
 import { HardhatUserConfig } from "hardhat/config"
 import { NetworksUserConfig } from "hardhat/types"
@@ -49,10 +50,12 @@ const hardhatConfig: HardhatUserConfig = {
         cache: config.paths.cache,
         artifacts: config.paths.build.contracts
     },
+    dependencyCompiler: {
+        paths: ["@semaphore-protocol/contracts/verifiers/Verifier20.sol"]
+    },
     networks: {
         hardhat: {
-            chainId: 1337,
-            allowUnlimitedContractSize: true
+            chainId: 1337
         },
         ...getNetworks()
     },

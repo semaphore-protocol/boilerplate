@@ -18,6 +18,14 @@
         "no-restricted-syntax": "off",
         "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
         "@typescript-eslint/lines-between-class-members": "off",
-        "no-param-reassign": "off"
+        "no-param-reassign": "off",
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "variable",
+                "format": ["camelCase", "PascalCase", "UPPER_CASE", "snake_case"],
+                "leadingUnderscore": "allow"
+            }
+        ]
     }
 }

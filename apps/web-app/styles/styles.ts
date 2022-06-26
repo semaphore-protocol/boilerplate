@@ -4,16 +4,17 @@ import { Styles } from "@chakra-ui/theme-tools"
 const styles: Styles = {
     global: (): SystemStyleObject => ({
         body: {
-            bg: "background.100",
+            bg: "blackAlpha.100",
             color: "blackAlpha.900"
         },
-        "body, #__next": {
+        "body, #app": {
             minHeight: "100vh"
         },
-        "#__next": {
+        "#app": {
             display: "flex",
             flexDirection: "column",
-            alignItems: "center"
+            alignItems: "center",
+            justifyContent: "center"
         }
     })
 }

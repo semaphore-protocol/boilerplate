@@ -1,7 +1,7 @@
 {
     "name": "web-app",
     "scripts": {
-        "start": "parcel --open --no-cache ./index.html"
+        "start": "parcel --open --no-cache ./src/index.html"
     },
     "devDependencies": {
         "@types/react": "^18.0.12",
