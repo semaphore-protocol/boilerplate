@@ -55,15 +55,24 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
         }
     }, [signer, contract])
 
-    const joinEvent = useCallback(
-        async (groupId: string) => {
-            if (signer && contract && _identityCommitment) {
-                const transaction = await contract.addMember(groupId, _identityCommitment)
+    const addMember = useCallback(
+        async (event: any) => {
+            if (_identityCommitment) {
+                const response = await fetch("http://localhost:3000/add-member", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        groupId: event.groupId,
+                        identityCommitment: _identityCommitment
+                    })
+                })
 
-                await transaction.wait()
+                if (response.status === 200) {
+                    onSelect(event)
+                }
             }
         },
-        [signer, contract, _identityCommitment]
+        [_identityCommitment]
     )
 
     return (
@@ -96,7 +105,7 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
                                 <Button
                                     key={e.groupId}
                                     onClick={() =>
-                                        e.members.includes(_identityCommitment) ? onSelect(e) : joinEvent(e.groupId)
+                                        e.members.includes(_identityCommitment) ? onSelect(e) : addMember(e)
                                     }
                                     justifyContent="left"
                                     colorScheme="primary"
@@ -107,7 +116,7 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
                                 </Button>
                             ))
                         ) : (
-                            <Text>Still no groups. Try to refresh!</Text>
+                            <Text>Still no events. Try to refresh!</Text>
                         )}
                     </VStack>
                 </Box>

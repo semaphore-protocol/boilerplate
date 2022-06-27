@@ -82,7 +82,13 @@ function App() {
                         }}
                     />
                 ) : (
-                    <ProofStep signer={_signer} contract={_contract} event={_event} onPrevClick={() => setStep(2)} />
+                    <ProofStep
+                        signer={_signer}
+                        contract={_contract}
+                        identity={_identity as Identity}
+                        event={_event}
+                        onPrevClick={() => setStep(2)}
+                    />
                 )}
             </Stack>
         </Container>
