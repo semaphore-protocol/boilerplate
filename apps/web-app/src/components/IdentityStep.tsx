@@ -1,12 +1,14 @@
-import { Box, Button, Heading, Text } from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, Text, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
 import { useCallback, useEffect, useState } from "react"
+import Stepper from "./Stepper"
 
 export type IdentityStepProps = {
-    onSuccess?: (message?: string) => void
+    onChange?: (identity: Identity) => void
+    onNextClick?: () => void
 }
 
-export default function IdentityStep({ onSuccess }: IdentityStepProps) {
+export default function IdentityStep({ onChange, onNextClick }: IdentityStepProps) {
     const [_identity, setIdentity] = useState<Identity>()
 
     useEffect(() => {
@@ -24,29 +26,36 @@ export default function IdentityStep({ onSuccess }: IdentityStepProps) {
 
         localStorage.setItem("identity", identity.toString())
 
-        if (onSuccess) {
-            onSuccess()
+        if (onChange) {
+            onChange(identity)
         }
     }, [])
 
     return (
         <>
-            <Heading as="h2" size="xl">
+            <Heading as="h2" size="xl" textAlign="center">
                 Semaphore identity
             </Heading>
+
             <Text fontSize="md">Users interact with the protocol with identities similar to Ethereum accounts.</Text>
 
             {_identity && (
-                <Box>
-                    <Text>Trapdoor: {_identity.getTrapdoor().toString().substring(0, 10)}...</Text>
-                    <Text>Nullifier: {_identity.getNullifier().toString().substring(0, 10)}...</Text>
-                    <Text>Commitment: {_identity.generateCommitment().toString().substring(0, 10)}...</Text>
+                <Box w="100%" py="6">
+                    <VStack alignItems="start" p="5" border="1px solid gray" borderRadius="4px">
+                        <Text>Trapdoor: {_identity.getTrapdoor().toString().substring(0, 25)}...</Text>
+                        <Text>Nullifier: {_identity.getNullifier().toString().substring(0, 25)}...</Text>
+                        <Text>Commitment: {_identity.generateCommitment().toString().substring(0, 25)}...</Text>
+                    </VStack>
                 </Box>
             )}
 
             <Button colorScheme="primary" variant="outline" onClick={createIdentity}>
                 Create identity
             </Button>
+
+            <Divider pt="8" borderColor="gray" />
+
+            <Stepper step={1} onNextClick={_identity ? onNextClick : undefined} />
         </>
     )
 }
