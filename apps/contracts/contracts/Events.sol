@@ -39,6 +39,8 @@ contract Events is SemaphoreCore, SemaphoreGroups {
 
         _verifyProof(review, root, nullifierHash, groupId, proof, verifier);
 
+        _saveNullifierHash(nullifierHash);
+
         emit ReviewPosted(groupId, review);
     }
 
