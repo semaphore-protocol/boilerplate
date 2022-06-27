@@ -13,7 +13,11 @@
     "plugins": ["@typescript-eslint"],
     "rules": {
         "no-underscore-dangle": "off",
+        "no-alert": "off",
+        "no-nested-ternary": "off",
         "import/no-extraneous-dependencies": "off",
+        "import/extensions": "off",
+        "import/no-relative-packages": "off",
         "no-bitwise": "off",
         "no-restricted-syntax": "off",
         "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
