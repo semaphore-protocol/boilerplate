@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Heading, IconButton, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, IconButton, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
 import { Contract, Signer } from "ethers"
 import { formatBytes32String, parseBytes32String } from "ethers/lib/utils"
@@ -10,11 +10,13 @@ export type GroupStepProps = {
     signer?: Signer
     contract?: Contract
     identity: Identity
-    onPrevClick?: () => void
+    onPrevClick: () => void
     onSelect: (e: any) => void
+    onLog: (message: string) => void
 }
 
-export default function GroupStep({ signer, contract, identity, onPrevClick, onSelect }: GroupStepProps) {
+export default function GroupStep({ signer, contract, identity, onPrevClick, onSelect, onLog }: GroupStepProps) {
+    const [_loading, setLoading] = useBoolean()
     const [_events, setEvents] = useState<any[]>([])
     const [_identityCommitment, setIdentityCommitment] = useState<string>()
 
@@ -34,7 +36,19 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
     }, [signer, contract])
 
     useEffect(() => {
-        getEvents().then(setEvents)
+        ;(async () => {
+            const events = await getEvents()
+
+            if (events.length > 0) {
+                setEvents(events)
+
+                onLog(
+                    `${events.length} event${
+                        events.length > 1 ? "s" : ""
+                    } were retrieved from the contract 🤙🏽 Join one or create a new one!`
+                )
+            }
+        })()
     }, [signer, contract])
 
     useEffect(() => {
@@ -43,47 +57,86 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
 
     const createEvent = useCallback(async () => {
         if (signer && contract) {
-            const eventName = prompt("Please enter your event name:")
+            const eventName = window.prompt("Please enter your event name:")
 
             if (eventName) {
-                const transaction = await contract.createEvent(formatBytes32String(eventName))
+                setLoading.on()
+                onLog(`Creating the '${eventName}' event...`)
 
-                await transaction.wait()
+                try {
+                    const transaction = await contract.createEvent(formatBytes32String(eventName))
 
-                getEvents().then(setEvents)
+                    await transaction.wait()
+
+                    setEvents(await getEvents())
+
+                    onLog(`The '${eventName}' event was just created 🎉`)
+                } catch (error) {
+                    console.error(error)
+
+                    onLog("Some error occurred, please try again!")
+                } finally {
+                    setLoading.off()
+                }
             }
         }
     }, [signer, contract])
 
-    const addMember = useCallback(
+    const joinEvent = useCallback(
         async (event: any) => {
             if (_identityCommitment) {
-                const response = await fetch("http://localhost:3000/add-member", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        groupId: event.groupId,
-                        identityCommitment: _identityCommitment
-                    })
-                })
+                const response = window.confirm(
+                    `There are ${event.members.length} members in this event. Are you sure you want to join?`
+                )
 
-                if (response.status === 200) {
-                    onSelect(event)
+                if (response) {
+                    setLoading.on()
+                    onLog(`Joining the '${event.eventName}' event...`)
+
+                    const { status } = await fetch("http://localhost:3000/add-member", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            groupId: event.groupId,
+                            identityCommitment: _identityCommitment
+                        })
+                    })
+
+                    if (status === 200) {
+                        event.members.push(_identityCommitment)
+                        onSelect(event)
+
+                        onLog(`You joined the '${event.eventName}' event 🎉 Post your anonymous reviews!`)
+                    } else {
+                        onLog("Some error occurred, please try again!")
+                    }
+
+                    setLoading.off()
                 }
             }
         },
         [_identityCommitment]
     )
 
+    const selectEvent = useCallback((event: any) => {
+        onSelect(event)
+
+        onLog(`Post your anonymous reviews in the '${event.eventName}' event 👍🏽`)
+    }, [])
+
     return (
         <>
             <Heading as="h2" size="xl" textAlign="center">
-                Semaphore group
+                Semaphore groups
             </Heading>
 
             <Text fontSize="md">
-                Semaphore groups are binary incremental Merkle trees that store the public identity commitment of each
-                member.
+                Semaphore{" "}
+                <Link href="https://semaphore.appliedzkp.org/docs/guides/groups" color="primary.500" isExternal>
+                    groups
+                </Link>{" "}
+                are binary incremental Merkle trees in which each leaf contains an identity commitment for a user.
+                Groups can be abstracted to represent events, polls, or organizations.
             </Text>
 
             {_events && (
@@ -101,18 +154,21 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
 
                     <VStack spacing="3" alignItems="start" p="5" border="1px solid gray" borderRadius="4px">
                         {_events.length > 0 ? (
-                            _events.map((e) => (
+                            _events.map((event) => (
                                 <Button
-                                    key={e.groupId}
+                                    key={event.groupId}
                                     onClick={() =>
-                                        e.members.includes(_identityCommitment) ? onSelect(e) : addMember(e)
+                                        event.members.includes(_identityCommitment)
+                                            ? selectEvent(event)
+                                            : joinEvent(event)
                                     }
+                                    isDisabled={_loading}
                                     justifyContent="left"
                                     colorScheme="primary"
-                                    fontWeight={e.members.includes(_identityCommitment) ? "bold" : "normal"}
+                                    fontWeight={event.members.includes(_identityCommitment) ? "bold" : "normal"}
                                     variant="link"
                                 >
-                                    {e.eventName} ({e.members.length})
+                                    {event.eventName} ({event.members.length})
                                 </Button>
                             ))
                         ) : (
@@ -122,7 +178,7 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
                 </Box>
             )}
 
-            <Button colorScheme="primary" variant="outline" onClick={createEvent}>
+            <Button colorScheme="primary" variant="outline" isDisabled={_loading} onClick={createEvent}>
                 Create event
             </Button>
 

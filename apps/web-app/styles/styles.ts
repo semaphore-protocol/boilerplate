@@ -12,9 +12,7 @@ const styles: Styles = {
         },
         "#app": {
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center"
+            flexDirection: "column"
         }
     })
 }

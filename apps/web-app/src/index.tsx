@@ -1,4 +1,4 @@
-import { ChakraProvider, Container, Stack } from "@chakra-ui/react"
+import { ChakraProvider, Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
 import detectEthereumProvider from "@metamask/detect-provider"
 import { Identity } from "@semaphore-protocol/identity"
 import { Contract, providers, Signer } from "ethers"
@@ -12,6 +12,7 @@ import IdentityStep from "./components/IdentityStep"
 import ProofStep from "./components/ProofStep"
 
 function App() {
+    const [_logs, setLogs] = useState<string>("")
     const [_step, setStep] = useState<number>(1)
     const [_identity, setIdentity] = useState<Identity>()
     const [_signer, setSigner] = useState<Signer>()
@@ -53,45 +54,49 @@ function App() {
         })()
     }, [])
 
-    useEffect(() => {
-        const identityString = localStorage.getItem("identity")
-
-        if (!identityString) {
-            setStep(1)
-        } else {
-            setIdentity(new Identity(identityString))
-
-            setStep(2)
-        }
-    }, [])
-
     return (
-        <Container maxW="md">
-            <Stack>
-                {_step === 1 ? (
-                    <IdentityStep onChange={setIdentity} onNextClick={() => setStep(2)} />
-                ) : _step === 2 ? (
-                    <GroupStep
-                        signer={_signer}
-                        contract={_contract}
-                        identity={_identity as Identity}
-                        onPrevClick={() => setStep(1)}
-                        onSelect={(event) => {
-                            setEvent(event)
-                            setStep(3)
-                        }}
-                    />
-                ) : (
-                    <ProofStep
-                        signer={_signer}
-                        contract={_contract}
-                        identity={_identity as Identity}
-                        event={_event}
-                        onPrevClick={() => setStep(2)}
-                    />
-                )}
-            </Stack>
-        </Container>
+        <>
+            <Container maxW="lg" flex="1" display="flex" alignItems="center">
+                <Stack>
+                    {_step === 1 ? (
+                        <IdentityStep onChange={setIdentity} onLog={setLogs} onNextClick={() => setStep(2)} />
+                    ) : _step === 2 ? (
+                        <GroupStep
+                            signer={_signer}
+                            contract={_contract}
+                            identity={_identity as Identity}
+                            onPrevClick={() => setStep(1)}
+                            onSelect={(event) => {
+                                setEvent(event)
+                                setStep(3)
+                            }}
+                            onLog={setLogs}
+                        />
+                    ) : (
+                        <ProofStep
+                            signer={_signer}
+                            contract={_contract}
+                            identity={_identity as Identity}
+                            event={_event}
+                            onPrevClick={() => setStep(2)}
+                            onLog={setLogs}
+                        />
+                    )}
+                </Stack>
+            </Container>
+
+            <HStack
+                flexBasis="56px"
+                borderTop="1px solid #8f9097"
+                backgroundColor="#DAE0FF"
+                align="center"
+                spacing="4"
+                p="4"
+            >
+                {_logs.endsWith("...") && <Spinner color="primary.400" />}
+                <Text>{_logs || `Current step: ${_step}`}</Text>
+            </HStack>
+        </>
     )
 }
 

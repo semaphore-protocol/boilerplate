@@ -1,4 +1,16 @@
-import { Box, Button, Divider, Heading, IconButton, Text, VStack } from "@chakra-ui/react"
+import {
+    Box,
+    Button,
+    Divider,
+    Heading,
+    IconButton,
+    Link,
+    ListItem,
+    Text,
+    UnorderedList,
+    useBoolean,
+    VStack
+} from "@chakra-ui/react"
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
@@ -13,10 +25,12 @@ export type ProofStepProps = {
     contract?: Contract
     identity: Identity
     event: any
-    onPrevClick?: () => void
+    onPrevClick: () => void
+    onLog: (message: string) => void
 }
 
-export default function ProofStep({ signer, contract, event, identity, onPrevClick }: ProofStepProps) {
+export default function ProofStep({ signer, contract, event, identity, onPrevClick, onLog }: ProofStepProps) {
+    const [_loading, setLoading] = useBoolean()
     const [_reviews, setReviews] = useState<any[]>([])
 
     const getReviews = useCallback(async () => {
@@ -35,9 +49,12 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
 
     const postReview = useCallback(async () => {
         if (contract && identity) {
-            const review = prompt("Please enter your review name:")
+            const review = prompt("Please enter your review:")
 
             if (review) {
+                setLoading.on()
+                onLog(`Posting your anonymous review...`)
+
                 const members = await contract.queryFilter(contract.filters.MemberAdded(event.groupId))
                 const group = new Group()
 
@@ -55,7 +72,7 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                 )
                 const solidityProof = packToSolidityProof(proof)
 
-                const response = await fetch("http://localhost:3000/post-review", {
+                const { status } = await fetch("http://localhost:3000/post-review", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -66,9 +83,15 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                     })
                 })
 
-                if (response.status === 200) {
+                if (status === 200) {
                     setReviews((v) => [...v, review])
+
+                    onLog(`Your review was posted 🎉`)
+                } else {
+                    onLog("Some error occurred, please try again!")
                 }
+
+                setLoading.off()
             }
         }
     }, [contract, identity])
@@ -76,12 +99,16 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
     return (
         <>
             <Heading as="h2" size="xl" textAlign="center">
-                Semaphore proof
+                Semaphore proofs
             </Heading>
 
             <Text fontSize="md">
-                Semaphore group members can anonymously prove that they are part of a group and that they are generating
-                their own proofs and signals.
+                Semaphore group members can anonymously{" "}
+                <Link href="https://semaphore.appliedzkp.org/docs/guides/proofs" color="primary.500" isExternal>
+                    prove
+                </Link>{" "}
+                that they are part of a group (or an event) and that they are generating their own proofs and signals.
+                Signals could be anonymous votes, leaks, or reviews.
             </Text>
 
             <Box w="100%" py="6" position="relative">
@@ -97,23 +124,30 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                 />
 
                 <VStack spacing="3" alignItems="start" p="5" border="1px solid gray" borderRadius="4px">
-                    <Text>Event name: {event.eventName}</Text>
-                    <Text>Number of members: {event.members.length}</Text>
+                    <Text>
+                        <b>Event name</b>: {event.eventName}
+                    </Text>
+                    <Text>
+                        <b>Number of members</b>: {event.members.length}
+                    </Text>
 
-                    <Text>Signals:</Text>
+                    <Text>
+                        <b>Signals</b>:
+                    </Text>
+
                     {_reviews.length > 0 ? (
-                        _reviews.map((r, i) => (
-                            <Text key={i} pl="10px" fontWeight="bold">
-                                &#8226; {r}
-                            </Text>
-                        ))
+                        <UnorderedList pl="20px">
+                            {_reviews.map((review, i) => (
+                                <ListItem key={i}>{review}</ListItem>
+                            ))}
+                        </UnorderedList>
                     ) : (
                         <Text>Still no reviews. Try to refresh!</Text>
                     )}
                 </VStack>
             </Box>
 
-            <Button colorScheme="primary" variant="outline" onClick={postReview}>
+            <Button colorScheme="primary" variant="outline" isDisabled={_loading} onClick={postReview}>
                 Post review
             </Button>
 

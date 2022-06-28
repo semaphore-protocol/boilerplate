@@ -1,21 +1,29 @@
-import { Box, Button, Divider, Heading, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, Link, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
 import { useCallback, useEffect, useState } from "react"
 import Stepper from "./Stepper"
 
 export type IdentityStepProps = {
-    onChange?: (identity: Identity) => void
-    onNextClick?: () => void
+    onNextClick: () => void
+    onChange: (identity: Identity) => void
+    onLog: (message: string) => void
 }
 
-export default function IdentityStep({ onChange, onNextClick }: IdentityStepProps) {
+export default function IdentityStep({ onChange, onNextClick, onLog }: IdentityStepProps) {
     const [_identity, setIdentity] = useState<Identity>()
 
     useEffect(() => {
         const identityString = localStorage.getItem("identity")
 
         if (identityString) {
-            setIdentity(new Identity(identityString))
+            const identity = new Identity(identityString)
+
+            setIdentity(identity)
+
+            onChange(identity)
+            onLog("Your Semaphore identity was retrieved from the browser cache 👌🏽")
+        } else {
+            onLog("Create your Semaphore identity 👆🏽")
         }
     }, [])
 
@@ -26,25 +34,40 @@ export default function IdentityStep({ onChange, onNextClick }: IdentityStepProp
 
         localStorage.setItem("identity", identity.toString())
 
-        if (onChange) {
-            onChange(identity)
-        }
+        onChange(identity)
+        onLog("Your new Semaphore identity was just created 🎉")
     }, [])
 
     return (
         <>
             <Heading as="h2" size="xl" textAlign="center">
-                Semaphore identity
+                Semaphore identities
             </Heading>
 
-            <Text fontSize="md">Users interact with the protocol with identities similar to Ethereum accounts.</Text>
+            <Text fontSize="md">
+                Users interact with the protocol with{" "}
+                <Link href="https://semaphore.appliedzkp.org/docs/guides/identities" color="primary.500" isExternal>
+                    identities
+                </Link>{" "}
+                similar to Ethereum accounts. An identity contains three values:
+            </Text>
+            <UnorderedList pl="20px">
+                <ListItem>trapdoor and nullifier: secret values known only by the user,</ListItem>
+                <ListItem>commitment: the public value.</ListItem>
+            </UnorderedList>
 
             {_identity && (
                 <Box w="100%" py="6">
                     <VStack alignItems="start" p="5" border="1px solid gray" borderRadius="4px">
-                        <Text>Trapdoor: {_identity.getTrapdoor().toString().substring(0, 25)}...</Text>
-                        <Text>Nullifier: {_identity.getNullifier().toString().substring(0, 25)}...</Text>
-                        <Text>Commitment: {_identity.generateCommitment().toString().substring(0, 25)}...</Text>
+                        <Text>
+                            <b>Trapdoor</b>: {_identity.getTrapdoor().toString().substring(0, 35)}...
+                        </Text>
+                        <Text>
+                            <b>Nullifier</b>: {_identity.getNullifier().toString().substring(0, 35)}...
+                        </Text>
+                        <Text>
+                            <b>Commitment</b>: {_identity.generateCommitment().toString().substring(0, 35)}...
+                        </Text>
                     </VStack>
                 </Box>
             )}
