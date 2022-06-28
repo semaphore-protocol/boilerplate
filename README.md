@@ -69,7 +69,11 @@ and add your environment variables.
 
 ### Start the app
 
-Run the following commands in three separate tabs of the terminal:
+Run the following commands sequentially in three separate tabs of the terminal:
+
+```bash
+yarn start:contracts
+```
 
 ```bash
 yarn start:web-app
@@ -77,10 +81,6 @@ yarn start:web-app
 
 ```bash
 yarn start:relay
-```
-
-```bash
-yarn start:contracts
 ```
 
 ### Code quality and formatting
