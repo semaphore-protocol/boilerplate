@@ -31,7 +31,6 @@ const { port } = new URL(process.env.RELAY_URL)
 const app = express()
 
 app.use(cors())
-app.use(express.static("public"))
 app.use(express.json())
 
 const provider = new providers.JsonRpcProvider(ethereumURL)

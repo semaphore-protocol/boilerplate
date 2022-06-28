@@ -66,8 +66,8 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                     event.groupId.toString(),
                     review,
                     {
-                        wasmFilePath: `${process.env.RELAY_URL}/semaphore.wasm`,
-                        zkeyFilePath: `${process.env.RELAY_URL}/semaphore.zkey`
+                        wasmFilePath: `https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm`,
+                        zkeyFilePath: `https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey`
                     }
                 )
                 const solidityProof = packToSolidityProof(proof)
