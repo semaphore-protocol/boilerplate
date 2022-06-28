@@ -16,6 +16,9 @@ dist
 build
 cache
 
+# github
+.github/ISSUE_TEMPLATE
+
 # misc
 .DS_Store
 *.pem
