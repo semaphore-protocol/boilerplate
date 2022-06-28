@@ -1,19 +1,36 @@
 import cors from "cors"
+import { config as dotenvConfig } from "dotenv"
 import { Contract, providers, utils, Wallet } from "ethers"
 import express from "express"
+import { resolve } from "path"
 import { abi as contractAbi } from "../contracts/build/contracts/contracts/Events.sol/Events.json"
 
-const ethereumPrivateKey = "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-const ethereumJsonProvider = "http://localhost:8545"
-const contractAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
-const port = 3000
+dotenvConfig({ path: resolve(__dirname, "./.env") })
+
+if (typeof process.env.CONTRACT_ADDRESS !== "string") {
+    throw new Error("Please, define CONTRACT_ADDRESS in your .env file")
+}
+
+if (typeof process.env.ETHEREUM_URL !== "string") {
+    throw new Error("Please, define ETHEREUM_URL in your .env file")
+}
+
+if (typeof process.env.ETHEREUM_PRIVATE_KEY !== "string") {
+    throw new Error("Please, define ETHEREUM_PRIVATE_KEY in your .env file")
+}
+
+const ethereumPrivateKey = process.env.ETHEREUM_PRIVATE_KEY
+const ethereumURL = process.env.ETHEREUM_URL
+const contractAddress = process.env.CONTRACT_ADDRESS
+const port = Number(process.env.API_PORT) || 3000
 
 const app = express()
 
 app.use(cors())
+app.use(express.static("public"))
 app.use(express.json())
 
-const provider = new providers.JsonRpcProvider(ethereumJsonProvider)
+const provider = new providers.JsonRpcProvider(ethereumURL)
 const signer = new Wallet(ethereumPrivateKey, provider)
 const contract = new Contract(contractAddress, contractAbi, signer)
 
@@ -55,5 +72,5 @@ app.post("/add-member", async (req, res) => {
 })
 
 app.listen(port, () => {
-    console.info(`Started HTTP relay API at http://127.0.0.1:${port}/`)
+    console.info(`Started HTTP relay API at http://0.0.0.0:${port}/`)
 })
