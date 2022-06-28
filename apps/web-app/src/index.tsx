@@ -21,7 +21,6 @@ function App() {
 
     useEffect(() => {
         ;(async () => {
-            const contractAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
             const ethereum = (await detectEthereumProvider()) as any
             const accounts = await ethereum.request({ method: "eth_requestAccounts" })
 
@@ -29,7 +28,7 @@ function App() {
                 method: "wallet_switchEthereumChain",
                 params: [
                     {
-                        chainId: hexlify(1337).replace("0x0", "0x")
+                        chainId: hexlify(Number(process.env.ETHEREUM_CHAIN_ID!)).replace("0x0", "0x")
                     }
                 ]
             })
@@ -39,14 +38,14 @@ function App() {
             if (accounts[0]) {
                 setSigner(ethersProvider.getSigner())
 
-                setContract(new Contract(contractAddress, Events.abi, ethersProvider.getSigner()))
+                setContract(new Contract(process.env.CONTRACT_ADDRESS!, Events.abi, ethersProvider.getSigner()))
             }
 
             ethereum.on("accountsChanged", (newAccounts: string[]) => {
                 if (newAccounts.length !== 0) {
                     setSigner(ethersProvider.getSigner())
 
-                    setContract(new Contract(contractAddress, Events.abi, ethersProvider.getSigner()))
+                    setContract(new Contract(process.env.CONTRACT_ADDRESS!, Events.abi, ethersProvider.getSigner()))
                 } else {
                     setSigner(undefined)
                 }

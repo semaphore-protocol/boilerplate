@@ -93,7 +93,7 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
                     setLoading.on()
                     onLog(`Joining the '${event.eventName}' event...`)
 
-                    const { status } = await fetch("http://localhost:3000/add-member", {
+                    const { status } = await fetch(`${process.env.RELAY_URL}/add-member`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({

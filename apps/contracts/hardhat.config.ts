@@ -13,7 +13,7 @@ import "./tasks/accounts"
 import "./tasks/deploy-events"
 import "./tasks/deploy-verifier"
 
-dotenvConfig({ path: resolve(__dirname, "./.env") })
+dotenvConfig({ path: resolve(__dirname, "../../.env") })
 
 function getNetworks(): NetworksUserConfig {
     if (process.env.INFURA_API_KEY && process.env.ETHEREUM_PRIVATE_KEY) {

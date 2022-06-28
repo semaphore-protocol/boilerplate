@@ -66,13 +66,13 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                     event.groupId.toString(),
                     review,
                     {
-                        wasmFilePath: "https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm",
-                        zkeyFilePath: "https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey"
+                        wasmFilePath: `${process.env.RELAY_URL}/semaphore.wasm`,
+                        zkeyFilePath: `${process.env.RELAY_URL}/semaphore.zkey`
                     }
                 )
                 const solidityProof = packToSolidityProof(proof)
 
-                const { status } = await fetch("http://localhost:3000/post-review", {
+                const { status } = await fetch(`${process.env.RELAY_URL}/post-review`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -132,7 +132,7 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                     </Text>
 
                     <Text>
-                        <b>Signals</b>:
+                        <b>Reviews</b>:
                     </Text>
 
                     {_reviews.length > 0 ? (

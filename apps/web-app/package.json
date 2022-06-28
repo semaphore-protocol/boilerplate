@@ -6,7 +6,7 @@
     "devDependencies": {
         "@types/react": "^18.0.12",
         "@types/react-dom": "^18.0.5",
-        "parcel": "^2.6.0"
+        "parcel": "^2.6.2"
     },
     "dependencies": {
         "@chakra-ui/react": "^2.2.1",
