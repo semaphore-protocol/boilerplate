@@ -4,7 +4,6 @@ async function main() {
     const { address: verifierAddress } = await run("deploy:verifier", { logs: false })
 
     await run("deploy:events", {
-        logs: false,
         verifierAddress
     })
 }
