@@ -1,7 +1,11 @@
 <p align="center">
     <h1 align="center">
-      <img width="40" src="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">  
-      Semaphore boilerplate
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon-dark.svg">
+            <source media="(prefers-color-scheme: light)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
+            <img width="40" alt="Semaphore icon." src="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
+        </picture>
+        Semaphore Boilerplate
     </h1>
 </p>
 
@@ -12,24 +16,32 @@
     <a href="https://github.com/semaphore-protocol/boilerplate/blob/main/LICENSE">
         <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/boilerplate.svg?style=flat-square">
     </a>
+    <a href="https://github.com/semaphore-protocol/semaphore.js/actions?query=workflow%3Astyle">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/workflow/status/semaphore-protocol/semaphore.js/style?label=style&style=flat-square&logo=github">
+    </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
     </a>
     <a href="https://prettier.io/">
         <img alt="Code style prettier" src="https://img.shields.io/badge/code%20style-prettier-f8bc45?style=flat-square&logo=prettier">
     </a>
-
 </p>
 
-## 🧩 Components
+| The repository is divided into three components: [web app](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/web-app), [relay](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/relay) and [contracts](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/contracts). The app allows users to create their own Semaphore identity and create events where only members can post reviews anonymously. |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
--   [Web App](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/web-app)
--   [Relay](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/relay)
--   [Contracts](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/contracts)
+```mermaid
+flowchart LR
+
+A(Web App) -->|Create events| C(Contracts)
+A -->|Join events| B(Relay)
+A -->|Post event reviews| B
+B --> C
+```
 
 ## 🛠 Install
 
-Use this repository as [template](https://github.com/semaphore-protocol/boilerplate/generate).
+Use this repository as a Github [template](https://github.com/semaphore-protocol/boilerplate/generate).
 
 Clone your repository:
 
@@ -44,6 +56,32 @@ cd <your-repo> && yarn
 ```
 
 ## 📜 Usage
+
+Copy the `.env.example` file as `.env`:
+
+```bash
+cp .env.example .env
+```
+
+and add your environment variables.
+
+ℹ️ You can use the default ones to start the app in a local network.
+
+### Start the app
+
+Run the following commands in three separate tabs of the terminal:
+
+```bash
+yarn start:web-app
+```
+
+```bash
+yarn start:relay
+```
+
+```bash
+yarn start:contracts
+```
 
 ### Code quality and formatting
 
