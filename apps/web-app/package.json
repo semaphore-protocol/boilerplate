@@ -18,7 +18,7 @@
         "@metamask/detect-provider": "^1.2.0",
         "@semaphore-protocol/group": "2.0.0",
         "@semaphore-protocol/identity": "2.0.0",
-        "@semaphore-protocol/proof": "2.0.1",
+        "@semaphore-protocol/proof": "2.1.0",
         "assert": "^2.0.0",
         "ethers": "^5.6.8",
         "framer-motion": "^6.3.11",

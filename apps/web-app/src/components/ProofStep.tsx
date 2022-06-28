@@ -55,43 +55,45 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                 setLoading.on()
                 onLog(`Posting your anonymous review...`)
 
-                const members = await contract.queryFilter(contract.filters.MemberAdded(event.groupId))
-                const group = new Group()
+                try {
+                    const members = await contract.queryFilter(contract.filters.MemberAdded(event.groupId))
+                    const group = new Group()
 
-                group.addMembers(members.map((m) => m.args![1].toString()))
+                    group.addMembers(members.map((m) => m.args![1].toString()))
 
-                const { proof, publicSignals } = await generateProof(
-                    identity,
-                    group,
-                    event.groupId.toString(),
-                    review,
-                    {
-                        wasmFilePath: `https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm`,
-                        zkeyFilePath: `https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey`
-                    }
-                )
-                const solidityProof = packToSolidityProof(proof)
+                    const { proof, publicSignals } = await generateProof(
+                        identity,
+                        group,
+                        event.groupId.toString(),
+                        review
+                    )
+                    const solidityProof = packToSolidityProof(proof)
 
-                const { status } = await fetch(`${process.env.RELAY_URL}/post-review`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        review,
-                        nullifierHash: publicSignals.nullifierHash,
-                        groupId: event.groupId.toString(),
-                        solidityProof
+                    const { status } = await fetch(`${process.env.RELAY_URL}/post-review`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            review,
+                            nullifierHash: publicSignals.nullifierHash,
+                            groupId: event.groupId.toString(),
+                            solidityProof
+                        })
                     })
-                })
 
-                if (status === 200) {
-                    setReviews((v) => [...v, review])
+                    if (status === 200) {
+                        setReviews((v) => [...v, review])
 
-                    onLog(`Your review was posted 🎉`)
-                } else {
+                        onLog(`Your review was posted 🎉`)
+                    } else {
+                        onLog("Some error occurred, please try again!")
+                    }
+                } catch (error) {
+                    console.error(error)
+
                     onLog("Some error occurred, please try again!")
+                } finally {
+                    setLoading.off()
                 }
-
-                setLoading.off()
             }
         }
     }, [contract, identity])

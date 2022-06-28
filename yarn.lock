@@ -2943,9 +2943,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/proof@npm:2.0.1":
-  version: 2.0.1
-  resolution: "@semaphore-protocol/proof@npm:2.0.1"
+"@semaphore-protocol/proof@npm:2.1.0":
+  version: 2.1.0
+  resolution: "@semaphore-protocol/proof@npm:2.1.0"
   dependencies:
     "@ethersproject/bytes": ^5.5.0
     "@ethersproject/solidity": ^5.5.0
@@ -2954,7 +2954,7 @@ __metadata:
     "@semaphore-protocol/identity": 2.0.0
     circomlibjs: 0.0.8
     snarkjs: ^0.4.13
-  checksum: 549ee21a9ec6266d391d56b8238ae53923028d09f9717a6c4cd5cefb588a957827a2dc594d4ce89e491611f199cbfa40e0682c3ebe4ce39452cc2afb3dbf9ce0
+  checksum: f65a52b773e6d0e7d7fb2ea56ce81ce29a0cf12dcee61760add12bbe5616136b8dbd705a223e2047387fa48ebbac822c9d01958657461073a5763c2152dbf6c4
   languageName: node
   linkType: hard
 
@@ -8038,7 +8038,7 @@ __metadata:
   dependencies:
     bn.js: ^4.11.8
     ethereumjs-util: ^6.0.0
-  checksum: ae074be0bb012857ab5d3ae644d1163b908a48dd724b7d2567cfde309dc72222d460438f2411936a70dc949dc604ce1ef7118f7273bd525815579143c907e336
+  checksum: 03127d09960e5f8a44167463faf25b2894db2f746376dbb8195b789ed11762f93db9c574eaa7c498c400063508e9dfc1c80de2edf5f0e1406b25c87d860ff2f1
   languageName: node
   linkType: hard
 
@@ -17094,7 +17094,7 @@ __metadata:
     "@metamask/detect-provider": ^1.2.0
     "@semaphore-protocol/group": 2.0.0
     "@semaphore-protocol/identity": 2.0.0
-    "@semaphore-protocol/proof": 2.0.1
+    "@semaphore-protocol/proof": 2.1.0
     "@types/react": ^18.0.12
     "@types/react-dom": ^18.0.5
     assert: ^2.0.0
