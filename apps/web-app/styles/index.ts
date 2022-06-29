@@ -4,6 +4,10 @@ import colors from "./colors"
 import components from "./components"
 
 const config = {
+    fonts: {
+        heading: "Inter, sans-serif",
+        body: "Inter, sans-serif"
+    },
     colors,
     styles,
     components

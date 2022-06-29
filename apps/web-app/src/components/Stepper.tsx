@@ -7,7 +7,7 @@ export type StepperProps = {
     onNextClick?: () => void
 }
 
-export default function ProofStep({ step, onPrevClick, onNextClick }: StepperProps) {
+export default function Stepper({ step, onPrevClick, onNextClick }: StepperProps) {
     return (
         <HStack width="100%" justify="space-between" pt="6">
             {onPrevClick ? (
@@ -26,23 +26,20 @@ export default function ProofStep({ step, onPrevClick, onNextClick }: StepperPro
             )}
 
             <Text textAlign="center" flex="1" fontWeight="bold">
-                {step.toString()}
+                {step.toString()}/3
             </Text>
 
-            {onNextClick ? (
-                <Button
-                    flex="1"
-                    rightIcon={<MdChevronRight />}
-                    justifyContent="right"
-                    colorScheme="primary"
-                    variant="link"
-                    onClick={onNextClick}
-                >
-                    Next
-                </Button>
-            ) : (
-                <Box flex="1" />
-            )}
+            <Button
+                flex="1"
+                rightIcon={<MdChevronRight />}
+                justifyContent="right"
+                colorScheme="primary"
+                variant="link"
+                isDisabled={!onNextClick}
+                onClick={onNextClick}
+            >
+                Next
+            </Button>
         </HStack>
     )
 }

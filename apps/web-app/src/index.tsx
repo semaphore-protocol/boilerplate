@@ -1,4 +1,5 @@
 import { ChakraProvider, Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
+import "@fontsource/inter/400.css"
 import detectEthereumProvider from "@metamask/detect-provider"
 import { Identity } from "@semaphore-protocol/identity"
 import { Contract, providers, Signer } from "ethers"
@@ -89,11 +90,12 @@ function App() {
                 borderTop="1px solid #8f9097"
                 backgroundColor="#DAE0FF"
                 align="center"
+                justify="center"
                 spacing="4"
                 p="4"
             >
                 {_logs.endsWith("...") && <Spinner color="primary.400" />}
-                <Text>{_logs || `Current step: ${_step}`}</Text>
+                <Text fontWeight="bold">{_logs || `Current step: ${_step}`}</Text>
             </HStack>
         </>
     )
