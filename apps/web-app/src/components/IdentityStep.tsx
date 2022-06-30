@@ -66,12 +66,7 @@ export default function IdentityStep({ onChange, onNextClick, onLog }: IdentityS
                     Identity
                 </Text>
                 {_identity && (
-                    <Button
-                        leftIcon={<IconRefreshLine color="text.700" />}
-                        variant="link"
-                        color="text.700"
-                        onClick={createIdentity}
-                    >
+                    <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={createIdentity}>
                         New
                     </Button>
                 )}
@@ -94,7 +89,7 @@ export default function IdentityStep({ onChange, onNextClick, onLog }: IdentityS
                         colorScheme="primary"
                         px="4"
                         onClick={createIdentity}
-                        leftIcon={<IconAddCircleFill color="white" />}
+                        leftIcon={<IconAddCircleFill />}
                     >
                         Create identity
                     </Button>
@@ -103,15 +98,7 @@ export default function IdentityStep({ onChange, onNextClick, onLog }: IdentityS
 
             <Divider pt="3" borderColor="gray" />
 
-            {!_identity && (
-                <Box pt="6">
-                    <Text py="2" px="3" fontWeight="bold" fontSize="md" backgroundColor="#FFF5EF" color="#AE511C">
-                        Create a Semaphore identity in order to move to step 2.
-                    </Text>
-                </Box>
-            )}
-
-            <Stepper step={1} onNextClick={_identity ? onNextClick : undefined} />
+            <Stepper step={1} onNextClick={!!_identity && onNextClick} />
         </>
     )
 }

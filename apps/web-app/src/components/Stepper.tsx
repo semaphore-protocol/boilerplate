@@ -1,23 +1,24 @@
 import { Box, Button, HStack, Text } from "@chakra-ui/react"
-import { MdChevronLeft, MdChevronRight } from "react-icons/md"
+import IconChevronLeft from "../icons/IconChevronLeft"
+import IconChevronRight from "../icons/IconChevronRight"
 
 export type StepperProps = {
     step: number
-    onPrevClick?: () => void
-    onNextClick?: () => void
+    onPrevClick?: (() => void) | false
+    onNextClick?: (() => void) | false
 }
 
 export default function Stepper({ step, onPrevClick, onNextClick }: StepperProps) {
     return (
         <HStack width="100%" justify="space-between" pt="6">
-            {onPrevClick ? (
+            {onPrevClick !== undefined ? (
                 <Button
                     flex="1"
-                    leftIcon={<MdChevronLeft />}
+                    leftIcon={<IconChevronLeft />}
                     justifyContent="left"
                     colorScheme="primary"
                     variant="link"
-                    onClick={onPrevClick}
+                    onClick={onPrevClick || undefined}
                 >
                     Prev
                 </Button>
@@ -29,17 +30,21 @@ export default function Stepper({ step, onPrevClick, onNextClick }: StepperProps
                 {step.toString()}/3
             </Text>
 
-            <Button
-                flex="1"
-                rightIcon={<MdChevronRight />}
-                justifyContent="right"
-                colorScheme="primary"
-                variant="link"
-                isDisabled={!onNextClick}
-                onClick={onNextClick}
-            >
-                Next
-            </Button>
+            {onNextClick !== undefined ? (
+                <Button
+                    flex="1"
+                    rightIcon={<IconChevronRight />}
+                    justifyContent="right"
+                    colorScheme="primary"
+                    variant="link"
+                    isDisabled={!onNextClick}
+                    onClick={onNextClick || undefined}
+                >
+                    Next
+                </Button>
+            ) : (
+                <Box flex="1" />
+            )}
         </HStack>
     )
 }

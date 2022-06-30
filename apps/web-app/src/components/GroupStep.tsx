@@ -1,9 +1,11 @@
-import { Box, Button, Divider, Heading, IconButton, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
 import { Contract, Signer } from "ethers"
 import { formatBytes32String, parseBytes32String } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
-import { MdOutlineRefresh } from "react-icons/md"
+import IconCheck from "../icons/IconCheck"
+import IconAddCircleFill from "../icons/IconAddCircleFill"
+import IconRefreshLine from "../icons/IconRefreshLine"
 import Stepper from "./Stepper"
 
 export type GroupStepProps = {
@@ -126,11 +128,11 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
 
     return (
         <>
-            <Heading as="h2" size="xl" textAlign="center">
-                Semaphore groups
+            <Heading as="h2" size="xl">
+                Groups
             </Heading>
 
-            <Text fontSize="md">
+            <Text pt="2" fontSize="md">
                 Semaphore{" "}
                 <Link href="https://semaphore.appliedzkp.org/docs/guides/groups" color="primary.500" isExternal>
                     groups
@@ -139,48 +141,79 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
                 Groups can be abstracted to represent events, polls, or organizations.
             </Text>
 
-            {_events && (
-                <Box w="100%" py="6" position="relative">
-                    <IconButton
-                        colorScheme="primary"
-                        variant="link"
-                        onClick={() => getEvents().then(setEvents)}
-                        position="absolute"
-                        right="0"
-                        top="35px"
-                        aria-label="Refresh groups"
-                        icon={<MdOutlineRefresh />}
-                    />
+            <Divider pt="5" borderColor="gray.500" />
 
-                    <VStack spacing="3" alignItems="start" p="5" border="1px solid gray" borderRadius="4px">
-                        {_events.length > 0 ? (
-                            _events.map((event) => (
+            <HStack pt="5" justify="space-between">
+                <Text fontWeight="bold" fontSize="lg">
+                    Groups
+                </Text>
+                <Button
+                    leftIcon={<IconRefreshLine />}
+                    variant="link"
+                    color="text.700"
+                    onClick={() => getEvents().then(setEvents)}
+                >
+                    Refresh
+                </Button>
+            </HStack>
+
+            <Box py="5">
+                <Button
+                    w="100%"
+                    fontWeight="bold"
+                    justifyContent="left"
+                    colorScheme="primary"
+                    px="4"
+                    onClick={createEvent}
+                    isDisabled={_loading}
+                    leftIcon={<IconAddCircleFill />}
+                >
+                    Create new group
+                </Button>
+            </Box>
+
+            {_events.length > 0 && (
+                <VStack spacing="3">
+                    {_events.map((event, i) => (
+                        <HStack
+                            key={i}
+                            justify="space-between"
+                            w="100%"
+                            p="3"
+                            backgroundColor="#F8F9FF"
+                            borderWidth={1}
+                        >
+                            <Text>
+                                <b>{event.eventName}</b> ({event.members.length}{" "}
+                                {event.members.length === 1 ? "member" : "members"})
+                            </Text>
+
+                            {event.members.includes(_identityCommitment) ? (
                                 <Button
-                                    key={event.groupId}
-                                    onClick={() =>
-                                        event.members.includes(_identityCommitment)
-                                            ? selectEvent(event)
-                                            : joinEvent(event)
-                                    }
+                                    onClick={() => selectEvent(event)}
                                     isDisabled={_loading}
-                                    justifyContent="left"
+                                    leftIcon={<IconCheck />}
                                     colorScheme="primary"
-                                    fontWeight={event.members.includes(_identityCommitment) ? "bold" : "normal"}
+                                    fontWeight="bold"
                                     variant="link"
                                 >
-                                    {event.eventName} ({event.members.length})
+                                    Joined
                                 </Button>
-                            ))
-                        ) : (
-                            <Text>Still no events. Try to refresh!</Text>
-                        )}
-                    </VStack>
-                </Box>
+                            ) : (
+                                <Button
+                                    onClick={() => joinEvent(event)}
+                                    isDisabled={_loading}
+                                    colorScheme="primary"
+                                    fontWeight="bold"
+                                    variant="link"
+                                >
+                                    Join
+                                </Button>
+                            )}
+                        </HStack>
+                    ))}
+                </VStack>
             )}
-
-            <Button colorScheme="primary" variant="outline" isDisabled={_loading} onClick={createEvent}>
-                Create event
-            </Button>
 
             <Divider pt="8" borderColor="gray" />
 

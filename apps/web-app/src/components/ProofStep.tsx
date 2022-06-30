@@ -1,23 +1,12 @@
-import {
-    Box,
-    Button,
-    Divider,
-    Heading,
-    IconButton,
-    Link,
-    ListItem,
-    Text,
-    UnorderedList,
-    useBoolean,
-    VStack
-} from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { Contract, Signer } from "ethers"
 import { parseBytes32String } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
-import { MdOutlineRefresh } from "react-icons/md"
+import IconAddCircleFill from "../icons/IconAddCircleFill"
+import IconRefreshLine from "../icons/IconRefreshLine"
 import Stepper from "./Stepper"
 
 export type ProofStepProps = {
@@ -100,60 +89,61 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
 
     return (
         <>
-            <Heading as="h2" size="xl" textAlign="center">
-                Semaphore proofs
+            <Heading as="h2" size="xl">
+                Proofs
             </Heading>
 
-            <Text fontSize="md">
+            <Text pt="2" fontSize="md">
                 Semaphore group members can anonymously{" "}
                 <Link href="https://semaphore.appliedzkp.org/docs/guides/proofs" color="primary.500" isExternal>
                     prove
                 </Link>{" "}
-                that they are part of a group (or an event) and that they are generating their own proofs and signals.
-                Signals could be anonymous votes, leaks, or reviews.
+                that they are part of a group and that they are generating their own signals. Signals could be anonymous
+                votes, leaks, or reviews.
             </Text>
 
-            <Box w="100%" py="6" position="relative">
-                <IconButton
-                    colorScheme="primary"
+            <Divider pt="5" borderColor="gray.500" />
+
+            <HStack pt="5" justify="space-between">
+                <Text fontWeight="bold" fontSize="lg">
+                    <b>{event.eventName}</b> ({event.members.length})
+                </Text>
+                <Button
+                    leftIcon={<IconRefreshLine />}
                     variant="link"
+                    color="text.700"
                     onClick={() => getReviews().then(setReviews)}
-                    position="absolute"
-                    right="0"
-                    top="35px"
-                    aria-label="Refresh reviews"
-                    icon={<MdOutlineRefresh />}
-                />
+                >
+                    Refresh
+                </Button>
+            </HStack>
 
-                <VStack spacing="3" alignItems="start" p="5" border="1px solid gray" borderRadius="4px">
-                    <Text>
-                        <b>Event name</b>: {event.eventName}
-                    </Text>
-                    <Text>
-                        <b>Number of members</b>: {event.members.length}
-                    </Text>
-
-                    <Text>
-                        <b>Reviews</b>:
-                    </Text>
-
-                    {_reviews.length > 0 ? (
-                        <UnorderedList pl="20px">
-                            {_reviews.map((review, i) => (
-                                <ListItem key={i}>{review}</ListItem>
-                            ))}
-                        </UnorderedList>
-                    ) : (
-                        <Text>Still no reviews. Try to refresh!</Text>
-                    )}
-                </VStack>
+            <Box py="5">
+                <Button
+                    w="100%"
+                    fontWeight="bold"
+                    justifyContent="left"
+                    colorScheme="primary"
+                    px="4"
+                    onClick={postReview}
+                    isDisabled={_loading}
+                    leftIcon={<IconAddCircleFill />}
+                >
+                    Generate a signal
+                </Button>
             </Box>
 
-            <Button colorScheme="primary" variant="outline" isDisabled={_loading} onClick={postReview}>
-                Post review
-            </Button>
+            {_reviews.length > 0 && (
+                <VStack spacing="3" align="left">
+                    {_reviews.map((review, i) => (
+                        <HStack key={i} p="3" borderWidth={1}>
+                            <Text>{review}</Text>
+                        </HStack>
+                    ))}
+                </VStack>
+            )}
 
-            <Divider pt="8" borderColor="gray" />
+            <Divider pt="4" borderColor="gray" />
 
             <Stepper step={3} onPrevClick={onPrevClick} />
         </>
