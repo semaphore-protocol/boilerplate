@@ -1,5 +1,6 @@
 import { Identity } from "@semaphore-protocol/identity"
-import { createMerkleTree, generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
+import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
+import { Group } from "@semaphore-protocol/group"
 import { expect } from "chai"
 import { formatBytes32String, solidityKeccak256 } from "ethers/lib/utils"
 import { run } from "hardhat"
@@ -12,9 +13,12 @@ describe("Events", () => {
     const treeDepth = Number(process.env.TREE_DEPTH)
     const eventName = formatBytes32String("Event")
     const groupId = BigInt(solidityKeccak256(["bytes32"], [eventName])) >> BigInt(8)
+
     const identity = new Identity()
     const identityCommitment = identity.generateCommitment()
-    const tree = createMerkleTree(treeDepth, BigInt(0), [identityCommitment])
+    const group = new Group(treeDepth)
+
+    group.addMember(identityCommitment)
 
     const wasmFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.wasm`
     const zkeyFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.zkey`
@@ -42,7 +46,9 @@ describe("Events", () => {
         it("Should add a member to an existing event", async () => {
             const transaction = contract.addMember(groupId, identityCommitment)
 
-            await expect(transaction).to.emit(contract, "MemberAdded").withArgs(groupId, identityCommitment, tree.root)
+            await expect(transaction)
+                .to.emit(contract, "MemberAdded")
+                .withArgs(groupId, 0, identityCommitment, group.root)
         })
     })
 
@@ -51,9 +57,7 @@ describe("Events", () => {
             const review = "Great!"
             const bytes32Review = formatBytes32String(review)
 
-            const merkleProof = tree.createProof(0)
-
-            const fullProof = await generateProof(identity, merkleProof, groupId, review, {
+            const fullProof = await generateProof(identity, group, groupId, review, {
                 wasmFilePath,
                 zkeyFilePath
             })

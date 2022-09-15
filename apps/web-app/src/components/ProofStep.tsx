@@ -48,7 +48,7 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                     const members = await contract.queryFilter(contract.filters.MemberAdded(event.groupId))
                     const group = new Group()
 
-                    group.addMembers(members.map((m) => m.args![1].toString()))
+                    group.addMembers(members.map((m) => m.args![2].toString()))
 
                     const { proof, publicSignals } = await generateProof(
                         identity,

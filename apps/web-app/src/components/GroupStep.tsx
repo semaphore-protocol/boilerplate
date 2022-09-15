@@ -33,7 +33,7 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
         return events.map((e) => ({
             groupId: e.args![0],
             eventName: parseBytes32String(e.args![1]),
-            members: members.filter((m) => m.args![0].eq(e.args![0])).map((m) => m.args![1].toString())
+            members: members.filter((m) => m.args![0].eq(e.args![0])).map((m) => m.args![2].toString())
         }))
     }, [signer, contract])
 
