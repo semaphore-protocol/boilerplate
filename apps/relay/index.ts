@@ -3,7 +3,7 @@ import { config as dotenvConfig } from "dotenv"
 import { Contract, providers, utils, Wallet } from "ethers"
 import express from "express"
 import { resolve } from "path"
-import { abi as contractAbi } from "../contracts/build/contracts/contracts/Events.sol/Events.json"
+import { abi as contractAbi } from "../contracts/build/contracts/contracts/Greeter.sol/Greeter.json"
 
 dotenvConfig({ path: resolve(__dirname, "../../.env") })
 
@@ -37,14 +37,14 @@ const provider = new providers.JsonRpcProvider(ethereumURL)
 const signer = new Wallet(ethereumPrivateKey, provider)
 const contract = new Contract(contractAddress, contractAbi, signer)
 
-app.post("/post-review", async (req, res) => {
-    const { review, nullifierHash, groupId, solidityProof } = req.body
+app.post("/greet", async (req, res) => {
+    const { greeting, merkleRoot, nullifierHash, solidityProof } = req.body
 
     try {
-        const transaction = await contract.postReview(
-            utils.formatBytes32String(review),
+        const transaction = await contract.greet(
+            utils.formatBytes32String(greeting),
+            merkleRoot,
             nullifierHash,
-            groupId,
             solidityProof
         )
 
@@ -58,11 +58,11 @@ app.post("/post-review", async (req, res) => {
     }
 })
 
-app.post("/add-member", async (req, res) => {
-    const { groupId, identityCommitment } = req.body
+app.post("/join-group", async (req, res) => {
+    const { identityCommitment, username } = req.body
 
     try {
-        const transaction = await contract.addMember(groupId, identityCommitment)
+        const transaction = await contract.joinGroup(identityCommitment, utils.formatBytes32String(username))
 
         await transaction.wait()
 

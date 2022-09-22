@@ -6,7 +6,7 @@ import { Contract, providers, Signer } from "ethers"
 import { hexlify } from "ethers/lib/utils"
 import { useEffect, useState } from "react"
 import { createRoot } from "react-dom/client"
-import Events from "../../contracts/build/contracts/contracts/Events.sol/Events.json"
+import Greeter from "../../contracts/build/contracts/contracts/Greeter.sol/Greeter.json"
 import theme from "../styles"
 import GroupStep from "./components/GroupStep"
 import IdentityStep from "./components/IdentityStep"
@@ -18,7 +18,6 @@ function App() {
     const [_identity, setIdentity] = useState<Identity>()
     const [_signer, setSigner] = useState<Signer>()
     const [_contract, setContract] = useState<Contract>()
-    const [_event, setEvent] = useState<any>()
 
     useEffect(() => {
         ;(async () => {
@@ -39,14 +38,14 @@ function App() {
             if (accounts[0]) {
                 setSigner(ethersProvider.getSigner())
 
-                setContract(new Contract(process.env.CONTRACT_ADDRESS!, Events.abi, ethersProvider.getSigner()))
+                setContract(new Contract(process.env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
             }
 
             ethereum.on("accountsChanged", (newAccounts: string[]) => {
                 if (newAccounts.length !== 0) {
                     setSigner(ethersProvider.getSigner())
 
-                    setContract(new Contract(process.env.CONTRACT_ADDRESS!, Events.abi, ethersProvider.getSigner()))
+                    setContract(new Contract(process.env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
                 } else {
                     setSigner(undefined)
                 }
@@ -66,10 +65,7 @@ function App() {
                             contract={_contract}
                             identity={_identity as Identity}
                             onPrevClick={() => setStep(1)}
-                            onSelect={(event) => {
-                                setEvent(event)
-                                setStep(3)
-                            }}
+                            onNextClick={() => setStep(3)}
                             onLog={setLogs}
                         />
                     ) : (
@@ -77,7 +73,6 @@ function App() {
                             signer={_signer}
                             contract={_contract}
                             identity={_identity as Identity}
-                            event={_event}
                             onPrevClick={() => setStep(2)}
                             onLog={setLogs}
                         />

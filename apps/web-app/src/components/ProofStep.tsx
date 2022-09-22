@@ -13,66 +13,61 @@ export type ProofStepProps = {
     signer?: Signer
     contract?: Contract
     identity: Identity
-    event: any
     onPrevClick: () => void
     onLog: (message: string) => void
 }
 
-export default function ProofStep({ signer, contract, event, identity, onPrevClick, onLog }: ProofStepProps) {
+export default function ProofStep({ signer, contract, identity, onPrevClick, onLog }: ProofStepProps) {
     const [_loading, setLoading] = useBoolean()
-    const [_reviews, setReviews] = useState<any[]>([])
+    const [_greetings, setGreetings] = useState<string[]>([])
 
-    const getReviews = useCallback(async () => {
+    const getGreetings = useCallback(async () => {
         if (!signer || !contract) {
             return []
         }
 
-        const reviews = await contract.queryFilter(contract.filters.ReviewPosted(event.groupId))
+        const greetings = await contract.queryFilter(contract.filters.NewGreeting())
 
-        return reviews.map((r) => parseBytes32String(r.args![1]))
-    }, [signer, contract, event])
+        return greetings.map((e) => parseBytes32String(e.args![0]))
+    }, [signer, contract])
 
     useEffect(() => {
-        getReviews().then(setReviews)
-    }, [signer, contract, event])
+        getGreetings().then(setGreetings)
+    }, [signer, contract])
 
-    const postReview = useCallback(async () => {
+    const greet = useCallback(async () => {
         if (contract && identity) {
-            const review = prompt("Please enter your review:")
+            const greeting = prompt("Please enter your greeting:")
 
-            if (review) {
+            if (greeting) {
                 setLoading.on()
-                onLog(`Posting your anonymous review...`)
+                onLog(`Posting your anonymous greeting...`)
 
                 try {
-                    const members = await contract.queryFilter(contract.filters.MemberAdded(event.groupId))
+                    const groupId = await contract.groupId()
+                    const users = await contract.queryFilter(contract.filters.NewUser())
                     const group = new Group()
 
-                    group.addMembers(members.map((m) => m.args![2].toString()))
+                    group.addMembers(users.map((e) => e.args![0].toString()))
 
-                    const { proof, publicSignals } = await generateProof(
-                        identity,
-                        group,
-                        event.groupId.toString(),
-                        review
-                    )
+                    const { proof, publicSignals } = await generateProof(identity, group, groupId.toString(), greeting)
                     const solidityProof = packToSolidityProof(proof)
 
-                    const { status } = await fetch(`${process.env.RELAY_URL}/post-review`, {
+                    const { status } = await fetch(`${process.env.RELAY_URL}/greet`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            review,
+                            greeting,
+                            merkleRoot: publicSignals.merkleRoot,
                             nullifierHash: publicSignals.nullifierHash,
-                            groupId: event.groupId.toString(),
                             solidityProof
                         })
                     })
 
                     if (status === 200) {
-                        setReviews((v) => [...v, review])
+                        setGreetings((v) => [...v, greeting])
 
-                        onLog(`Your review was posted 🎉`)
+                        onLog(`Your greeting was posted 🎉`)
                     } else {
                         onLog("Some error occurred, please try again!")
                     }
@@ -94,29 +89,39 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
             </Heading>
 
             <Text pt="2" fontSize="md">
-                Semaphore group members can anonymously{" "}
+                Semaphore members can anonymously{" "}
                 <Link href="https://semaphore.appliedzkp.org/docs/guides/proofs" color="primary.500" isExternal>
                     prove
                 </Link>{" "}
                 that they are part of a group and that they are generating their own signals. Signals could be anonymous
-                votes, leaks, or reviews.
+                votes, leaks, reviews, or just greetings :)
             </Text>
 
             <Divider pt="5" borderColor="gray.500" />
 
-            <HStack pt="5" justify="space-between">
+            <HStack py="5" justify="space-between">
                 <Text fontWeight="bold" fontSize="lg">
-                    <b>{event.eventName}</b> ({event.members.length})
+                    Greeter signals ({_greetings.length})
                 </Text>
                 <Button
                     leftIcon={<IconRefreshLine />}
                     variant="link"
                     color="text.700"
-                    onClick={() => getReviews().then(setReviews)}
+                    onClick={() => getGreetings().then(setGreetings)}
                 >
                     Refresh
                 </Button>
             </HStack>
+
+            {_greetings.length > 0 && (
+                <VStack spacing="3" align="left">
+                    {_greetings.map((greeting, i) => (
+                        <HStack key={i} p="3" borderWidth={1}>
+                            <Text>{greeting}</Text>
+                        </HStack>
+                    ))}
+                </VStack>
+            )}
 
             <Box py="5">
                 <Button
@@ -125,23 +130,13 @@ export default function ProofStep({ signer, contract, event, identity, onPrevCli
                     justifyContent="left"
                     colorScheme="primary"
                     px="4"
-                    onClick={postReview}
+                    onClick={greet}
                     isDisabled={_loading}
                     leftIcon={<IconAddCircleFill />}
                 >
-                    Generate a signal
+                    Greet
                 </Button>
             </Box>
-
-            {_reviews.length > 0 && (
-                <VStack spacing="3" align="left">
-                    {_reviews.map((review, i) => (
-                        <HStack key={i} p="3" borderWidth={1}>
-                            <Text>{review}</Text>
-                        </HStack>
-                    ))}
-                </VStack>
-            )}
 
             <Divider pt="4" borderColor="gray" />
 

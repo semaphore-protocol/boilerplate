@@ -1,9 +1,8 @@
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
 import { Contract, Signer } from "ethers"
-import { formatBytes32String, parseBytes32String } from "ethers/lib/utils"
+import { parseBytes32String } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
-import IconCheck from "../icons/IconCheck"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
 import Stepper from "./Stepper"
@@ -13,42 +12,36 @@ export type GroupStepProps = {
     contract?: Contract
     identity: Identity
     onPrevClick: () => void
-    onSelect: (e: any) => void
+    onNextClick: () => void
     onLog: (message: string) => void
 }
 
-export default function GroupStep({ signer, contract, identity, onPrevClick, onSelect, onLog }: GroupStepProps) {
+export default function GroupStep({ signer, contract, identity, onPrevClick, onNextClick, onLog }: GroupStepProps) {
     const [_loading, setLoading] = useBoolean()
-    const [_events, setEvents] = useState<any[]>([])
     const [_identityCommitment, setIdentityCommitment] = useState<string>()
+    const [_users, setUsers] = useState<any[]>([])
 
-    const getEvents = useCallback(async () => {
+    const getUsers = useCallback(async () => {
         if (!signer || !contract) {
             return []
         }
 
-        const events = await contract.queryFilter(contract.filters.EventCreated())
-        const members = await contract.queryFilter(contract.filters.MemberAdded())
+        const users = await contract.queryFilter(contract.filters.NewUser())
 
-        return events.map((e) => ({
-            groupId: e.args![0],
-            eventName: parseBytes32String(e.args![1]),
-            members: members.filter((m) => m.args![0].eq(e.args![0])).map((m) => m.args![2].toString())
+        return users.map((e) => ({
+            identityCommitment: e.args![0].toString(),
+            username: parseBytes32String(e.args![1])
         }))
     }, [signer, contract])
 
     useEffect(() => {
         ;(async () => {
-            const events = await getEvents()
+            const users = await getUsers()
 
-            if (events.length > 0) {
-                setEvents(events)
+            if (users.length > 0) {
+                setUsers(users)
 
-                onLog(
-                    `${events.length} event${
-                        events.length > 1 ? "s" : ""
-                    } were retrieved from the contract 🤙🏽 Join one or create a new one!`
-                )
+                onLog(`${users.length} user${users.length > 1 ? "s were" : " was"} retrieved from the Greeter group 🤙🏽`)
             }
         })()
     }, [signer, contract])
@@ -57,74 +50,40 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
         setIdentityCommitment(identity.generateCommitment().toString())
     }, [identity])
 
-    const createEvent = useCallback(async () => {
-        if (signer && contract) {
-            const eventName = window.prompt("Please enter your event name:")
+    const joinGroup = useCallback(async () => {
+        if (_identityCommitment) {
+            const username = window.prompt("Please enter your username:")
 
-            if (eventName) {
+            if (username) {
                 setLoading.on()
-                onLog(`Creating the '${eventName}' event...`)
+                onLog(`Joining the Greeter group...`)
 
-                try {
-                    const transaction = await contract.createEvent(formatBytes32String(eventName))
+                const { status } = await fetch(`${process.env.RELAY_URL}/join-group`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        identityCommitment: _identityCommitment,
+                        username
+                    })
+                })
 
-                    await transaction.wait()
+                if (status === 200) {
+                    setUsers((users: any) => [...users, { identityCommitment: _identityCommitment, username }])
 
-                    setEvents(await getEvents())
-
-                    onLog(`The '${eventName}' event was just created 🎉`)
-                } catch (error) {
-                    console.error(error)
-
+                    onLog(`You joined the Greeter group event 🎉 Greet anonymously!`)
+                } else {
                     onLog("Some error occurred, please try again!")
-                } finally {
-                    setLoading.off()
                 }
+
+                setLoading.off()
             }
         }
-    }, [signer, contract])
+    }, [_identityCommitment])
 
-    const joinEvent = useCallback(
-        async (event: any) => {
-            if (_identityCommitment) {
-                const response = window.confirm(
-                    `There are ${event.members.length} members in this event. Are you sure you want to join?`
-                )
-
-                if (response) {
-                    setLoading.on()
-                    onLog(`Joining the '${event.eventName}' event...`)
-
-                    const { status } = await fetch(`${process.env.RELAY_URL}/add-member`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            groupId: event.groupId,
-                            identityCommitment: _identityCommitment
-                        })
-                    })
-
-                    if (status === 200) {
-                        event.members.push(_identityCommitment)
-                        onSelect(event)
-
-                        onLog(`You joined the '${event.eventName}' event 🎉 Post your anonymous reviews!`)
-                    } else {
-                        onLog("Some error occurred, please try again!")
-                    }
-
-                    setLoading.off()
-                }
-            }
-        },
-        [_identityCommitment]
+    const userHasJoined = useCallback(
+        () => _users.find((user) => user.identityCommitment === _identityCommitment),
+        [_users, _identityCommitment]
     )
-
-    const selectEvent = useCallback((event: any) => {
-        onSelect(event)
-
-        onLog(`Post your anonymous reviews in the '${event.eventName}' event 👍🏽`)
-    }, [])
 
     return (
         <>
@@ -143,19 +102,29 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
 
             <Divider pt="5" borderColor="gray.500" />
 
-            <HStack pt="5" justify="space-between">
+            <HStack py="5" justify="space-between">
                 <Text fontWeight="bold" fontSize="lg">
-                    Groups
+                    Greeter users ({_users.length})
                 </Text>
                 <Button
                     leftIcon={<IconRefreshLine />}
                     variant="link"
                     color="text.700"
-                    onClick={() => getEvents().then(setEvents)}
+                    onClick={() => getUsers().then(setUsers)}
                 >
                     Refresh
                 </Button>
             </HStack>
+
+            {_users.length > 0 && (
+                <VStack spacing="3" align="left">
+                    {_users.map((user, i) => (
+                        <HStack key={i} p="3" borderWidth={1}>
+                            <Text>{user.username}</Text>
+                        </HStack>
+                    ))}
+                </VStack>
+            )}
 
             <Box py="5">
                 <Button
@@ -164,60 +133,17 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onS
                     justifyContent="left"
                     colorScheme="primary"
                     px="4"
-                    onClick={createEvent}
-                    isDisabled={_loading}
+                    onClick={joinGroup}
+                    isDisabled={_loading || userHasJoined()}
                     leftIcon={<IconAddCircleFill />}
                 >
-                    Create new group
+                    Join group
                 </Button>
             </Box>
 
-            {_events.length > 0 && (
-                <VStack spacing="3">
-                    {_events.map((event, i) => (
-                        <HStack
-                            key={i}
-                            justify="space-between"
-                            w="100%"
-                            p="3"
-                            backgroundColor="#F8F9FF"
-                            borderWidth={1}
-                        >
-                            <Text>
-                                <b>{event.eventName}</b> ({event.members.length}{" "}
-                                {event.members.length === 1 ? "member" : "members"})
-                            </Text>
+            <Divider pt="4" borderColor="gray" />
 
-                            {event.members.includes(_identityCommitment) ? (
-                                <Button
-                                    onClick={() => selectEvent(event)}
-                                    isDisabled={_loading}
-                                    leftIcon={<IconCheck />}
-                                    colorScheme="primary"
-                                    fontWeight="bold"
-                                    variant="link"
-                                >
-                                    Joined
-                                </Button>
-                            ) : (
-                                <Button
-                                    onClick={() => joinEvent(event)}
-                                    isDisabled={_loading}
-                                    colorScheme="primary"
-                                    fontWeight="bold"
-                                    variant="link"
-                                >
-                                    Join
-                                </Button>
-                            )}
-                        </HStack>
-                    ))}
-                </VStack>
-            )}
-
-            <Divider pt="8" borderColor="gray" />
-
-            <Stepper step={2} onPrevClick={onPrevClick} />
+            <Stepper step={2} onPrevClick={onPrevClick} onNextClick={userHasJoined() && onNextClick} />
         </>
     )
 }
