@@ -1,18 +1,20 @@
-import { ChakraProvider, Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
+import { Container, HStack, Spinner, Stack, Text, VStack } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
 import detectEthereumProvider from "@metamask/detect-provider"
 import { Identity } from "@semaphore-protocol/identity"
 import { Contract, providers, Signer } from "ethers"
 import { hexlify } from "ethers/lib/utils"
+import Head from "next/head"
 import { useEffect, useState } from "react"
-import { createRoot } from "react-dom/client"
-import Greeter from "../../contracts/build/contracts/contracts/Greeter.sol/Greeter.json"
-import theme from "../styles"
-import GroupStep from "./components/GroupStep"
-import IdentityStep from "./components/IdentityStep"
-import ProofStep from "./components/ProofStep"
+import Greeter from "../../../contracts/build/contracts/contracts/Greeter.sol/Greeter.json"
+import GroupStep from "../components/GroupStep"
+import IdentityStep from "../components/IdentityStep"
+import ProofStep from "../components/ProofStep"
+import getNextConfig from "next/config"
 
-function App() {
+const { publicRuntimeConfig: env } = getNextConfig()
+
+export default function Home() {
     const [_logs, setLogs] = useState<string>("")
     const [_step, setStep] = useState<number>(1)
     const [_identity, setIdentity] = useState<Identity>()
@@ -28,7 +30,7 @@ function App() {
                 method: "wallet_switchEthereumChain",
                 params: [
                     {
-                        chainId: hexlify(Number(process.env.ETHEREUM_CHAIN_ID!)).replace("0x0", "0x")
+                        chainId: hexlify(Number(env.ETHEREUM_CHAIN_ID!)).replace("0x0", "0x")
                     }
                 ]
             })
@@ -38,14 +40,14 @@ function App() {
             if (accounts[0]) {
                 setSigner(ethersProvider.getSigner())
 
-                setContract(new Contract(process.env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
+                setContract(new Contract(env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
             }
 
             ethereum.on("accountsChanged", (newAccounts: string[]) => {
                 if (newAccounts.length !== 0) {
                     setSigner(ethersProvider.getSigner())
 
-                    setContract(new Contract(process.env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
+                    setContract(new Contract(env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
                 } else {
                     setSigner(undefined)
                 }
@@ -55,6 +57,11 @@ function App() {
 
     return (
         <>
+            <Head>
+                <title>Greeter</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
             <Container maxW="lg" flex="1" display="flex" alignItems="center">
                 <Stack>
                     {_step === 1 ? (
@@ -95,11 +102,3 @@ function App() {
         </>
     )
 }
-
-const root = createRoot(document.getElementById("app")!)
-
-root.render(
-    <ChakraProvider theme={theme}>
-        <App />
-    </ChakraProvider>
-)

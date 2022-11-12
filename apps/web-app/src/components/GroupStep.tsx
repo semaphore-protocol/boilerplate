@@ -58,7 +58,7 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onN
                 setLoading.on()
                 onLog(`Joining the Greeter group...`)
 
-                const { status } = await fetch(`${process.env.RELAY_URL}/join-group`, {
+                const { status } = await fetch("api/join", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({

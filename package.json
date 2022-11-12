@@ -8,8 +8,7 @@
     "private": true,
     "scripts": {
         "start:contracts": "yarn workspace contracts start",
-        "start:relay": "yarn workspace relay start",
-        "start:web-app": "yarn workspace web-app start",
+        "start:web-app": "yarn workspace web-app dev",
         "lint": "eslint . --ext .js,.ts",
         "prettier": "prettier -c .",
         "prettier:write": "prettier -w ."

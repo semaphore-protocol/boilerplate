@@ -7,10 +7,10 @@ const styles: Styles = {
             bg: "white",
             color: "text.700"
         },
-        "body, #app": {
+        "body, #__next": {
             minHeight: "100vh"
         },
-        "#app": {
+        "#__next": {
             display: "flex",
             flexDirection: "column"
         }

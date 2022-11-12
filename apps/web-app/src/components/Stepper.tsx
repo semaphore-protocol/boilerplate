@@ -37,7 +37,6 @@ export default function Stepper({ step, onPrevClick, onNextClick }: StepperProps
                     justifyContent="right"
                     colorScheme="primary"
                     variant="link"
-                    isDisabled={!onNextClick}
                     onClick={onNextClick || undefined}
                 >
                     Next

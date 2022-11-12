@@ -54,8 +54,16 @@ dist
 build
 cache
 
-# Parcel
-.parcel-cache
+# Next.js
+.next/
+out/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
 # dotenv environment variable files
 .env
@@ -70,6 +78,7 @@ cache
 
 # yarn v3
 .pnp.*
+.pnp.js
 .yarn/*
 !.yarn/patches
 !.yarn/plugins

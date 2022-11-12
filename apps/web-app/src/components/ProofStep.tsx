@@ -53,7 +53,7 @@ export default function ProofStep({ signer, contract, identity, onPrevClick, onL
                     const { proof, publicSignals } = await generateProof(identity, group, groupId.toString(), greeting)
                     const solidityProof = packToSolidityProof(proof)
 
-                    const { status } = await fetch(`${process.env.RELAY_URL}/greet`, {
+                    const { status } = await fetch("api/greet", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({

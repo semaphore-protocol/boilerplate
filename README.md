@@ -79,10 +79,6 @@ yarn start:contracts
 yarn start:web-app
 ```
 
-```bash
-yarn start:relay
-```
-
 ### Code quality and formatting
 
 Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
