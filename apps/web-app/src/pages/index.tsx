@@ -1,16 +1,16 @@
-import { Container, HStack, Spinner, Stack, Text, VStack } from "@chakra-ui/react"
+import { Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
 import detectEthereumProvider from "@metamask/detect-provider"
 import { Identity } from "@semaphore-protocol/identity"
 import { Contract, providers, Signer } from "ethers"
 import { hexlify } from "ethers/lib/utils"
+import getNextConfig from "next/config"
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import Greeter from "../../../contracts/build/contracts/contracts/Greeter.sol/Greeter.json"
+import Greeter from "../../contract-artifacts/Greeter.json"
 import GroupStep from "../components/GroupStep"
 import IdentityStep from "../components/IdentityStep"
 import ProofStep from "../components/ProofStep"
-import getNextConfig from "next/config"
 
 const { publicRuntimeConfig: env } = getNextConfig()
 

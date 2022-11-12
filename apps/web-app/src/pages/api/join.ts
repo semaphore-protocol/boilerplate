@@ -1,6 +1,6 @@
 import { Contract, providers, utils, Wallet } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { abi as contractAbi } from "../../../../contracts/build/contracts/contracts/Greeter.sol/Greeter.json"
+import { abi as contractAbi } from "../../../contract-artifacts/Greeter.json"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (typeof process.env.CONTRACT_ADDRESS !== "string") {
