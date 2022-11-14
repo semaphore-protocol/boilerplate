@@ -2,7 +2,7 @@ import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack }
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
-import { Contract, Signer } from "ethers"
+import { Contract } from "ethers"
 import { parseBytes32String } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
@@ -10,30 +10,29 @@ import IconRefreshLine from "../icons/IconRefreshLine"
 import Stepper from "./Stepper"
 
 export type ProofStepProps = {
-    signer?: Signer
     contract?: Contract
     identity: Identity
     onPrevClick: () => void
     onLog: (message: string) => void
 }
 
-export default function ProofStep({ signer, contract, identity, onPrevClick, onLog }: ProofStepProps) {
+export default function ProofStep({ contract, identity, onPrevClick, onLog }: ProofStepProps) {
     const [_loading, setLoading] = useBoolean()
     const [_greetings, setGreetings] = useState<string[]>([])
 
     const getGreetings = useCallback(async () => {
-        if (!signer || !contract) {
+        if (!contract) {
             return []
         }
 
         const greetings = await contract.queryFilter(contract.filters.NewGreeting())
 
         return greetings.map((e) => parseBytes32String(e.args![0]))
-    }, [signer, contract])
+    }, [contract])
 
     useEffect(() => {
         getGreetings().then(setGreetings)
-    }, [signer, contract])
+    }, [contract])
 
     const greet = useCallback(async () => {
         if (contract && identity) {

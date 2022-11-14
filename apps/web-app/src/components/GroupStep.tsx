@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
-import { Contract, Signer } from "ethers"
+import { Contract } from "ethers"
 import { parseBytes32String } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
@@ -8,7 +8,6 @@ import IconRefreshLine from "../icons/IconRefreshLine"
 import Stepper from "./Stepper"
 
 export type GroupStepProps = {
-    signer?: Signer
     contract?: Contract
     identity: Identity
     onPrevClick: () => void
@@ -16,13 +15,12 @@ export type GroupStepProps = {
     onLog: (message: string) => void
 }
 
-export default function GroupStep({ signer, contract, identity, onPrevClick, onNextClick, onLog }: GroupStepProps) {
+export default function GroupStep({ contract, identity, onPrevClick, onNextClick, onLog }: GroupStepProps) {
     const [_loading, setLoading] = useBoolean()
-    const [_identityCommitment, setIdentityCommitment] = useState<string>()
     const [_users, setUsers] = useState<any[]>([])
 
     const getUsers = useCallback(async () => {
-        if (!signer || !contract) {
+        if (!contract) {
             return []
         }
 
@@ -32,7 +30,7 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onN
             identityCommitment: e.args![0].toString(),
             username: parseBytes32String(e.args![1])
         }))
-    }, [signer, contract])
+    }, [contract])
 
     useEffect(() => {
         ;(async () => {
@@ -44,45 +42,39 @@ export default function GroupStep({ signer, contract, identity, onPrevClick, onN
                 onLog(`${users.length} user${users.length > 1 ? "s were" : " was"} retrieved from the Greeter group 🤙🏽`)
             }
         })()
-    }, [signer, contract])
-
-    useEffect(() => {
-        setIdentityCommitment(identity.generateCommitment().toString())
-    }, [identity])
+    }, [contract])
 
     const joinGroup = useCallback(async () => {
-        if (_identityCommitment) {
-            const username = window.prompt("Please enter your username:")
+        const username = window.prompt("Please enter your username:")
 
-            if (username) {
-                setLoading.on()
-                onLog(`Joining the Greeter group...`)
+        if (username) {
+            setLoading.on()
+            onLog(`Joining the Greeter group...`)
 
-                const { status } = await fetch("api/join", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        identityCommitment: _identityCommitment,
-                        username
-                    })
+            const { status } = await fetch("api/join", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    identityCommitment: identity.commitment.toString(),
+                    username
                 })
+            })
 
-                if (status === 200) {
-                    setUsers((users: any) => [...users, { identityCommitment: _identityCommitment, username }])
+            if (status === 200) {
+                setUsers((users: any) => [...users, { identityCommitment: identity.commitment.toString(), username }])
 
-                    onLog(`You joined the Greeter group event 🎉 Greet anonymously!`)
-                } else {
-                    onLog("Some error occurred, please try again!")
-                }
-
-                setLoading.off()
+                onLog(`You joined the Greeter group event 🎉 Greet anonymously!`)
+            } else {
+                onLog("Some error occurred, please try again!")
             }
+
+            setLoading.off()
         }
-    }, [_identityCommitment])
+    }, [])
 
     const userHasJoined = useCallback(
-        () => _users.find((user) => user.identityCommitment === _identityCommitment),
-        [_users, _identityCommitment]
+        () => _users.find((user) => user.identityCommitment === identity.commitment.toString()),
+        [_users, identity]
     )
 
     return (

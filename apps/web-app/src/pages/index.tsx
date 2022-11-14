@@ -2,7 +2,7 @@ import { Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
 import detectEthereumProvider from "@metamask/detect-provider"
 import { Identity } from "@semaphore-protocol/identity"
-import { Contract, providers, Signer } from "ethers"
+import { Contract, providers } from "ethers"
 import { hexlify } from "ethers/lib/utils"
 import getNextConfig from "next/config"
 import Head from "next/head"
@@ -18,13 +18,11 @@ export default function Home() {
     const [_logs, setLogs] = useState<string>("")
     const [_step, setStep] = useState<number>(1)
     const [_identity, setIdentity] = useState<Identity>()
-    const [_signer, setSigner] = useState<Signer>()
     const [_contract, setContract] = useState<Contract>()
 
     useEffect(() => {
         ;(async () => {
             const ethereum = (await detectEthereumProvider()) as any
-            const accounts = await ethereum.request({ method: "eth_requestAccounts" })
 
             await ethereum.request({
                 method: "wallet_switchEthereumChain",
@@ -37,21 +35,7 @@ export default function Home() {
 
             const ethersProvider = new providers.Web3Provider(ethereum)
 
-            if (accounts[0]) {
-                setSigner(ethersProvider.getSigner())
-
-                setContract(new Contract(env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
-            }
-
-            ethereum.on("accountsChanged", (newAccounts: string[]) => {
-                if (newAccounts.length !== 0) {
-                    setSigner(ethersProvider.getSigner())
-
-                    setContract(new Contract(env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider.getSigner()))
-                } else {
-                    setSigner(undefined)
-                }
-            })
+            setContract(new Contract(env.CONTRACT_ADDRESS!, Greeter.abi, ethersProvider))
         })()
     }, [])
 
@@ -68,7 +52,6 @@ export default function Home() {
                         <IdentityStep onChange={setIdentity} onLog={setLogs} onNextClick={() => setStep(2)} />
                     ) : _step === 2 ? (
                         <GroupStep
-                            signer={_signer}
                             contract={_contract}
                             identity={_identity as Identity}
                             onPrevClick={() => setStep(1)}
@@ -77,7 +60,6 @@ export default function Home() {
                         />
                     ) : (
                         <ProofStep
-                            signer={_signer}
                             contract={_contract}
                             identity={_identity as Identity}
                             onPrevClick={() => setStep(2)}
