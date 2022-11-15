@@ -49,7 +49,7 @@ export default function IdentityStep({ onChange, onNextClick, onLog }: IdentityS
             <Text pt="2" fontSize="md">
                 Users interact with the protocol using a Semaphore{" "}
                 <Link href="https://semaphore.appliedzkp.org/docs/guides/identities" color="primary.500" isExternal>
-                    identities
+                    identity
                 </Link>{" "}
                 (similar to Ethereum accounts). It contains three values:
             </Text>
