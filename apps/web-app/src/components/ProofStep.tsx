@@ -112,17 +112,7 @@ export default function ProofStep({ contract, identity, onPrevClick, onLog }: Pr
                 </Button>
             </HStack>
 
-            {_greetings.length > 0 && (
-                <VStack spacing="3" align="left">
-                    {_greetings.map((greeting, i) => (
-                        <HStack key={i} p="3" borderWidth={1}>
-                            <Text>{greeting}</Text>
-                        </HStack>
-                    ))}
-                </VStack>
-            )}
-
-            <Box py="5">
+            <Box pb="5">
                 <Button
                     w="100%"
                     fontWeight="bold"
@@ -137,7 +127,17 @@ export default function ProofStep({ contract, identity, onPrevClick, onLog }: Pr
                 </Button>
             </Box>
 
-            <Divider pt="4" borderColor="gray" />
+            {_greetings.length > 0 && (
+                <VStack spacing="3" align="left">
+                    {_greetings.map((greeting, i) => (
+                        <HStack key={i} p="3" borderWidth={1}>
+                            <Text>{greeting}</Text>
+                        </HStack>
+                    ))}
+                </VStack>
+            )}
+
+            <Divider pt="6" borderColor="gray" />
 
             <Stepper step={3} onPrevClick={onPrevClick} />
         </>

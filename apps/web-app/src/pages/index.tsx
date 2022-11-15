@@ -47,7 +47,7 @@ export default function Home() {
             </Head>
 
             <Container maxW="lg" flex="1" display="flex" alignItems="center">
-                <Stack>
+                <Stack py="8">
                     {_step === 1 ? (
                         <IdentityStep onChange={setIdentity} onLog={setLogs} onNextClick={() => setStep(2)} />
                     ) : _step === 2 ? (

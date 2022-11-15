@@ -39,7 +39,7 @@ export default function GroupStep({ contract, identity, onPrevClick, onNextClick
             if (users.length > 0) {
                 setUsers(users)
 
-                onLog(`${users.length} user${users.length > 1 ? "s were" : " was"} retrieved from the Greeter group 🤙🏽`)
+                onLog(`${users.length} user${users.length > 1 ? "s" : ""} retrieved from the Greeter group 🤙🏽`)
             }
         })()
     }, [contract])
@@ -108,17 +108,7 @@ export default function GroupStep({ contract, identity, onPrevClick, onNextClick
                 </Button>
             </HStack>
 
-            {_users.length > 0 && (
-                <VStack spacing="3" align="left">
-                    {_users.map((user, i) => (
-                        <HStack key={i} p="3" borderWidth={1}>
-                            <Text>{user.username}</Text>
-                        </HStack>
-                    ))}
-                </VStack>
-            )}
-
-            <Box py="5">
+            <Box pb="5">
                 <Button
                     w="100%"
                     fontWeight="bold"
@@ -133,7 +123,17 @@ export default function GroupStep({ contract, identity, onPrevClick, onNextClick
                 </Button>
             </Box>
 
-            <Divider pt="4" borderColor="gray" />
+            {_users.length > 0 && (
+                <VStack spacing="3" px="3" align="left" maxHeight="300px" overflowY="scroll">
+                    {_users.map((user, i) => (
+                        <HStack key={i} p="3" borderWidth={1}>
+                            <Text>{user.username}</Text>
+                        </HStack>
+                    ))}
+                </VStack>
+            )}
+
+            <Divider pt="6" borderColor="gray" />
 
             <Stepper step={2} onPrevClick={onPrevClick} onNextClick={userHasJoined() && onNextClick} />
         </>
