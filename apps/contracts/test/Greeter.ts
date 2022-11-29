@@ -2,7 +2,7 @@ import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
-import { formatBytes32String } from "ethers/lib/utils"
+import { formatBytes32String, solidityKeccak256 } from "ethers/lib/utils"
 import { run } from "hardhat"
 import { Greeter } from "../build/typechain"
 import { config } from "../package.json"
@@ -45,10 +45,11 @@ describe("Greeter", () => {
         const wasmFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.wasm`
         const zkeyFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.zkey`
 
-        it("Should allow users to greet", async () => {
-            const greeting = formatBytes32String("Hello World")
+        it("Should allow users to greet anonymously", async () => {
+            const greeting = "Hello World"
+            const greetingHash = solidityKeccak256(["string"], [greeting])
 
-            const fullProof = await generateProof(users[1].identity, group, BigInt(groupId), greeting, {
+            const fullProof = await generateProof(users[1].identity, group, BigInt(groupId), greetingHash, {
                 wasmFilePath,
                 zkeyFilePath
             })

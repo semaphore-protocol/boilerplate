@@ -3,7 +3,7 @@ import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { Contract } from "ethers"
-import { parseBytes32String } from "ethers/lib/utils"
+import { solidityKeccak256 } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
@@ -27,7 +27,7 @@ export default function ProofStep({ contract, identity, onPrevClick, onLog }: Pr
 
         const greetings = await contract.queryFilter(contract.filters.NewGreeting())
 
-        return greetings.map((e) => parseBytes32String(e.args![0]))
+        return greetings.map((e) => e.args![0])
     }, [contract])
 
     useEffect(() => {
@@ -46,10 +46,16 @@ export default function ProofStep({ contract, identity, onPrevClick, onLog }: Pr
                     const groupId = await contract.groupId()
                     const users = await contract.queryFilter(contract.filters.NewUser())
                     const group = new Group()
+                    const greetingHash = solidityKeccak256(["string"], [greeting])
 
                     group.addMembers(users.map((e) => e.args![0].toString()))
 
-                    const { proof, publicSignals } = await generateProof(identity, group, groupId.toString(), greeting)
+                    const { proof, publicSignals } = await generateProof(
+                        identity,
+                        group,
+                        groupId.toString(),
+                        greetingHash
+                    )
                     const solidityProof = packToSolidityProof(proof)
 
                     const { status } = await fetch("api/greet", {

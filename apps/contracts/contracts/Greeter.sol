@@ -4,7 +4,7 @@ pragma solidity ^0.8.4;
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
 contract Greeter {
-    event NewGreeting(bytes32 greeting);
+    event NewGreeting(string greeting);
     event NewUser(uint256 identityCommitment, bytes32 username);
 
     ISemaphore public semaphore;
@@ -28,12 +28,19 @@ contract Greeter {
     }
 
     function greet(
-        bytes32 greeting,
+        string calldata greeting,
         uint256 merkleTreeRoot,
         uint256 nullifierHash,
         uint256[8] calldata proof
     ) external {
-        semaphore.verifyProof(groupId, merkleTreeRoot, greeting, nullifierHash, groupId, proof);
+        semaphore.verifyProof(
+            groupId,
+            merkleTreeRoot,
+            keccak256(abi.encodePacked(greeting)),
+            nullifierHash,
+            groupId,
+            proof
+        );
 
         emit NewGreeting(greeting);
     }
