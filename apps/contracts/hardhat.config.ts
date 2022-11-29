@@ -14,19 +14,13 @@ import "./tasks/deploy"
 dotenvConfig({ path: resolve(__dirname, "../../.env") })
 
 function getNetworks(): NetworksUserConfig {
-    if (process.env.INFURA_API_KEY && process.env.ETHEREUM_PRIVATE_KEY) {
-        const infuraApiKey = process.env.INFURA_API_KEY
+    if (process.env.ETHEREUM_URL && process.env.ETHEREUM_PRIVATE_KEY) {
         const accounts = [`0x${process.env.ETHEREUM_PRIVATE_KEY}`]
 
         return {
             goerli: {
-                url: `https://goerli.infura.io/v3/${infuraApiKey}`,
+                url: process.env.ETHEREUM_URL,
                 chainId: 5,
-                accounts
-            },
-            arbitrum: {
-                url: "https://arb1.arbitrum.io/rpc",
-                chainId: 42161,
                 accounts
             }
         }
