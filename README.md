@@ -27,17 +27,8 @@
     </a>
 </p>
 
-| The repository is divided into three components: [web app](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/web-app), [relay](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/relay) and [contracts](https://github.com/semaphore-protocol/boilerplate/tree/main/apps/contracts). The app allows users to create their own Semaphore identity and create events where only members can post reviews anonymously. |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-
-```mermaid
-flowchart LR
-
-A(Web App) -->|Create events| C(Contracts)
-A -->|Join events| B(Relay)
-A -->|Post event reviews| B
-B --> C
-```
+| The repository is divided into three components: [web app](./apps/web-app), [contracts](./apps/contracts) and [subgraph](./apps/subgraph). The app allows users to create their own Semaphore identity, join a 'Greeter' group with their usernames and then send their greetings anonymously (currently on Goerli). |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
 
@@ -65,15 +56,9 @@ cp .env.example .env
 
 and add your environment variables.
 
-ℹ️ You can use the default ones to start the app in a local network.
+ℹ️ You should at least set a valid Ethereum URL (e.g. Infura) and a private key with some ethers.
 
 ### Start the app
-
-Run the following commands sequentially in three separate tabs of the terminal:
-
-```bash
-yarn start:contracts
-```
 
 ```bash
 yarn start:web-app
