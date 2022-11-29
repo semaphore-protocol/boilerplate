@@ -14,7 +14,6 @@
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
         "@fontsource/inter": "^4.5.14",
-        "@metamask/detect-provider": "^2.0.0",
         "@semaphore-protocol/group": "^2.6.1",
         "@semaphore-protocol/identity": "^2.6.1",
         "@semaphore-protocol/proof": "^2.6.1",

@@ -1,36 +1,22 @@
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
-import { Contract } from "ethers"
-import { parseBytes32String } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
+import useSubgraph from "../hooks/useSubgraph"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
 import Stepper from "./Stepper"
 
 export type GroupStepProps = {
-    contract?: Contract
     identity: Identity
     onPrevClick: () => void
     onNextClick: () => void
     onLog: (message: string) => void
 }
 
-export default function GroupStep({ contract, identity, onPrevClick, onNextClick, onLog }: GroupStepProps) {
+export default function GroupStep({ identity, onPrevClick, onNextClick, onLog }: GroupStepProps) {
     const [_loading, setLoading] = useBoolean()
     const [_users, setUsers] = useState<any[]>([])
-
-    const getUsers = useCallback(async () => {
-        if (!contract) {
-            return []
-        }
-
-        const users = await contract.queryFilter(contract.filters.NewUser())
-
-        return users.map((e) => ({
-            identityCommitment: e.args![0].toString(),
-            username: parseBytes32String(e.args![1])
-        }))
-    }, [contract])
+    const { getUsers } = useSubgraph()
 
     useEffect(() => {
         ;(async () => {
@@ -42,7 +28,7 @@ export default function GroupStep({ contract, identity, onPrevClick, onNextClick
                 onLog(`${users.length} user${users.length > 1 ? "s" : ""} retrieved from the Greeter group 🤙🏽`)
             }
         })()
-    }, [contract])
+    }, [])
 
     const joinGroup = useCallback(async () => {
         const username = window.prompt("Please enter your username:")

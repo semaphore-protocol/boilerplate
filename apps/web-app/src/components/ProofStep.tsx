@@ -2,40 +2,31 @@ import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack }
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
-import { Contract } from "ethers"
 import { solidityKeccak256 } from "ethers/lib/utils"
 import { useCallback, useEffect, useState } from "react"
+import useSubgraph from "../hooks/useSubgraph"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
 import Stepper from "./Stepper"
 
 export type ProofStepProps = {
-    contract?: Contract
+    groupId: string
     identity: Identity
     onPrevClick: () => void
     onLog: (message: string) => void
 }
 
-export default function ProofStep({ contract, identity, onPrevClick, onLog }: ProofStepProps) {
+export default function ProofStep({ groupId, identity, onPrevClick, onLog }: ProofStepProps) {
     const [_loading, setLoading] = useBoolean()
     const [_greetings, setGreetings] = useState<string[]>([])
-
-    const getGreetings = useCallback(async () => {
-        if (!contract) {
-            return []
-        }
-
-        const greetings = await contract.queryFilter(contract.filters.NewGreeting())
-
-        return greetings.map((e) => e.args![0])
-    }, [contract])
+    const { getGreetings, getUsers } = useSubgraph()
 
     useEffect(() => {
         getGreetings().then(setGreetings)
-    }, [contract])
+    }, [])
 
     const greet = useCallback(async () => {
-        if (contract && identity) {
+        if (identity) {
             const greeting = prompt("Please enter your greeting:")
 
             if (greeting) {
@@ -43,19 +34,13 @@ export default function ProofStep({ contract, identity, onPrevClick, onLog }: Pr
                 onLog(`Posting your anonymous greeting...`)
 
                 try {
-                    const groupId = await contract.groupId()
-                    const users = await contract.queryFilter(contract.filters.NewUser())
+                    const users = await getUsers()
                     const group = new Group()
                     const greetingHash = solidityKeccak256(["string"], [greeting])
 
-                    group.addMembers(users.map((e) => e.args![0].toString()))
+                    group.addMembers(users.map(({ identityCommitment }) => identityCommitment))
 
-                    const { proof, publicSignals } = await generateProof(
-                        identity,
-                        group,
-                        groupId.toString(),
-                        greetingHash
-                    )
+                    const { proof, publicSignals } = await generateProof(identity, group, groupId, greetingHash)
                     const solidityProof = packToSolidityProof(proof)
 
                     const { status } = await fetch("api/greet", {
@@ -85,7 +70,7 @@ export default function ProofStep({ contract, identity, onPrevClick, onLog }: Pr
                 }
             }
         }
-    }, [contract, identity])
+    }, [identity])
 
     return (
         <>
