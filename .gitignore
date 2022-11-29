@@ -85,3 +85,6 @@ next-env.d.ts
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# The Graph
+generated
