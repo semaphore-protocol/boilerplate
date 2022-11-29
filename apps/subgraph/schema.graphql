@@ -1,0 +1,10 @@
+type User @entity {
+    id: ID!
+    identityCommitment: BigInt!
+    username: String!
+}
+
+type Greeting @entity {
+    id: ID!
+    greeting: String!
+}

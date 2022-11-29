@@ -1,0 +1,29 @@
+specVersion: 0.0.4
+description: Semaphore boilerplate subgraph definition (The Graph).
+repository: https://github.com/semaphore-protocol/boilerplate
+schema:
+    file: ./schema.graphql
+dataSources:
+    - kind: ethereum/contract
+      name: Greeter
+      network: goerli
+      source:
+          address: "0xf41b202D2D008BdD2859A9E981Bf5A78c3D64770"
+          abi: Greeter
+          startBlock: 8041948
+      mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.6
+          language: wasm/assemblyscript
+          entities:
+              - User
+              - Greeting
+          abis:
+              - name: Greeter
+                file: ./contract-artifacts/Greeter.json
+          eventHandlers:
+              - event: NewUser(uint256,bytes32)
+                handler: createUser
+              - event: NewGreeting(string)
+                handler: createGreeting
+          file: ./src/mapping.ts
