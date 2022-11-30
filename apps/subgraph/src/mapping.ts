@@ -1,6 +1,7 @@
-import { log } from "@graphprotocol/graph-ts"
+import { ByteArray, log } from "@graphprotocol/graph-ts"
 import { NewGreeting, NewUser } from "../generated/Greeter/Greeter"
 import { Greeting, User } from "../generated/schema"
+import { concat, hash } from "./utils"
 
 /**
  * Creates a new user.
@@ -9,7 +10,10 @@ import { Greeting, User } from "../generated/schema"
 export function createUser(event: NewUser): void {
     log.debug(`NewUser event block: {}`, [event.block.number.toString()])
 
-    const user = new User(event.transaction.from.toHex())
+    const userId = hash(
+        concat(ByteArray.fromBigInt(event.block.timestamp), ByteArray.fromBigInt(event.params.identityCommitment))
+    )
+    const user = new User(userId)
 
     log.info("Creating user '{}'", [user.id])
 
@@ -28,7 +32,10 @@ export function createUser(event: NewUser): void {
 export function createGreeting(event: NewGreeting): void {
     log.debug(`NewGreeting event block: {}`, [event.block.number.toString()])
 
-    const greeting = new Greeting(event.transaction.from.toHex())
+    const greetingId = hash(
+        concat(ByteArray.fromBigInt(event.block.timestamp), ByteArray.fromHexString(event.params.greeting))
+    )
+    const greeting = new Greeting(greetingId)
 
     log.info("Creating greeting '{}'", [greeting.id])
 
