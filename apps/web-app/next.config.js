@@ -1,12 +1,16 @@
 /** @type {import('next').NextConfig} */
 
 const fs = require("fs")
+const withPWA = require("next-pwa")
 
 if (!fs.existsSync("./.env")) {
     require("dotenv").config({ path: "../../.env" })
 }
 
-const nextConfig = {
+const nextConfig = withPWA({
+    dest: "public",
+    disable: process.env.NODE_ENV === "development"
+})({
     reactStrictMode: true,
     swcMinify: true,
     env: {
@@ -26,6 +30,6 @@ const nextConfig = {
 
         return config
     }
-}
+})
 
 module.exports = nextConfig

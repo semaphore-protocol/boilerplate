@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Heading, HStack, Link, ListItem, OrderedList, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, HStack, Link, ListItem, OrderedList, Text } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
 import { useCallback, useEffect, useState } from "react"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
@@ -73,12 +73,18 @@ export default function IdentityStep({ onChange, onNextClick, onLog }: IdentityS
             </HStack>
 
             {_identity ? (
-                <Box w="100%" py="6">
-                    <VStack alignItems="start" p="5" borderWidth={1} borderColor="gray.500" borderRadius="4px">
-                        <Text>Trapdoor: {_identity.getTrapdoor().toString().substring(0, 30)}...</Text>
-                        <Text>Nullifier: {_identity.getNullifier().toString().substring(0, 30)}...</Text>
-                        <Text>Commitment: {_identity.generateCommitment().toString().substring(0, 30)}...</Text>
-                    </VStack>
+                <Box py="6" whiteSpace="nowrap">
+                    <Box p="5" borderWidth={1} borderColor="gray.500" borderRadius="4px">
+                        <Text textOverflow="ellipsis" overflow="hidden">
+                            Trapdoor: {_identity.trapdoor.toString()}
+                        </Text>
+                        <Text textOverflow="ellipsis" overflow="hidden">
+                            Nullifier: {_identity.nullifier.toString()}
+                        </Text>
+                        <Text textOverflow="ellipsis" overflow="hidden">
+                            Commitment: {_identity.commitment.toString()}
+                        </Text>
+                    </Box>
                 </Box>
             ) : (
                 <Box py="6">

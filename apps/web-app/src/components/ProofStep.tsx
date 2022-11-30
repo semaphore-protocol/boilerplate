@@ -84,7 +84,7 @@ export default function ProofStep({ groupId, identity, onPrevClick, onLog }: Pro
                     prove
                 </Link>{" "}
                 that they are part of a group and that they are generating their own signals. Signals could be anonymous
-                votes, leaks, reviews, or just greetings :)
+                votes, leaks, reviews, or just greetings.
             </Text>
 
             <Divider pt="5" borderColor="gray.500" />
