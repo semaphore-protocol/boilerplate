@@ -1,4 +1,4 @@
-import { Contract, providers, utils, Wallet } from "ethers"
+import { Contract, providers, Wallet } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
 import Greeter from "../../../contract-artifacts/Greeter.json"
 

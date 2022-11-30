@@ -4,6 +4,7 @@ const fs = require("fs")
 const withPWA = require("next-pwa")
 
 if (!fs.existsSync("./.env")) {
+    // eslint-disable-next-line global-require
     require("dotenv").config({ path: "../../.env" })
 }
 
