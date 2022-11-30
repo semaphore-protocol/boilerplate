@@ -1,66 +1,106 @@
-import { Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
-import "@fontsource/inter/400.css"
+import { Box, Button, Divider, Heading, HStack, Link, ListItem, OrderedList, Text } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
-import getNextConfig from "next/config"
-import Head from "next/head"
-import { useState } from "react"
-import GroupStep from "../components/GroupStep"
-import IdentityStep from "../components/IdentityStep"
-import ProofStep from "../components/ProofStep"
+import { useRouter } from "next/router"
+import { useCallback, useContext, useEffect, useState } from "react"
+import Stepper from "../components/Stepper"
+import LogsContext from "../context/LogsContext"
+import IconAddCircleFill from "../icons/IconAddCircleFill"
+import IconRefreshLine from "../icons/IconRefreshLine"
 
-const { publicRuntimeConfig: env } = getNextConfig()
-
-export default function Home() {
-    const [_logs, setLogs] = useState<string>("")
-    const [_step, setStep] = useState<number>(1)
+export default function IdentitiesPage() {
+    const router = useRouter()
+    const { setLogs } = useContext(LogsContext)
     const [_identity, setIdentity] = useState<Identity>()
+
+    useEffect(() => {
+        const identityString = localStorage.getItem("identity")
+
+        if (identityString) {
+            const identity = new Identity(identityString)
+
+            setIdentity(identity)
+
+            setLogs("Your Semaphore identity was retrieved from the browser cache 👌🏽")
+        } else {
+            setLogs("Create your Semaphore identity 👆🏽")
+        }
+    }, [])
+
+    const createIdentity = useCallback(async () => {
+        const identity = new Identity()
+
+        setIdentity(identity)
+
+        localStorage.setItem("identity", identity.toString())
+
+        setLogs("Your new Semaphore identity was just created 🎉")
+    }, [])
 
     return (
         <>
-            <Head>
-                <title>Greeter</title>
-                <link rel="icon" href="/favicon.ico" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-                <link rel="manifest" href="/manifest.json" />
-                <meta name="theme-color" content="#ebedff" />
-            </Head>
+            <Heading as="h2" size="xl">
+                Identities
+            </Heading>
 
-            <Container maxW="lg" flex="1" display="flex" alignItems="center">
-                <Stack py="8" display="flex" width="100%">
-                    {_step === 1 ? (
-                        <IdentityStep onChange={setIdentity} onLog={setLogs} onNextClick={() => setStep(2)} />
-                    ) : _step === 2 ? (
-                        <GroupStep
-                            identity={_identity as Identity}
-                            onPrevClick={() => setStep(1)}
-                            onNextClick={() => setStep(3)}
-                            onLog={setLogs}
-                        />
-                    ) : (
-                        <ProofStep
-                            groupId={env.GROUP_ID}
-                            identity={_identity as Identity}
-                            onPrevClick={() => setStep(2)}
-                            onLog={setLogs}
-                        />
-                    )}
-                </Stack>
-            </Container>
+            <Text pt="2" fontSize="md">
+                Users interact with the protocol using a Semaphore{" "}
+                <Link href="https://semaphore.appliedzkp.org/docs/guides/identities" color="primary.500" isExternal>
+                    identity
+                </Link>{" "}
+                (similar to Ethereum accounts). It contains three values:
+            </Text>
+            <OrderedList pl="20px" pt="5px" spacing="3">
+                <ListItem>Trapdoor: private, known only by user</ListItem>
+                <ListItem>Nullifier: private, known only by user</ListItem>
+                <ListItem>Commitment: public</ListItem>
+            </OrderedList>
 
-            <HStack
-                flexBasis="56px"
-                borderTop="1px solid #8f9097"
-                backgroundColor="#DAE0FF"
-                align="center"
-                justify="center"
-                spacing="4"
-                p="4"
-            >
-                {_logs.endsWith("...") && <Spinner color="primary.400" />}
-                <Text fontWeight="bold">{_logs || `Current step: ${_step}`}</Text>
+            <Divider pt="5" borderColor="gray.500" />
+
+            <HStack pt="5" justify="space-between">
+                <Text fontWeight="bold" fontSize="lg">
+                    Identity
+                </Text>
+                {_identity && (
+                    <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={createIdentity}>
+                        New
+                    </Button>
+                )}
             </HStack>
+
+            {_identity ? (
+                <Box py="6" whiteSpace="nowrap">
+                    <Box p="5" borderWidth={1} borderColor="gray.500" borderRadius="4px">
+                        <Text textOverflow="ellipsis" overflow="hidden">
+                            Trapdoor: {_identity.trapdoor.toString()}
+                        </Text>
+                        <Text textOverflow="ellipsis" overflow="hidden">
+                            Nullifier: {_identity.nullifier.toString()}
+                        </Text>
+                        <Text textOverflow="ellipsis" overflow="hidden">
+                            Commitment: {_identity.commitment.toString()}
+                        </Text>
+                    </Box>
+                </Box>
+            ) : (
+                <Box py="6">
+                    <Button
+                        w="100%"
+                        fontWeight="bold"
+                        justifyContent="left"
+                        colorScheme="primary"
+                        px="4"
+                        onClick={createIdentity}
+                        leftIcon={<IconAddCircleFill />}
+                    >
+                        Create identity
+                    </Button>
+                </Box>
+            )}
+
+            <Divider pt="3" borderColor="gray" />
+
+            <Stepper step={1} onNextClick={!!_identity && (() => router.push("/groups"))} />
         </>
     )
 }

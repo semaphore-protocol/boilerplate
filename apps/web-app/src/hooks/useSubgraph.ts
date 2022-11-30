@@ -1,14 +1,13 @@
-import { useCallback } from "react"
-
-type ReturnParameters = {
-    getUsers: () => Promise<any[]>
-    getGreetings: () => Promise<string[]>
-}
+import { useCallback, useState } from "react"
+import { SubgraphContextType } from "../context/SubgraphContext"
 
 const url = "https://api.thegraph.com/subgraphs/name/semaphore-protocol/boilerplate"
 
-export default function useSubgraph(): ReturnParameters {
-    const getUsers = useCallback(async (): Promise<string[]> => {
+export default function useSubgraph(): SubgraphContextType {
+    const [_users, setUsers] = useState<any[]>([])
+    const [_greetings, setGreetings] = useState<string[]>([])
+
+    const refreshUsers = useCallback(async (): Promise<void> => {
         const response = await fetch(url, {
             method: "POST",
             body: JSON.stringify({
@@ -21,10 +20,17 @@ export default function useSubgraph(): ReturnParameters {
 
         const { data } = await response.json()
 
-        return data.users
+        setUsers(data.users)
     }, [])
 
-    const getGreetings = useCallback(async (): Promise<string[]> => {
+    const addUser = useCallback(
+        (user: any) => {
+            setUsers([..._users, user])
+        },
+        [_users]
+    )
+
+    const refreshGreetings = useCallback(async (): Promise<void> => {
         const response = await fetch(url, {
             method: "POST",
             body: JSON.stringify({
@@ -37,11 +43,22 @@ export default function useSubgraph(): ReturnParameters {
 
         const { data } = await response.json()
 
-        return data.greetings.map(({ greeting }: any) => greeting)
+        setGreetings(data.greetings.map(({ greeting }: any) => greeting))
     }, [])
 
+    const addGreeting = useCallback(
+        (greeting: string) => {
+            setGreetings([..._greetings, greeting])
+        },
+        [_greetings]
+    )
+
     return {
-        getUsers,
-        getGreetings
+        _users,
+        _greetings,
+        refreshUsers,
+        addUser,
+        refreshGreetings,
+        addGreeting
     }
 }

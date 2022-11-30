@@ -18,6 +18,7 @@ export default function Stepper({ step, onPrevClick, onNextClick }: StepperProps
                     justifyContent="left"
                     colorScheme="primary"
                     variant="link"
+                    disabled={!onPrevClick}
                     onClick={onPrevClick || undefined}
                 >
                     Prev
@@ -37,6 +38,7 @@ export default function Stepper({ step, onPrevClick, onNextClick }: StepperProps
                     justifyContent="right"
                     colorScheme="primary"
                     variant="link"
+                    disabled={!onNextClick}
                     onClick={onNextClick || undefined}
                 >
                     Next
