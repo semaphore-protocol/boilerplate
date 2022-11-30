@@ -1,7 +1,7 @@
 import { task, types } from "hardhat/config"
 
 task("deploy", "Deploy a Greeter contract")
-    .addParam("semaphore", "Semaphore contract address", undefined, types.string)
+    .addOptionalParam("semaphore", "Semaphore contract address", undefined, types.string)
     .addOptionalParam("group", "Group identifier", process.env.GROUP_ID, types.int)
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs, semaphore: semaphoreAddress, group: groupId }, { ethers, run }) => {

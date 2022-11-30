@@ -39,6 +39,12 @@ describe("Greeter", () => {
                 await expect(transaction).to.emit(greeter, "NewUser").withArgs(group.members[i], users[i].username)
             }
         })
+
+        it("Should not allow users to join the group with the same username", async () => {
+            const transaction = greeter.joinGroup(group.members[0], users[0].username)
+
+            await expect(transaction).to.be.revertedWith("Greeter__UsernameAlreadyExists()")
+        })
     })
 
     describe("# greet", () => {

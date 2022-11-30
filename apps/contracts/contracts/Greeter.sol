@@ -4,6 +4,8 @@ pragma solidity ^0.8.4;
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
 contract Greeter {
+    error Greeter__UsernameAlreadyExists();
+
     event NewGreeting(string greeting);
     event NewUser(uint256 identityCommitment, bytes32 username);
 
@@ -20,6 +22,10 @@ contract Greeter {
     }
 
     function joinGroup(uint256 identityCommitment, bytes32 username) external {
+        if (users[identityCommitment] != 0) {
+            revert Greeter__UsernameAlreadyExists();
+        }
+
         semaphore.addMember(groupId, identityCommitment);
 
         users[identityCommitment] = username;
