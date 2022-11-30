@@ -8,9 +8,9 @@ dataSources:
       name: Greeter
       network: goerli
       source:
-          address: "0xf41b202D2D008BdD2859A9E981Bf5A78c3D64770"
+          address: "0xc1591422e817912145DF8a80F01bC286482aCa53"
           abi: Greeter
-          startBlock: 8041948
+          startBlock: 8049755
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.6
