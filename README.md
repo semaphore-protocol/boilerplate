@@ -28,7 +28,7 @@
 </p>
 
 | The repository is divided into three components: [web app](./apps/web-app), [contracts](./apps/contracts) and [subgraph](./apps/subgraph). The app allows users to create their own Semaphore identity, join a group with their usernames and then send their feedback anonymously (currently on Goerli). |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
 
@@ -56,9 +56,43 @@ cp .env.example .env
 
 and add your environment variables.
 
-ℹ️ You should at least set a valid Ethereum URL (e.g. Infura) and a private key with some ethers.
+> **Note**  
+> You should at least set a valid Ethereum URL (e.g. Infura) and a private key with some ethers.
+
+### Deploy the contract
+
+1. Go to the `apps/contracts` directory and deploy your contract:
+
+```bash
+yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
+```
+
+2. Update your `.env` file with your new contract address and group id.
+
+> **Note**  
+> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
+
+> **Warning**  
+> The group id is a number!
+
+### Deploy the subgraph
+
+1. Go to the `apps/subgraph` directory and update the `subgraph.yaml` file by setting your contract address.
+2. Authenticate the account with your access token:
+
+```bash
+yarn auth <access-token>
+```
+
+3. Deploy your subgraph:
+
+```bash
+yarn deploy <subgraph-name>
+```
 
 ### Start the app
+
+You can start your app locally or you can easily deploy it to Vercel or AWS Amplify.
 
 ```bash
 yarn start:web-app
