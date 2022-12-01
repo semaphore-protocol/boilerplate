@@ -4,8 +4,8 @@ import IconChevronRight from "../icons/IconChevronRight"
 
 export type StepperProps = {
     step: number
-    onPrevClick?: (() => void) | false
-    onNextClick?: (() => void) | false
+    onPrevClick?: () => void
+    onNextClick?: () => void
 }
 
 export default function Stepper({ step, onPrevClick, onNextClick }: StepperProps) {

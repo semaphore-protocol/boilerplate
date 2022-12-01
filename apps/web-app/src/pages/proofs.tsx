@@ -17,7 +17,7 @@ const { publicRuntimeConfig: env } = getNextConfig()
 export default function ProofsPage() {
     const router = useRouter()
     const { setLogs } = useContext(LogsContext)
-    const { _users, _greetings, refreshGreetings, addGreeting } = useContext(SubgraphContext)
+    const { _users, _feedback, refreshFeedback, addFeedback } = useContext(SubgraphContext)
     const [_loading, setLoading] = useBoolean()
     const [_identity, setIdentity] = useState<Identity>()
 
@@ -33,38 +33,36 @@ export default function ProofsPage() {
     }, [])
 
     useEffect(() => {
-        if (_greetings.length > 0) {
-            setLogs(
-                `${_greetings.length} greeting${_greetings.length > 1 ? "s" : ""} retrieved from the Greeter group 🤙🏽`
-            )
+        if (_feedback.length > 0) {
+            setLogs(`${_feedback.length} feedback retrieved from the group 🤙🏽`)
         }
-    }, [_greetings])
+    }, [_feedback])
 
-    const greet = useCallback(async () => {
+    const sendFeedback = useCallback(async () => {
         if (!_identity) {
             return
         }
 
-        const greeting = prompt("Please enter your greeting:")
+        const feedback = prompt("Please enter your feedback:")
 
-        if (greeting) {
+        if (feedback) {
             setLoading.on()
-            setLogs(`Posting your anonymous greeting...`)
+            setLogs(`Posting your anonymous feedback...`)
 
             try {
                 const group = new Group()
-                const greetingHash = solidityKeccak256(["string"], [greeting])
+                const feedbackHash = solidityKeccak256(["string"], [feedback])
 
                 group.addMembers(_users.map(({ identityCommitment }) => identityCommitment))
 
-                const { proof, publicSignals } = await generateProof(_identity, group, env.GROUP_ID, greetingHash)
+                const { proof, publicSignals } = await generateProof(_identity, group, env.GROUP_ID, feedbackHash)
                 const solidityProof = packToSolidityProof(proof)
 
-                const { status } = await fetch("api/greet", {
+                const { status } = await fetch("api/feedback", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        greeting,
+                        feedback,
                         merkleRoot: publicSignals.merkleRoot,
                         nullifierHash: publicSignals.nullifierHash,
                         solidityProof
@@ -72,9 +70,9 @@ export default function ProofsPage() {
                 })
 
                 if (status === 200) {
-                    addGreeting(greeting)
+                    addFeedback(feedback)
 
-                    setLogs(`Your greeting was posted 🎉`)
+                    setLogs(`Your feedback was posted 🎉`)
                 } else {
                     setLogs("Some error occurred, please try again!")
                 }
@@ -100,16 +98,16 @@ export default function ProofsPage() {
                     prove
                 </Link>{" "}
                 that they are part of a group and that they are generating their own signals. Signals could be anonymous
-                votes, leaks, reviews, or greetings.
+                votes, leaks, reviews, or feedback.
             </Text>
 
             <Divider pt="5" borderColor="gray.500" />
 
             <HStack py="5" justify="space-between">
                 <Text fontWeight="bold" fontSize="lg">
-                    Greeter signals ({_greetings.length})
+                    Feedback signals ({_feedback.length})
                 </Text>
-                <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={refreshGreetings}>
+                <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={refreshFeedback}>
                     Refresh
                 </Button>
             </HStack>
@@ -121,19 +119,19 @@ export default function ProofsPage() {
                     justifyContent="left"
                     colorScheme="primary"
                     px="4"
-                    onClick={greet}
+                    onClick={sendFeedback}
                     isDisabled={_loading}
                     leftIcon={<IconAddCircleFill />}
                 >
-                    Greet
+                    Send Feedback
                 </Button>
             </Box>
 
-            {_greetings.length > 0 && (
+            {_feedback.length > 0 && (
                 <VStack spacing="3" align="left">
-                    {_greetings.map((greeting, i) => (
+                    {_feedback.map((f, i) => (
                         <HStack key={i} p="3" borderWidth={1}>
-                            <Text>{greeting}</Text>
+                            <Text>{f}</Text>
                         </HStack>
                     ))}
                 </VStack>

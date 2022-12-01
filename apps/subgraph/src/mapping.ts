@@ -1,6 +1,6 @@
 import { ByteArray, log } from "@graphprotocol/graph-ts"
-import { NewGreeting, NewUser } from "../generated/Greeter/Greeter"
-import { Greeting, User } from "../generated/schema"
+import { NewFeedback, NewUser } from "../generated/Feedback/Feedback"
+import { Feedback, User } from "../generated/schema"
 import { concat, hash } from "./utils"
 
 /**
@@ -26,22 +26,22 @@ export function createUser(event: NewUser): void {
 }
 
 /**
- * Creates a new anonymous greeting.
- * @param event Ethereum event emitted when a user greets anonymously.
+ * Creates a new anonymous feedback.
+ * @param event Ethereum event emitted when a user sends a feedback anonymously.
  */
-export function createGreeting(event: NewGreeting): void {
-    log.debug(`NewGreeting event block: {}`, [event.block.number.toString()])
+export function createFeedback(event: NewFeedback): void {
+    log.debug(`NewFeedback event block: {}`, [event.block.number.toString()])
 
-    const greetingId = hash(
-        concat(ByteArray.fromBigInt(event.block.timestamp), ByteArray.fromHexString(event.params.greeting))
+    const FeedbackId = hash(
+        concat(ByteArray.fromBigInt(event.block.timestamp), ByteArray.fromHexString(event.params.feedback))
     )
-    const greeting = new Greeting(greetingId)
+    const feedback = new Feedback(FeedbackId)
 
-    log.info("Creating greeting '{}'", [greeting.id])
+    log.info("Creating feedback '{}'", [feedback.id])
 
-    greeting.greeting = event.params.greeting
+    feedback.feedback = event.params.feedback
 
-    greeting.save()
+    feedback.save()
 
-    log.info("Greeting '{}' has been created", [greeting.id])
+    log.info("Feedback '{}' has been created", [feedback.id])
 }

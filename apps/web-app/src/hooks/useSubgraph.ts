@@ -5,7 +5,7 @@ const url = "https://api.thegraph.com/subgraphs/name/semaphore-protocol/boilerpl
 
 export default function useSubgraph(): SubgraphContextType {
     const [_users, setUsers] = useState<any[]>([])
-    const [_greetings, setGreetings] = useState<string[]>([])
+    const [_feedback, setFeedback] = useState<string[]>([])
 
     const refreshUsers = useCallback(async (): Promise<void> => {
         const response = await fetch(url, {
@@ -30,11 +30,11 @@ export default function useSubgraph(): SubgraphContextType {
         [_users]
     )
 
-    const refreshGreetings = useCallback(async (): Promise<void> => {
+    const refreshFeedback = useCallback(async (): Promise<void> => {
         const response = await fetch(url, {
             method: "POST",
             body: JSON.stringify({
-                query: `{ greetings { greeting } }`
+                query: `{ feedbacks { feedback } }`
             }),
             headers: {
                 "content-type": "application/json"
@@ -43,22 +43,22 @@ export default function useSubgraph(): SubgraphContextType {
 
         const { data } = await response.json()
 
-        setGreetings(data.greetings.map(({ greeting }: any) => greeting))
+        setFeedback(data.feedbacks.map(({ feedback }: any) => feedback))
     }, [])
 
-    const addGreeting = useCallback(
-        (greeting: string) => {
-            setGreetings([..._greetings, greeting])
+    const addFeedback = useCallback(
+        (feedback: string) => {
+            setFeedback([..._feedback, feedback])
         },
-        [_greetings]
+        [_feedback]
     )
 
     return {
         _users,
-        _greetings,
+        _feedback,
         refreshUsers,
         addUser,
-        refreshGreetings,
-        addGreeting
+        refreshFeedback,
+        addFeedback
     }
 }

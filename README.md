@@ -27,7 +27,7 @@
     </a>
 </p>
 
-| The repository is divided into three components: [web app](./apps/web-app), [contracts](./apps/contracts) and [subgraph](./apps/subgraph). The app allows users to create their own Semaphore identity, join a 'Greeter' group with their usernames and then send their greetings anonymously (currently on Goerli). |
+| The repository is divided into three components: [web app](./apps/web-app), [contracts](./apps/contracts) and [subgraph](./apps/subgraph). The app allows users to create their own Semaphore identity, join a group with their usernames and then send their feedback anonymously (currently on Goerli). |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install

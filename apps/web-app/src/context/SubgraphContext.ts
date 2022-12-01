@@ -2,18 +2,18 @@ import React from "react"
 
 export type SubgraphContextType = {
     _users: any[]
-    _greetings: string[]
+    _feedback: string[]
     refreshUsers: () => Promise<void>
     addUser: (user: any) => void
-    refreshGreetings: () => Promise<void>
-    addGreeting: (greeting: string) => void
+    refreshFeedback: () => Promise<void>
+    addFeedback: (feedback: string) => void
 }
 
 export default React.createContext<SubgraphContextType>({
     _users: [],
-    _greetings: [],
+    _feedback: [],
     refreshUsers: () => Promise.resolve(),
     addUser: () => {},
-    refreshGreetings: () => Promise.resolve(),
-    addGreeting: () => {}
+    refreshFeedback: () => Promise.resolve(),
+    addFeedback: () => {}
 })

@@ -28,7 +28,7 @@ export default function GroupsPage() {
 
     useEffect(() => {
         if (_users.length > 0) {
-            setLogs(`${_users.length} user${_users.length > 1 ? "s" : ""} retrieved from the Greeter group 🤙🏽`)
+            setLogs(`${_users.length} user${_users.length > 1 ? "s" : ""} retrieved from the group 🤙🏽`)
         }
     }, [_users])
 

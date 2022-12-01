@@ -1,6 +1,6 @@
 import { Contract, providers, utils, Wallet } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
-import Greeter from "../../../contract-artifacts/Greeter.json"
+import Feedback from "../../../contract-artifacts/Feedback.json"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (typeof process.env.CONTRACT_ADDRESS !== "string") {
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const provider = new providers.JsonRpcProvider(ethereumURL)
     const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(contractAddress, Greeter.abi, signer)
+    const contract = new Contract(contractAddress, Feedback.abi, signer)
 
     const { identityCommitment, username } = req.body
 

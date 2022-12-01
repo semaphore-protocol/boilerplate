@@ -3,10 +3,10 @@ pragma solidity ^0.8.4;
 
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
-contract Greeter {
-    error Greeter__UsernameAlreadyExists();
+contract Feedback {
+    error Feedback__UsernameAlreadyExists();
 
-    event NewGreeting(string greeting);
+    event NewFeedback(string feedback);
     event NewUser(uint256 identityCommitment, bytes32 username);
 
     ISemaphore public semaphore;
@@ -23,7 +23,7 @@ contract Greeter {
 
     function joinGroup(uint256 identityCommitment, bytes32 username) external {
         if (users[identityCommitment] != 0) {
-            revert Greeter__UsernameAlreadyExists();
+            revert Feedback__UsernameAlreadyExists();
         }
 
         semaphore.addMember(groupId, identityCommitment);
@@ -33,8 +33,8 @@ contract Greeter {
         emit NewUser(identityCommitment, username);
     }
 
-    function greet(
-        string calldata greeting,
+    function sendFeedback(
+        string calldata feedback,
         uint256 merkleTreeRoot,
         uint256 nullifierHash,
         uint256[8] calldata proof
@@ -42,12 +42,12 @@ contract Greeter {
         semaphore.verifyProof(
             groupId,
             merkleTreeRoot,
-            keccak256(abi.encodePacked(greeting)),
+            keccak256(abi.encodePacked(feedback)),
             nullifierHash,
             groupId,
             proof
         );
 
-        emit NewGreeting(greeting);
+        emit NewFeedback(feedback);
     }
 }

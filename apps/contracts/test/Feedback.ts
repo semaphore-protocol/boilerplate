@@ -4,18 +4,18 @@ import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
 import { formatBytes32String, solidityKeccak256 } from "ethers/lib/utils"
 import { run } from "hardhat"
-import { Greeter } from "../build/typechain"
+import { Feedback } from "../build/typechain"
 import { config } from "../package.json"
 
-describe("Greeter", () => {
-    let greeter: Greeter
+describe("Feedback", () => {
+    let feedbackContract: Feedback
 
     const users: any = []
     const groupId = 42
     const group = new Group()
 
     before(async () => {
-        greeter = await run("deploy", { logs: false, group: groupId })
+        feedbackContract = await run("deploy", { logs: false, group: groupId })
 
         users.push({
             identity: new Identity(),
@@ -34,41 +34,43 @@ describe("Greeter", () => {
     describe("# joinGroup", () => {
         it("Should allow users to join the group", async () => {
             for (let i = 0; i < group.members.length; i += 1) {
-                const transaction = greeter.joinGroup(group.members[i], users[i].username)
+                const transaction = feedbackContract.joinGroup(group.members[i], users[i].username)
 
-                await expect(transaction).to.emit(greeter, "NewUser").withArgs(group.members[i], users[i].username)
+                await expect(transaction)
+                    .to.emit(feedbackContract, "NewUser")
+                    .withArgs(group.members[i], users[i].username)
             }
         })
 
         it("Should not allow users to join the group with the same username", async () => {
-            const transaction = greeter.joinGroup(group.members[0], users[0].username)
+            const transaction = feedbackContract.joinGroup(group.members[0], users[0].username)
 
-            await expect(transaction).to.be.revertedWith("Greeter__UsernameAlreadyExists()")
+            await expect(transaction).to.be.revertedWith("Feedback__UsernameAlreadyExists()")
         })
     })
 
-    describe("# greet", () => {
+    describe("# sendFeedback", () => {
         const wasmFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.wasm`
         const zkeyFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.zkey`
 
-        it("Should allow users to greet anonymously", async () => {
-            const greeting = "Hello World"
-            const greetingHash = solidityKeccak256(["string"], [greeting])
+        it("Should allow users to send feedback anonymously", async () => {
+            const feedback = "Hello World"
+            const feedbackHash = solidityKeccak256(["string"], [feedback])
 
-            const fullProof = await generateProof(users[1].identity, group, BigInt(groupId), greetingHash, {
+            const fullProof = await generateProof(users[1].identity, group, BigInt(groupId), feedbackHash, {
                 wasmFilePath,
                 zkeyFilePath
             })
             const solidityProof = packToSolidityProof(fullProof.proof)
 
-            const transaction = greeter.greet(
-                greeting,
+            const transaction = feedbackContract.sendFeedback(
+                feedback,
                 fullProof.publicSignals.merkleRoot,
                 fullProof.publicSignals.nullifierHash,
                 solidityProof
             )
 
-            await expect(transaction).to.emit(greeter, "NewGreeting").withArgs(greeting)
+            await expect(transaction).to.emit(feedbackContract, "NewFeedback").withArgs(feedback)
         })
     })
 })

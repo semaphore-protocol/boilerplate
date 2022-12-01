@@ -100,7 +100,7 @@ export default function IdentitiesPage() {
 
             <Divider pt="3" borderColor="gray" />
 
-            <Stepper step={1} onNextClick={!!_identity && (() => router.push("/groups"))} />
+            <Stepper step={1} onNextClick={_identity && (() => router.push("/groups"))} />
         </>
     )
 }

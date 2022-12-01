@@ -5,25 +5,25 @@ schema:
     file: ./schema.graphql
 dataSources:
     - kind: ethereum/contract
-      name: Greeter
+      name: Feedback
       network: goerli
       source:
-          address: "0xc1591422e817912145DF8a80F01bC286482aCa53"
-          abi: Greeter
-          startBlock: 8049755
+          address: "0xAb14469cE3Be7aEAA8C2515aDE2F43cd949bcCb2"
+          abi: Feedback
+          startBlock: 8054146
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.6
           language: wasm/assemblyscript
           entities:
               - User
-              - Greeting
+              - Feeback
           abis:
-              - name: Greeter
-                file: ./contract-artifacts/Greeter.json
+              - name: Feedback
+                file: ./contract-artifacts/Feedback.json
           eventHandlers:
               - event: NewUser(uint256,bytes32)
                 handler: createUser
-              - event: NewGreeting(string)
-                handler: createGreeting
+              - event: NewFeedback(string)
+                handler: createFeedback
           file: ./src/mapping.ts
