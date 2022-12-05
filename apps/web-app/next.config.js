@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const fs = require("fs")
+const path = require("path")
 const withPWA = require("next-pwa")
 
 if (!fs.existsSync("./.env")) {
