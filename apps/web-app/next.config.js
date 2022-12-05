@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 const fs = require("fs")
-const path = require("path")
 const withPWA = require("next-pwa")
 
 if (!fs.existsSync("./.env")) {
@@ -13,8 +12,8 @@ const nextConfig = withPWA({
     dest: "public",
     disable: process.env.NODE_ENV === "development"
 })({
-    experimental: {
-        outputFileTracingRoot: path.join(__dirname, "../../")
+    eslint: {
+        ignoreDuringBuilds: true
     },
     reactStrictMode: true,
     swcMinify: true,
