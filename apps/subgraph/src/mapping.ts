@@ -10,9 +10,7 @@ import { concat, hash } from "./utils"
 export function createUser(event: NewUser): void {
     log.debug(`NewUser event block: {}`, [event.block.number.toString()])
 
-    const userId = hash(
-        concat(ByteArray.fromBigInt(event.block.timestamp), ByteArray.fromBigInt(event.params.identityCommitment))
-    )
+    const userId = hash(concat(ByteArray.fromBigInt(event.logIndex), event.transaction.hash))
     const user = new User(userId)
 
     log.info("Creating user '{}'", [user.id])
@@ -32,10 +30,8 @@ export function createUser(event: NewUser): void {
 export function createFeedback(event: NewFeedback): void {
     log.debug(`NewFeedback event block: {}`, [event.block.number.toString()])
 
-    const FeedbackId = hash(
-        concat(ByteArray.fromBigInt(event.block.timestamp), ByteArray.fromHexString(event.params.feedback))
-    )
-    const feedback = new Feedback(FeedbackId)
+    const feedbackId = hash(concat(ByteArray.fromBigInt(event.logIndex), event.transaction.hash))
+    const feedback = new Feedback(feedbackId)
 
     log.info("Creating feedback '{}'", [feedback.id])
 
