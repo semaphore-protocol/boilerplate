@@ -2,6 +2,7 @@ import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack }
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
+import { Subgraph } from "@semaphore-protocol/subgraph"
 import { solidityKeccak256 } from "ethers/lib/utils"
 import getNextConfig from "next/config"
 import { useRouter } from "next/router"
@@ -17,7 +18,7 @@ const { publicRuntimeConfig: env } = getNextConfig()
 export default function ProofsPage() {
     const router = useRouter()
     const { setLogs } = useContext(LogsContext)
-    const { _users, _feedback, refreshFeedback, addFeedback } = useContext(SubgraphContext)
+    const { _feedback, refreshFeedback, addFeedback } = useContext(SubgraphContext)
     const [_loading, setLoading] = useBoolean()
     const [_identity, setIdentity] = useState<Identity>()
 
@@ -53,7 +54,10 @@ export default function ProofsPage() {
                 const group = new Group()
                 const feedbackHash = solidityKeccak256(["string"], [feedback])
 
-                group.addMembers(_users.map(({ identityCommitment }) => identityCommitment))
+                const subgraph = new Subgraph("goerli")
+                const { members } = await subgraph.getGroup(env.GROUP_ID, { members: true })
+
+                group.addMembers(members)
 
                 const { proof, publicSignals } = await generateProof(_identity, group, env.GROUP_ID, feedbackHash)
                 const solidityProof = packToSolidityProof(proof)
