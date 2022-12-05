@@ -12,6 +12,7 @@ const nextConfig = withPWA({
     dest: "public",
     disable: process.env.NODE_ENV === "development"
 })({
+    output: "standalone",
     reactStrictMode: true,
     swcMinify: true,
     env: {
