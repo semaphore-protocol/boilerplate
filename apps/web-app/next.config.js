@@ -12,7 +12,9 @@ const nextConfig = withPWA({
     dest: "public",
     disable: process.env.NODE_ENV === "development"
 })({
-    output: "standalone",
+    experimental: {
+        outputFileTracingRoot: path.join(__dirname, "../../")
+    },
     reactStrictMode: true,
     swcMinify: true,
     env: {
