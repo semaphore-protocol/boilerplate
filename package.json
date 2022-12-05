@@ -21,15 +21,9 @@
         "semaphore",
         "boilerplate"
     ],
-    "workspaces": {
-        "packages": [
-            "apps/*"
-        ],
-        "nohoist": [
-            "**/next",
-            "**/next/**"
-        ]
-    },
+    "workspaces": [
+        "apps/*"
+    ],
     "packageManager": "yarn@3.2.1",
     "devDependencies": {
         "@types/node": "^17.0.9",
