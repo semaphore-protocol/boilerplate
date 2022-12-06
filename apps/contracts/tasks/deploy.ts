@@ -2,7 +2,7 @@ import { task, types } from "hardhat/config"
 
 task("deploy", "Deploy a Feedback contract")
     .addOptionalParam("semaphore", "Semaphore contract address", undefined, types.string)
-    .addOptionalParam("group", "Group identifier", process.env.GROUP_ID, types.int)
+    .addOptionalParam("group", "Group identifier", undefined, types.int)
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs, semaphore: semaphoreAddress, group: groupId }, { ethers, run }) => {
         if (!semaphoreAddress) {
@@ -19,6 +19,10 @@ task("deploy", "Deploy a Feedback contract")
             })
 
             semaphoreAddress = address
+        }
+
+        if (!groupId) {
+            groupId = process.env.GROUP_ID
         }
 
         const FeedbackFactory = await ethers.getContractFactory("Feedback")
