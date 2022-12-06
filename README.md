@@ -95,7 +95,7 @@ yarn deploy <subgraph-name>
 You can start your app locally or you can easily deploy it to Vercel or AWS Amplify.
 
 ```bash
-yarn start:web-app
+yarn start
 ```
 
 ### Code quality and formatting
