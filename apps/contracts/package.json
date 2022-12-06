@@ -7,7 +7,7 @@
         "start": "hardhat node & yarn compile && yarn deploy --network localhost",
         "compile": "hardhat compile",
         "download:snark-artifacts": "hardhat run scripts/download-snark-artifacts.ts",
-        "deploy": "hardhat deploy",
+        "deploy": "yarn compile && hardhat deploy",
         "test": "hardhat test",
         "test:report-gas": "REPORT_GAS=true hardhat test",
         "test:coverage": "hardhat coverage",
