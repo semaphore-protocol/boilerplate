@@ -1,5 +1,5 @@
 import "@nomiclabs/hardhat-ethers"
-import "@nomiclabs/hardhat-waffle"
+import "@nomicfoundation/hardhat-chai-matchers"
 import "@semaphore-protocol/hardhat"
 import "@typechain/hardhat"
 import { config as dotenvConfig } from "dotenv"

@@ -45,7 +45,7 @@ describe("Feedback", () => {
         it("Should not allow users to join the group with the same username", async () => {
             const transaction = feedbackContract.joinGroup(group.members[0], users[0].username)
 
-            await expect(transaction).to.be.revertedWith("Feedback__UsernameAlreadyExists()")
+            await expect(transaction).to.be.revertedWithCustomError(feedbackContract, "Feedback__UsernameAlreadyExists")
         })
     })
 
