@@ -25,6 +25,9 @@
     <a href="https://prettier.io/">
         <img alt="Code style prettier" src="https://img.shields.io/badge/code%20style-prettier-f8bc45?style=flat-square&logo=prettier">
     </a>
+    <a href="https://www.gitpoap.io/gh/semaphore-protocol/boilerplate" target="_blank">
+        <img src="https://public-api.gitpoap.io/v1/repo/semaphore-protocol/boilerplate/badge">
+    </a>
 </p>
 
 | The repository is divided into three components: [web app](./apps/web-app), [contracts](./apps/contracts) and [subgraph](./apps/subgraph). The app allows users to create their own Semaphore identity, join a group with their usernames and then send their feedback anonymously (currently on Goerli). |
