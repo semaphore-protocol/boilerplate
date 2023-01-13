@@ -17,10 +17,10 @@
     "devDependencies": {
         "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
         "@nomiclabs/hardhat-ethers": "^2.0.0",
-        "@semaphore-protocol/group": "2.2.0",
-        "@semaphore-protocol/hardhat": "^0.1.0",
-        "@semaphore-protocol/identity": "2.0.0",
-        "@semaphore-protocol/proof": "2.3.1",
+        "@semaphore-protocol/group": "3.0.0-beta.7",
+        "@semaphore-protocol/hardhat": "3.0.0-beta.7",
+        "@semaphore-protocol/identity": "3.0.0-beta.7",
+        "@semaphore-protocol/proof": "3.0.0-beta.7",
         "@typechain/ethers-v5": "^10.0.0",
         "@typechain/hardhat": "^6.0.0",
         "@types/chai": "^4.3.1",
@@ -40,7 +40,7 @@
         "typechain": "^8.0.0"
     },
     "dependencies": {
-        "@semaphore-protocol/contracts": "2.5.0"
+        "@semaphore-protocol/contracts": "3.0.0-beta.7"
     },
     "config": {
         "solidity": {
