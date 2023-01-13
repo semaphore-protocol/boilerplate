@@ -3371,7 +3371,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/solidity@npm:5.6.1, @ethersproject/solidity@npm:^5.5.0":
+"@ethersproject/solidity@npm:5.6.1":
   version: 5.6.1
   resolution: "@ethersproject/solidity@npm:5.6.1"
   dependencies:
@@ -4153,16 +4153,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/group@npm:^2.6.1":
-  version: 2.6.1
-  resolution: "@semaphore-protocol/group@npm:2.6.1"
-  dependencies:
-    "@zk-kit/incremental-merkle-tree": 1.0.0
-    circomlibjs: 0.0.8
-  checksum: 3a6f19603276ffbc6d88f30a835137ec512cb1b9b77f5625be892a2c998898f2fb3238b3f1287b1df4a13fa831c75c513b77ea7fe0c1c4f6a0aaaa46ce3f5338
-  languageName: node
-  linkType: hard
-
 "@semaphore-protocol/hardhat@npm:3.0.0-beta.7":
   version: 3.0.0-beta.7
   resolution: "@semaphore-protocol/hardhat@npm:3.0.0-beta.7"
@@ -4191,19 +4181,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/identity@npm:^2.6.1":
-  version: 2.6.1
-  resolution: "@semaphore-protocol/identity@npm:2.6.1"
-  dependencies:
-    "@ethersproject/bignumber": ^5.5.0
-    "@ethersproject/random": ^5.5.1
-    "@ethersproject/sha2": ^5.6.1
-    "@ethersproject/strings": ^5.6.1
-    circomlibjs: 0.0.8
-  checksum: 588dd0731cfaa513348d74b64f7f8bdf32676a83ff9a80d4f81cf72977b62024ebadfb404b90d7e63e8f7c6bc715b2bef5d528e4fc024e0410579eaeba63ce1e
-  languageName: node
-  linkType: hard
-
 "@semaphore-protocol/proof@npm:3.0.0-beta.7":
   version: 3.0.0-beta.7
   resolution: "@semaphore-protocol/proof@npm:3.0.0-beta.7"
@@ -4221,29 +4198,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/proof@npm:^2.6.1":
-  version: 2.6.1
-  resolution: "@semaphore-protocol/proof@npm:2.6.1"
-  dependencies:
-    "@ethersproject/bytes": ^5.7.0
-    "@ethersproject/solidity": ^5.5.0
-    "@ethersproject/strings": ^5.5.0
-    "@zk-kit/incremental-merkle-tree": 0.4.3
-    circomlibjs: 0.0.8
-    snarkjs: ^0.4.13
-  peerDependencies:
-    "@semaphore-protocol/group": 2.6.1
-    "@semaphore-protocol/identity": 2.6.1
-  checksum: 2496e827335dc0555196e1454c087d32fec8c96e190fedda6322b6e156d45236bdaef205e3b119c85f0bc285061bbe120f26e63dafe6724433f8bee7c285117e
-  languageName: node
-  linkType: hard
-
-"@semaphore-protocol/subgraph@npm:^2.6.1":
-  version: 2.6.1
-  resolution: "@semaphore-protocol/subgraph@npm:2.6.1"
+"@semaphore-protocol/subgraph@npm:3.0.0-beta.7":
+  version: 3.0.0-beta.7
+  resolution: "@semaphore-protocol/subgraph@npm:3.0.0-beta.7"
   dependencies:
     axios: ^0.27.2
-  checksum: ed522f1171253eb850ff3742085add1de7591553b53b8da75ee385de5af4f458290d3d508f9f73b3013f9e31e71d14812c35a6f36050a9a6a77238ef33a9aaa4
+  checksum: bcad3cbcf1d375e15d6f41ae71de672bb72023ab40b52bd7cc41ebe73ae31dbe6546b3174fec7e6a5ae6e81bace2f1f487b2d3524bbbde567cdb437d169cf7f7
   languageName: node
   linkType: hard
 
@@ -17139,10 +17099,10 @@ __metadata:
     "@emotion/react": ^11.10.5
     "@emotion/styled": ^11.10.5
     "@fontsource/inter": ^4.5.14
-    "@semaphore-protocol/group": ^2.6.1
-    "@semaphore-protocol/identity": ^2.6.1
-    "@semaphore-protocol/proof": ^2.6.1
-    "@semaphore-protocol/subgraph": ^2.6.1
+    "@semaphore-protocol/group": 3.0.0-beta.7
+    "@semaphore-protocol/identity": 3.0.0-beta.7
+    "@semaphore-protocol/proof": 3.0.0-beta.7
+    "@semaphore-protocol/subgraph": 3.0.0-beta.7
     "@types/react": 18.0.25
     "@types/react-dom": 18.0.8
     ethers: ^5.7.2
