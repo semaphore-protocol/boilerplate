@@ -90,7 +90,7 @@ yarn auth <access-token>
 3. Deploy your subgraph:
 
 ```bash
-yarn deploy <subgraph-name>
+yarn deploy <account-name/subgraph-name>
 ```
 
 ### Start the app
