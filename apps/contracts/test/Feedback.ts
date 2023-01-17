@@ -2,7 +2,7 @@ import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
-import { formatBytes32String, solidityKeccak256 } from "ethers/lib/utils"
+import { formatBytes32String } from "ethers/lib/utils"
 import { run } from "hardhat"
 import { Feedback } from "../build/typechain"
 import { config } from "../package.json"
@@ -11,8 +11,8 @@ describe("Feedback", () => {
     let feedbackContract: Feedback
 
     const users: any = []
-    const groupId = 42
-    const group = new Group()
+    const groupId = "42"
+    const group = new Group(groupId)
 
     before(async () => {
         feedbackContract = await run("deploy", { logs: false, group: groupId })
@@ -27,8 +27,8 @@ describe("Feedback", () => {
             username: formatBytes32String("anon2")
         })
 
-        group.addMember(users[0].identity.generateCommitment())
-        group.addMember(users[1].identity.generateCommitment())
+        group.addMember(users[0].identity.commitment)
+        group.addMember(users[1].identity.commitment)
     })
 
     describe("# joinGroup", () => {
@@ -54,10 +54,9 @@ describe("Feedback", () => {
         const zkeyFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.zkey`
 
         it("Should allow users to send feedback anonymously", async () => {
-            const feedback = "Hello World"
-            const feedbackHash = solidityKeccak256(["string"], [feedback])
+            const feedback = formatBytes32String("Hello World")
 
-            const fullProof = await generateProof(users[1].identity, group, BigInt(groupId), feedbackHash, {
+            const fullProof = await generateProof(users[1].identity, group, groupId, feedback, {
                 wasmFilePath,
                 zkeyFilePath
             })
@@ -65,7 +64,7 @@ describe("Feedback", () => {
 
             const transaction = feedbackContract.sendFeedback(
                 feedback,
-                fullProof.publicSignals.merkleRoot,
+                fullProof.publicSignals.merkleTreeRoot,
                 fullProof.publicSignals.nullifierHash,
                 solidityProof
             )

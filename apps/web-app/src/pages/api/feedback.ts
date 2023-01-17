@@ -1,4 +1,4 @@
-import { Contract, providers, Wallet } from "ethers"
+import { Contract, providers, Wallet, utils } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
 import Feedback from "../../../contract-artifacts/Feedback.json"
 
@@ -26,7 +26,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { feedback, merkleRoot, nullifierHash, solidityProof } = req.body
 
     try {
-        const transaction = await contract.sendFeedback(feedback, merkleRoot, nullifierHash, solidityProof)
+        console.log("feedbackBytes32String", utils.formatBytes32String(feedback))
+        console.log("merkleRoot", merkleRoot)
+        console.log("nullifierHash", nullifierHash)
+        console.log("solidityProof", solidityProof)
+
+        const transaction = await contract.sendFeedback(
+            utils.formatBytes32String(feedback),
+            merkleRoot,
+            nullifierHash,
+            solidityProof
+        )
 
         await transaction.wait()
 
