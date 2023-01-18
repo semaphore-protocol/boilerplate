@@ -8,9 +8,9 @@ dataSources:
       name: Feedback
       network: goerli
       source:
-          address: "0xA9C2B639a28cDa8b59C4377e980F75A93dD8605F"
+          address: "0xdDB08494976d97a45B6cA8D9CD4B9f9A5250D590"
           abi: Feedback
-          startBlock: 8333681
+          startBlock: 8333929
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.6

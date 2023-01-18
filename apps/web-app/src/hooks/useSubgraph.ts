@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 import { SubgraphContextType } from "../context/SubgraphContext"
 
-const url = "https://api.thegraph.com/subgraphs/name/cedoor/test"
+const url = "https://api.thegraph.com/subgraphs/name/semaphore-protocol/boilerplate"
 
 export default function useSubgraph(): SubgraphContextType {
     const [_users, setUsers] = useState<any[]>([])
