@@ -8,9 +8,9 @@ dataSources:
       name: Feedback
       network: goerli
       source:
-          address: "0xDf68F69D8390c0d01F87DfDA31189F54839B47E2"
+          address: "0xA9C2B639a28cDa8b59C4377e980F75A93dD8605F"
           abi: Feedback
-          startBlock: 8323378
+          startBlock: 8333681
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.6
@@ -24,6 +24,6 @@ dataSources:
           eventHandlers:
               - event: NewUser(uint256,bytes32)
                 handler: createUser
-              - event: NewFeedback(string)
+              - event: NewFeedback(bytes32)
                 handler: createFeedback
           file: ./src/mapping.ts
