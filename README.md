@@ -78,6 +78,16 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 > **Warning**  
 > The group id is a number!
 
+#### Steps to follow every time the smart contract is deployed:
+
+1. Change the `CONTRACT_ADDRESS` (with the new contract address) and `GROUP_ID` (with the group id) in the `.env` file.
+
+2. Change the `address` (with the new contract address) and `startBlock` (with the block number of the transaction where the contract was created) in the `subgraph.yaml` file.
+
+3. Deploy the subgraph again.
+
+4. Copy the `Feedback.sol` file (contract artifacts) from `apps/contracts/build/contracts/contracts/Feedback.sol` folder to `apps/subgraph/contract-artifacts` and `apps/web-app/contract-artifacts `folders manually or in the root folder, run: `yarn copy:contract-artifacts` to do it automatically.
+
 ### Deploy the subgraph
 
 1. Go to the `apps/subgraph` directory and update the `subgraph.yaml` file by setting your contract address.
