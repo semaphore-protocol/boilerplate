@@ -78,7 +78,6 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 > **Warning**  
 > The group id is a number!
 
-#### Steps to follow every time the smart contract is deployed:
 
 1. Change the `CONTRACT_ADDRESS` (with the new contract address) and `GROUP_ID` (with the group id) in the `.env` file.
 
