@@ -79,8 +79,6 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 > The group id is a number!
 
 
-1. Change the `CONTRACT_ADDRESS` (with the new contract address) and `GROUP_ID` (with the group id) in the `.env` file.
-
 3. Change the `address` (with the new contract address) and `startBlock` (with the block number of the transaction where the contract was created) in the `apps/subgraph/subgraph.yaml` file.
 
 4. Copy your contract artifacts from `apps/contracts/build/contracts/contracts` folder to `apps/subgraph/contract-artifacts` and `apps/web-app/contract-artifacts `folders manually. Or run `yarn copy:contract-artifacts` in the project root to do it automatically.
