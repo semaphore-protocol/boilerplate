@@ -1,7 +1,7 @@
 import * as fs from "fs"
 
 async function main() {
-    const contractArtifactsPath = "sdfapps/contracts/build/contracts/contracts/Feedback.sol"
+    const contractArtifactsPath = "apps/contracts/build/contracts/contracts/Feedback.sol"
     const subgraphArtifactsPath = "apps/subgraph/contract-artifacts"
     const webAppArtifactsPath = "apps/web-app/contract-artifacts"
 
