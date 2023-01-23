@@ -79,7 +79,7 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 5. Deploy the subgraph again.
 
 > **Note**  
-> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
+> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts).
 
 > **Warning**  
 > The group id is a number!
