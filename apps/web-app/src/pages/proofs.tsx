@@ -1,9 +1,9 @@
+import { formatBytes32String } from "ethers/lib/utils"
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
 import { Subgraph } from "@semaphore-protocol/subgraph"
-import { solidityKeccak256 } from "ethers/lib/utils"
 import getNextConfig from "next/config"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
@@ -48,26 +48,30 @@ export default function ProofsPage() {
 
         if (feedback) {
             setLoading.on()
+
             setLogs(`Posting your anonymous feedback...`)
 
             try {
-                const group = new Group()
-                const feedbackHash = solidityKeccak256(["string"], [feedback])
+                const group = new Group(env.GROUP_ID)
+
+                const feedbackBytes32 = formatBytes32String(feedback)
 
                 const subgraph = new Subgraph("goerli")
+
                 const { members } = await subgraph.getGroup(env.GROUP_ID, { members: true })
 
                 group.addMembers(members)
 
-                const { proof, publicSignals } = await generateProof(_identity, group, env.GROUP_ID, feedbackHash)
+                const { proof, publicSignals } = await generateProof(_identity, group, env.GROUP_ID, feedbackBytes32)
+
                 const solidityProof = packToSolidityProof(proof)
 
                 const { status } = await fetch("api/feedback", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        feedback,
-                        merkleRoot: publicSignals.merkleRoot,
+                        feedback: feedbackBytes32,
+                        merkleRoot: publicSignals.merkleTreeRoot,
                         nullifierHash: publicSignals.nullifierHash,
                         solidityProof
                     })

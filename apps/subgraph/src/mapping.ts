@@ -35,7 +35,7 @@ export function createFeedback(event: NewFeedback): void {
 
     log.info("Creating feedback '{}'", [feedback.id])
 
-    feedback.feedback = event.params.feedback
+    feedback.feedback = event.params.feedback.toString()
 
     feedback.save()
 

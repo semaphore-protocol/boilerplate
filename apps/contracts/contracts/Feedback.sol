@@ -6,7 +6,7 @@ import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 contract Feedback {
     error Feedback__UsernameAlreadyExists();
 
-    event NewFeedback(string feedback);
+    event NewFeedback(bytes32 feedback);
     event NewUser(uint256 identityCommitment, bytes32 username);
 
     ISemaphore public semaphore;
@@ -18,7 +18,7 @@ contract Feedback {
         semaphore = ISemaphore(semaphoreAddress);
         groupId = _groupId;
 
-        semaphore.createGroup(groupId, 20, 0, address(this));
+        semaphore.createGroup(groupId, 20, address(this));
     }
 
     function joinGroup(uint256 identityCommitment, bytes32 username) external {
@@ -34,19 +34,12 @@ contract Feedback {
     }
 
     function sendFeedback(
-        string calldata feedback,
+        bytes32 feedback,
         uint256 merkleTreeRoot,
         uint256 nullifierHash,
         uint256[8] calldata proof
     ) external {
-        semaphore.verifyProof(
-            groupId,
-            merkleTreeRoot,
-            keccak256(abi.encodePacked(feedback)),
-            nullifierHash,
-            groupId,
-            proof
-        );
+        semaphore.verifyProof(groupId, merkleTreeRoot, uint256(feedback), nullifierHash, groupId, proof);
 
         emit NewFeedback(feedback);
     }

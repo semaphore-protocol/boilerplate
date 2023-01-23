@@ -72,6 +72,12 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 
 2. Update your `.env` file with your new contract address and group id.
 
+3. Change the `address` (with the new contract address) and `startBlock` (with the block number of the transaction where the contract was created) in the `apps/subgraph/subgraph.yaml` file.
+
+4. Copy your contract artifacts from `apps/contracts/build/contracts/contracts` folder to `apps/subgraph/contract-artifacts` and `apps/web-app/contract-artifacts` folders manually. Or run `yarn copy:contract-artifacts` in the project root to do it automatically.
+
+5. Deploy the subgraph again.
+
 > **Note**  
 > Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
 

@@ -2,23 +2,15 @@ import { task, types } from "hardhat/config"
 
 task("deploy", "Deploy a Feedback contract")
     .addOptionalParam("semaphore", "Semaphore contract address", undefined, types.string)
-    .addOptionalParam("group", "Group identifier", undefined, types.int)
+    .addOptionalParam("group", "Group id", "42", types.string)
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs, semaphore: semaphoreAddress, group: groupId }, { ethers, run }) => {
         if (!semaphoreAddress) {
-            const { address: verifierAddress } = await run("deploy:verifier", { logs, merkleTreeDepth: 20 })
-
-            const { address } = await run("deploy:semaphore", {
-                logs,
-                verifiers: [
-                    {
-                        merkleTreeDepth: 20,
-                        contractAddress: verifierAddress
-                    }
-                ]
+            const { semaphore } = await run("deploy:semaphore", {
+                logs
             })
 
-            semaphoreAddress = address
+            semaphoreAddress = semaphore.address
         }
 
         if (!groupId) {
