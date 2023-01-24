@@ -41,7 +41,7 @@ export default function GroupsPage() {
 
         if (username) {
             setLoading.on()
-            setLogs(`Joining the Greeter group...`)
+            setLogs(`Joining the Feedback group...`)
 
             const { status } = await fetch("api/join", {
                 method: "POST",
@@ -55,7 +55,7 @@ export default function GroupsPage() {
             if (status === 200) {
                 addUser({ identityCommitment: _identity.commitment.toString(), username })
 
-                setLogs(`You joined the Greeter group event 🎉 Greet anonymously!`)
+                setLogs(`You joined the Feedback group event 🎉 Share your feedback anonymously!`)
             } else {
                 setLogs("Some error occurred, please try again!")
             }
@@ -88,7 +88,7 @@ export default function GroupsPage() {
 
             <HStack py="5" justify="space-between">
                 <Text fontWeight="bold" fontSize="lg">
-                    Greeter users ({_users.length})
+                    Feedback users ({_users.length})
                 </Text>
                 <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={refreshUsers}>
                     Refresh
