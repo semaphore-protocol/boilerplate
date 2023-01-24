@@ -1,6 +1,6 @@
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
-import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
+import { generateProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
 import { formatBytes32String } from "ethers/lib/utils"
 import { run } from "hardhat"
@@ -60,13 +60,12 @@ describe("Feedback", () => {
                 wasmFilePath,
                 zkeyFilePath
             })
-            const solidityProof = packToSolidityProof(fullProof.proof)
 
             const transaction = feedbackContract.sendFeedback(
                 feedback,
-                fullProof.publicSignals.merkleTreeRoot,
-                fullProof.publicSignals.nullifierHash,
-                solidityProof
+                fullProof.merkleTreeRoot,
+                fullProof.nullifierHash,
+                fullProof.proof
             )
 
             await expect(transaction).to.emit(feedbackContract, "NewFeedback").withArgs(feedback)
