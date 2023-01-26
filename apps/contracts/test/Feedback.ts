@@ -4,6 +4,7 @@ import { generateProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
 import { formatBytes32String } from "ethers/lib/utils"
 import { run } from "hardhat"
+// @ts-ignore: typechain folder will be generated after contracts compilation
 import { Feedback } from "../build/typechain"
 import { config } from "../package.json"
 
