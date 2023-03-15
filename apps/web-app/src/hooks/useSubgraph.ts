@@ -1,26 +1,23 @@
+import { SemaphoreEthers } from "@semaphore-protocol/data"
+import { BigNumber, utils } from "ethers"
+import getNextConfig from "next/config"
 import { useCallback, useState } from "react"
 import { SubgraphContextType } from "../context/SubgraphContext"
 
-const url = "https://api.thegraph.com/subgraphs/name/semaphore-protocol/boilerplate"
+const { publicRuntimeConfig: env } = getNextConfig()
 
 export default function useSubgraph(): SubgraphContextType {
     const [_users, setUsers] = useState<any[]>([])
     const [_feedback, setFeedback] = useState<string[]>([])
 
     const refreshUsers = useCallback(async (): Promise<void> => {
-        const response = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify({
-                query: `{ users { username identityCommitment } }`
-            }),
-            headers: {
-                "content-type": "application/json"
-            }
+        const semaphore = new SemaphoreEthers(env.ETHEREUM_URL, {
+            address: env.SEMAPHORE_CONTRACT_ADDRESS
         })
 
-        const { data } = await response.json()
+        const members = await semaphore.getGroupMembers(env.GROUP_ID)
 
-        setUsers(data.users)
+        setUsers(members)
     }, [])
 
     const addUser = useCallback(
@@ -31,19 +28,13 @@ export default function useSubgraph(): SubgraphContextType {
     )
 
     const refreshFeedback = useCallback(async (): Promise<void> => {
-        const response = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify({
-                query: `{ feedbacks { feedback } }`
-            }),
-            headers: {
-                "content-type": "application/json"
-            }
+        const semaphore = new SemaphoreEthers(env.ETHEREUM_URL, {
+            address: env.SEMAPHORE_CONTRACT_ADDRESS
         })
 
-        const { data } = await response.json()
+        const proofs = await semaphore.getGroupVerifiedProofs(env.GROUP_ID)
 
-        setFeedback(data.feedbacks.map(({ feedback }: any) => feedback))
+        setFeedback(proofs.map(({ signal }: any) => utils.toUtf8String(BigNumber.from(signal).toHexString())))
     }, [])
 
     const addFeedback = useCallback(

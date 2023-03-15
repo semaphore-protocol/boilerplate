@@ -37,35 +37,30 @@ export default function GroupsPage() {
             return
         }
 
-        const username = window.prompt("Please enter your username:")
+        setLoading.on()
+        setLogs(`Joining the Feedback group...`)
 
-        if (username) {
-            setLoading.on()
-            setLogs(`Joining the Feedback group...`)
-
-            const { status } = await fetch("api/join", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    identityCommitment: _identity.commitment.toString(),
-                    username
-                })
+        const { status } = await fetch("api/join", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                identityCommitment: _identity.commitment.toString()
             })
+        })
 
-            if (status === 200) {
-                addUser({ identityCommitment: _identity.commitment.toString(), username })
+        if (status === 200) {
+            addUser(_identity.commitment.toString())
 
-                setLogs(`You joined the Feedback group event 🎉 Share your feedback anonymously!`)
-            } else {
-                setLogs("Some error occurred, please try again!")
-            }
-
-            setLoading.off()
+            setLogs(`You joined the Feedback group event 🎉 Share your feedback anonymously!`)
+        } else {
+            setLogs("Some error occurred, please try again!")
         }
+
+        setLoading.off()
     }, [_identity])
 
     const userHasJoined = useCallback(
-        (identity: Identity) => _users.find((user) => user.identityCommitment === identity.commitment.toString()),
+        (identity: Identity) => _users.find((user) => user === identity.commitment.toString()),
         [_users]
     )
 
@@ -88,7 +83,7 @@ export default function GroupsPage() {
 
             <HStack py="5" justify="space-between">
                 <Text fontWeight="bold" fontSize="lg">
-                    Feedback users ({_users.length})
+                    Feedback group members ({_users.length})
                 </Text>
                 <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={refreshUsers}>
                     Refresh
@@ -113,8 +108,10 @@ export default function GroupsPage() {
             {_users.length > 0 && (
                 <VStack spacing="3" px="3" align="left" maxHeight="300px" overflowY="scroll">
                     {_users.map((user, i) => (
-                        <HStack key={i} p="3" borderWidth={1}>
-                            <Text>{user.username}</Text>
+                        <HStack key={i} p="3" borderWidth={1} whiteSpace="nowrap">
+                            <Text textOverflow="ellipsis" overflow="hidden">
+                                {user}
+                            </Text>
                         </HStack>
                     ))}
                 </VStack>
