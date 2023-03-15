@@ -7,7 +7,9 @@
     "bugs": "https://github.com/semaphore-protocol/boilerplate/issues",
     "private": true,
     "scripts": {
-        "start": "yarn workspace web-app dev",
+        "dev": "yarn workspaces foreach -pi run dev",
+        "dev:web-app": "yarn workspace web-app dev",
+        "dev:contracts": "yarn workspace contracts dev",
         "lint": "eslint . --ext .js,.ts",
         "prettier": "prettier -c .",
         "prettier:write": "prettier -w .",
