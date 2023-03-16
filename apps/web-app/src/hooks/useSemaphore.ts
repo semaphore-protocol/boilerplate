@@ -34,7 +34,7 @@ export default function useSemaphore(): SemaphoreContextType {
 
         const proofs = await semaphore.getGroupVerifiedProofs(env.GROUP_ID)
 
-        setFeedback(proofs.map(({ signal }: any) => utils.toUtf8String(BigNumber.from(signal).toHexString())))
+        setFeedback(proofs.map(({ signal }: any) => utils.parseBytes32String(BigNumber.from(signal).toHexString())))
     }, [])
 
     const addFeedback = useCallback(
