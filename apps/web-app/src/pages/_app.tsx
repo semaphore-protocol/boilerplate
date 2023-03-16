@@ -5,18 +5,18 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import LogsContext from "../context/LogsContext"
-import SubgraphContext from "../context/SubgraphContext"
-import useSubgraph from "../hooks/useSubgraph"
+import SemaphoreContext from "../context/SemaphoreContext"
+import useSemaphore from "../hooks/useSemaphore"
 import theme from "../styles/index"
 
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter()
-    const subgraph = useSubgraph()
+    const semaphore = useSemaphore()
     const [_logs, setLogs] = useState<string>("")
 
     useEffect(() => {
-        subgraph.refreshUsers()
-        subgraph.refreshFeedback()
+        semaphore.refreshUsers()
+        semaphore.refreshFeedback()
     }, [])
 
     return (
@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <ChakraProvider theme={theme}>
                 <Container maxW="lg" flex="1" display="flex" alignItems="center">
                     <Stack py="8" display="flex" width="100%">
-                        <SubgraphContext.Provider value={subgraph}>
+                        <SemaphoreContext.Provider value={semaphore}>
                             <LogsContext.Provider
                                 value={{
                                     _logs,
@@ -43,7 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
                             >
                                 <Component {...pageProps} />
                             </LogsContext.Provider>
-                        </SubgraphContext.Provider>
+                        </SemaphoreContext.Provider>
                     </Stack>
                 </Container>
 

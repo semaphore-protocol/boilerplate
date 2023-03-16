@@ -1,15 +1,15 @@
 import React from "react"
 
-export type SubgraphContextType = {
-    _users: any[]
+export type SemaphoreContextType = {
+    _users: string[]
     _feedback: string[]
     refreshUsers: () => Promise<void>
-    addUser: (user: any) => void
+    addUser: (user: string) => void
     refreshFeedback: () => Promise<void>
     addFeedback: (feedback: string) => void
 }
 
-export default React.createContext<SubgraphContextType>({
+export default React.createContext<SemaphoreContextType>({
     _users: [],
     _feedback: [],
     refreshUsers: () => Promise.resolve(),

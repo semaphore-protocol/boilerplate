@@ -4,14 +4,14 @@ import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Stepper from "../components/Stepper"
 import LogsContext from "../context/LogsContext"
-import SubgraphContext from "../context/SubgraphContext"
+import SemaphoreContext from "../context/SemaphoreContext"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
 
 export default function GroupsPage() {
     const router = useRouter()
     const { setLogs } = useContext(LogsContext)
-    const { _users, refreshUsers, addUser } = useContext(SubgraphContext)
+    const { _users, refreshUsers, addUser } = useContext(SemaphoreContext)
     const [_loading, setLoading] = useBoolean()
     const [_identity, setIdentity] = useState<Identity>()
 
@@ -59,10 +59,7 @@ export default function GroupsPage() {
         setLoading.off()
     }, [_identity])
 
-    const userHasJoined = useCallback(
-        (identity: Identity) => _users.find((user) => user === identity.commitment.toString()),
-        [_users]
-    )
+    const userHasJoined = useCallback((identity: Identity) => _users.includes(identity.commitment.toString()), [_users])
 
     return (
         <>
@@ -83,7 +80,7 @@ export default function GroupsPage() {
 
             <HStack py="5" justify="space-between">
                 <Text fontWeight="bold" fontSize="lg">
-                    Feedback group members ({_users.length})
+                    Feedback users ({_users.length})
                 </Text>
                 <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={refreshUsers}>
                     Refresh
@@ -122,7 +119,7 @@ export default function GroupsPage() {
             <Stepper
                 step={2}
                 onPrevClick={() => router.push("/")}
-                onNextClick={_identity && userHasJoined(_identity) && (() => router.push("/proofs"))}
+                onNextClick={_identity && userHasJoined(_identity) ? () => router.push("/proofs") : undefined}
             />
         </>
     )

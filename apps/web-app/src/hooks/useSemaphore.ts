@@ -2,11 +2,11 @@ import { SemaphoreEthers } from "@semaphore-protocol/data"
 import { BigNumber, utils } from "ethers"
 import getNextConfig from "next/config"
 import { useCallback, useState } from "react"
-import { SubgraphContextType } from "../context/SubgraphContext"
+import { SemaphoreContextType } from "../context/SemaphoreContext"
 
 const { publicRuntimeConfig: env } = getNextConfig()
 
-export default function useSubgraph(): SubgraphContextType {
+export default function useSemaphore(): SemaphoreContextType {
     const [_users, setUsers] = useState<any[]>([])
     const [_feedback, setFeedback] = useState<string[]>([])
 
