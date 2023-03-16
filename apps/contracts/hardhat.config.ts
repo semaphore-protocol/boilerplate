@@ -18,9 +18,9 @@ function getNetworks(): NetworksUserConfig {
         const accounts = [`0x${process.env.ETHEREUM_PRIVATE_KEY}`]
 
         return {
-            goerli: {
+            sepolia: {
                 url: process.env.ETHEREUM_URL,
-                chainId: 5,
+                chainId: 11155111,
                 accounts
             }
         }
