@@ -10,43 +10,35 @@ import { config } from "../package.json"
 
 describe("Feedback", () => {
     let feedbackContract: Feedback
+    let semaphoreContract: string
 
-    const users: any = []
     const groupId = "42"
     const group = new Group(groupId)
+    const users: Identity[] = []
 
     before(async () => {
-        feedbackContract = await run("deploy", { logs: false, group: groupId })
-
-        users.push({
-            identity: new Identity(),
-            username: formatBytes32String("anon1")
+        const { semaphore } = await run("deploy:semaphore", {
+            logs: false
         })
 
-        users.push({
-            identity: new Identity(),
-            username: formatBytes32String("anon2")
-        })
+        feedbackContract = await run("deploy", { logs: false, group: groupId, semaphore: semaphore.address })
+        semaphoreContract = semaphore
 
-        group.addMember(users[0].identity.commitment)
-        group.addMember(users[1].identity.commitment)
+        users.push(new Identity())
+        users.push(new Identity())
     })
 
     describe("# joinGroup", () => {
         it("Should allow users to join the group", async () => {
-            for (let i = 0; i < group.members.length; i += 1) {
-                const transaction = feedbackContract.joinGroup(group.members[i], users[i].username)
+            for await (const [i, user] of users.entries()) {
+                const transaction = feedbackContract.joinGroup(user.commitment)
+
+                group.addMember(user.commitment)
 
                 await expect(transaction)
-                    .to.emit(feedbackContract, "NewUser")
-                    .withArgs(group.members[i], users[i].username)
+                    .to.emit(semaphoreContract, "MemberAdded")
+                    .withArgs(groupId, i, user.commitment, group.root)
             }
-        })
-
-        it("Should not allow users to join the group with the same username", async () => {
-            const transaction = feedbackContract.joinGroup(group.members[0], users[0].username)
-
-            await expect(transaction).to.be.revertedWithCustomError(feedbackContract, "Feedback__UsernameAlreadyExists")
         })
     })
 
@@ -57,7 +49,7 @@ describe("Feedback", () => {
         it("Should allow users to send feedback anonymously", async () => {
             const feedback = formatBytes32String("Hello World")
 
-            const fullProof = await generateProof(users[1].identity, group, groupId, feedback, {
+            const fullProof = await generateProof(users[1], group, groupId, feedback, {
                 wasmFilePath,
                 zkeyFilePath
             })
@@ -69,7 +61,9 @@ describe("Feedback", () => {
                 fullProof.proof
             )
 
-            await expect(transaction).to.emit(feedbackContract, "NewFeedback").withArgs(feedback)
+            await expect(transaction)
+                .to.emit(semaphoreContract, "ProofVerified")
+                .withArgs(groupId, fullProof.merkleTreeRoot, fullProof.nullifierHash, groupId, fullProof.signal)
         })
     })
 })
