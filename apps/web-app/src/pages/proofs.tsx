@@ -1,15 +1,14 @@
-import { formatBytes32String } from "ethers/lib/utils"
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof } from "@semaphore-protocol/proof"
-import { Subgraph } from "@semaphore-protocol/subgraph"
+import { BigNumber, utils } from "ethers"
 import getNextConfig from "next/config"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Stepper from "../components/Stepper"
 import LogsContext from "../context/LogsContext"
-import SubgraphContext from "../context/SubgraphContext"
+import SemaphoreContext from "../context/SemaphoreContext"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
 
@@ -18,7 +17,7 @@ const { publicRuntimeConfig: env } = getNextConfig()
 export default function ProofsPage() {
     const router = useRouter()
     const { setLogs } = useContext(LogsContext)
-    const { _feedback, refreshFeedback, addFeedback } = useContext(SubgraphContext)
+    const { _users, _feedback, refreshFeedback, addFeedback } = useContext(SemaphoreContext)
     const [_loading, setLoading] = useBoolean()
     const [_identity, setIdentity] = useState<Identity>()
 
@@ -46,7 +45,7 @@ export default function ProofsPage() {
 
         const feedback = prompt("Please enter your feedback:")
 
-        if (feedback) {
+        if (feedback && _users) {
             setLoading.on()
 
             setLogs(`Posting your anonymous feedback...`)
@@ -54,26 +53,22 @@ export default function ProofsPage() {
             try {
                 const group = new Group(env.GROUP_ID)
 
-                const feedbackBytes32 = formatBytes32String(feedback)
+                const signal = BigNumber.from(utils.formatBytes32String(feedback)).toString()
 
-                const subgraph = new Subgraph("goerli")
-
-                const { members } = await subgraph.getGroup(env.GROUP_ID, { members: true })
-
-                group.addMembers(members)
+                group.addMembers(_users)
 
                 const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
                     _identity,
                     group,
                     env.GROUP_ID,
-                    feedbackBytes32
+                    signal
                 )
 
                 const { status } = await fetch("api/feedback", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        feedback: feedbackBytes32,
+                        feedback: signal,
                         merkleTreeRoot,
                         nullifierHash,
                         proof

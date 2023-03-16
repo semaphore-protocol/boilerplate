@@ -30,8 +30,8 @@
     </a>
 </p>
 
-| The repository is divided into three components: [web app](./apps/web-app), [contracts](./apps/contracts) and [subgraph](./apps/subgraph). The app allows users to create their own Semaphore identity, join a group with their usernames and then send their feedback anonymously (currently on Goerli). |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The repository is divided into two components: [web app](./apps/web-app) and [contracts](./apps/contracts). The app allows users to create their own Semaphore identity, join a group and then send their feedback anonymously (currently on Sepolia). |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 
 ## 🛠 Install
 
@@ -67,16 +67,12 @@ and add your environment variables.
 1. Go to the `apps/contracts` directory and deploy your contract:
 
 ```bash
-yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
+yarn deploy --semaphore <semaphore-address> --group <group-id> --network sepolia
 ```
 
-2. Update your `.env` file with your new contract address and group id.
+2. Update your `.env` file with your new contract address, the group id and the semaphore contract address.
 
-3. Change the `address` (with the new contract address) and `startBlock` (with the block number of the transaction where the contract was created) in the `apps/subgraph/subgraph.yaml` file.
-
-4. Copy your contract artifacts from `apps/contracts/build/contracts/contracts` folder to `apps/subgraph/contract-artifacts` and `apps/web-app/contract-artifacts` folders manually. Or run `yarn copy:contract-artifacts` in the project root to do it automatically.
-
-5. Deploy the subgraph again.
+3. Copy your contract artifacts from `apps/contracts/build/contracts/contracts` folder to `apps/web-app/contract-artifacts` folders manually. Or run `yarn copy:contract-artifacts` in the project root to do it automatically.
 
 > **Note**  
 > Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts).
@@ -84,27 +80,12 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 > **Warning**  
 > The group id is a number!
 
-### Deploy the subgraph
+### Local server
 
-1. Go to the `apps/subgraph` directory and update the `subgraph.yaml` file by setting your contract address.
-2. Authenticate the account with your access token:
-
-```bash
-yarn auth <access-token>
-```
-
-3. Deploy your subgraph:
+You can start your app locally with:
 
 ```bash
-yarn deploy <account-name/subgraph-name>
-```
-
-### Start the app
-
-You can start your app locally or you can easily deploy it to Vercel or AWS Amplify.
-
-```bash
-yarn start
+yarn dev
 ```
 
 ### Code quality and formatting

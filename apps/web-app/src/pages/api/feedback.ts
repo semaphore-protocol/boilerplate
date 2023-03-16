@@ -3,8 +3,8 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import Feedback from "../../../contract-artifacts/Feedback.json"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (typeof process.env.CONTRACT_ADDRESS !== "string") {
-        throw new Error("Please, define CONTRACT_ADDRESS in your .env file")
+    if (typeof process.env.FEEDBACK_CONTRACT_ADDRESS !== "string") {
+        throw new Error("Please, define FEEDBACK_CONTRACT_ADDRESS in your .env file")
     }
 
     if (typeof process.env.ETHEREUM_URL !== "string") {
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const ethereumPrivateKey = process.env.ETHEREUM_PRIVATE_KEY
     const ethereumURL = process.env.ETHEREUM_URL
-    const contractAddress = process.env.CONTRACT_ADDRESS
+    const contractAddress = process.env.FEEDBACK_CONTRACT_ADDRESS
 
     const provider = new providers.JsonRpcProvider(ethereumURL)
     const signer = new Wallet(ethereumPrivateKey, provider)
