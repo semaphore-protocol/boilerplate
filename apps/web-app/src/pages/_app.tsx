@@ -1,13 +1,17 @@
-import { ChakraProvider, Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
+import { ChakraProvider, Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
 import type { AppProps } from "next/app"
+import getNextConfig from "next/config"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { FaGithub } from "react-icons/fa"
 import LogsContext from "../context/LogsContext"
 import SemaphoreContext from "../context/SemaphoreContext"
 import useSemaphore from "../hooks/useSemaphore"
 import theme from "../styles/index"
+
+const { publicRuntimeConfig: env } = getNextConfig()
 
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter()
@@ -18,6 +22,10 @@ export default function App({ Component, pageProps }: AppProps) {
         semaphore.refreshUsers()
         semaphore.refreshFeedback()
     }, [])
+
+    function shortenAddress(address: string) {
+        return `${address.slice(0, 6)}...${address.slice(-4)}`
+    }
 
     return (
         <>
@@ -32,6 +40,18 @@ export default function App({ Component, pageProps }: AppProps) {
             </Head>
 
             <ChakraProvider theme={theme}>
+                <HStack align="center" justify="right" p="2">
+                    <Link
+                        href={`https://${env.DEFAULT_NETWORK}.etherscan.io/address/${env.FEEDBACK_CONTRACT_ADDRESS}`}
+                        isExternal
+                    >
+                        <Text>{shortenAddress(env.FEEDBACK_CONTRACT_ADDRESS)}</Text>
+                    </Link>
+                    <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
+                        <IconButton aria-label="Github repository" icon={<Icon boxSize={6} as={FaGithub} />} />
+                    </Link>
+                </HStack>
+
                 <Container maxW="lg" flex="1" display="flex" alignItems="center">
                     <Stack py="8" display="flex" width="100%">
                         <SemaphoreContext.Provider value={semaphore}>
