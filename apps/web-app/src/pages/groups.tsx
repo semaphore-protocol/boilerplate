@@ -1,12 +1,16 @@
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
+import getNextConfig from "next/config"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
+import Feedback from "../../contract-artifacts/Feedback.json"
 import Stepper from "../components/Stepper"
 import LogsContext from "../context/LogsContext"
 import SemaphoreContext from "../context/SemaphoreContext"
 import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
+
+const { publicRuntimeConfig: env } = getNextConfig()
 
 export default function GroupsPage() {
     const router = useRouter()
@@ -40,15 +44,30 @@ export default function GroupsPage() {
         setLoading.on()
         setLogs(`Joining the Feedback group...`)
 
-        const { status } = await fetch("api/join", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                identityCommitment: _identity.commitment.toString()
-            })
-        })
+        let response: any
 
-        if (status === 200) {
+        if (env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+            response = await fetch(env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    abi: Feedback.abi,
+                    address: env.FEEDBACK_CONTRACT_ADDRESS,
+                    functionName: "joinGroup",
+                    functionParameters: [_identity.commitment.toString()]
+                })
+            })
+        } else {
+            response = await fetch("api/join", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    identityCommitment: _identity.commitment.toString()
+                })
+            })
+        }
+
+        if (response.status === 200) {
             addUser(_identity.commitment.toString())
 
             setLogs(`You joined the Feedback group event 🎉 Share your feedback anonymously!`)
