@@ -7173,6 +7173,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv@npm:^16.0.3":
+  version: 16.0.3
+  resolution: "dotenv@npm:16.0.3"
+  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
+  languageName: node
+  linkType: hard
+
 "download@npm:^8.0.0":
   version: 8.0.0
   resolution: "download@npm:8.0.0"
@@ -13498,7 +13505,6 @@ __metadata:
     eslint-config-airbnb-typescript: ^16.1.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-import: ^2.25.2
-    next: 13.0.3
     prettier: ^2.5.1
     ts-node: ^10.8.1
     typescript: ^4.7.3
@@ -15286,6 +15292,7 @@ __metadata:
     "@semaphore-protocol/proof": 3.2.3
     "@types/react": 18.0.25
     "@types/react-dom": 18.0.8
+    dotenv: ^16.0.3
     ethers: ^5.7.2
     framer-motion: ^7.6.6
     next: 13.0.3

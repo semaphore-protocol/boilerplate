@@ -27,9 +27,6 @@
         "apps/*"
     ],
     "packageManager": "yarn@3.2.1",
-    "dependencies": {
-        "next": "13.0.3"
-    },
     "devDependencies": {
         "@types/node": "^17.0.9",
         "@typescript-eslint/eslint-plugin": "^5.9.1",
