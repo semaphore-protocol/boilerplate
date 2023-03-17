@@ -6,6 +6,7 @@ import { BigNumber, utils } from "ethers"
 import getNextConfig from "next/config"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
+import Feedback from "../../contract-artifacts/Feedback.json"
 import Stepper from "../components/Stepper"
 import LogsContext from "../context/LogsContext"
 import SemaphoreContext from "../context/SemaphoreContext"
@@ -64,18 +65,33 @@ export default function ProofsPage() {
                     signal
                 )
 
-                const { status } = await fetch("api/feedback", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        feedback: signal,
-                        merkleTreeRoot,
-                        nullifierHash,
-                        proof
-                    })
-                })
+                let response: any
 
-                if (status === 200) {
+                if (env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+                    response = await fetch(env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            abi: Feedback.abi,
+                            address: env.FEEDBACK_CONTRACT_ADDRESS,
+                            functionName: "sendFeedback",
+                            functionParameters: [signal, merkleTreeRoot, nullifierHash, proof]
+                        })
+                    })
+                } else {
+                    response = await fetch("api/feedback", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            feedback: signal,
+                            merkleTreeRoot,
+                            nullifierHash,
+                            proof
+                        })
+                    })
+                }
+
+                if (response.status === 200) {
                     addFeedback(feedback)
 
                     setLogs(`Your feedback was posted 🎉`)
