@@ -6,12 +6,14 @@ import { SemaphoreContextType } from "../context/SemaphoreContext"
 
 const { publicRuntimeConfig: env } = getNextConfig()
 
+const ethereumNetwork = env.DEFAULT_NETWORK === "localhost" ? "http://localhost:8545" : env.DEFAULT_NETWORK
+
 export default function useSemaphore(): SemaphoreContextType {
     const [_users, setUsers] = useState<any[]>([])
     const [_feedback, setFeedback] = useState<string[]>([])
 
     const refreshUsers = useCallback(async (): Promise<void> => {
-        const semaphore = new SemaphoreEthers(env.ETHEREUM_URL, {
+        const semaphore = new SemaphoreEthers(ethereumNetwork, {
             address: env.SEMAPHORE_CONTRACT_ADDRESS
         })
 
@@ -28,7 +30,7 @@ export default function useSemaphore(): SemaphoreContextType {
     )
 
     const refreshFeedback = useCallback(async (): Promise<void> => {
-        const semaphore = new SemaphoreEthers(env.ETHEREUM_URL, {
+        const semaphore = new SemaphoreEthers(ethereumNetwork, {
             address: env.SEMAPHORE_CONTRACT_ADDRESS
         })
 

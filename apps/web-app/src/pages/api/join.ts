@@ -7,8 +7,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         throw new Error("Please, define FEEDBACK_CONTRACT_ADDRESS in your .env file")
     }
 
-    if (typeof process.env.ETHEREUM_URL !== "string") {
-        throw new Error("Please, define ETHEREUM_URL in your .env file")
+    if (typeof process.env.DEFAULT_NETWORK !== "string") {
+        throw new Error("Please, define DEFAULT_NETWORK in your .env file")
+    }
+
+    if (typeof process.env.INFURA_API_KEY !== "string") {
+        throw new Error("Please, define INFURA_API_KEY in your .env file")
     }
 
     if (typeof process.env.ETHEREUM_PRIVATE_KEY !== "string") {
@@ -16,10 +20,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const ethereumPrivateKey = process.env.ETHEREUM_PRIVATE_KEY
-    const ethereumURL = process.env.ETHEREUM_URL
+    const ethereumNetwork = process.env.DEFAULT_NETWORK
+    const infuraApiKey = process.env.INFURA_API_KEY
     const contractAddress = process.env.FEEDBACK_CONTRACT_ADDRESS
 
-    const provider = new providers.JsonRpcProvider(ethereumURL)
+    const provider =
+        ethereumNetwork === "localhost"
+            ? new providers.JsonRpcProvider()
+            : new providers.InfuraProvider(ethereumNetwork, infuraApiKey)
+
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(contractAddress, Feedback.abi, signer)
 

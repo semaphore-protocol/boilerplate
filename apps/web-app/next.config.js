@@ -18,13 +18,14 @@ const nextConfig = withPWA({
     reactStrictMode: true,
     swcMinify: true,
     env: {
-        ETHEREUM_URL: process.env.ETHEREUM_URL,
+        DEFAULT_NETWORK: process.env.DEFAULT_NETWORK,
+        INFURA_API_KEY: process.env.INFURA_API_KEY,
         ETHEREUM_PRIVATE_KEY: process.env.ETHEREUM_PRIVATE_KEY,
         FEEDBACK_CONTRACT_ADDRESS: process.env.FEEDBACK_CONTRACT_ADDRESS,
         SEMAPHORE_CONTRACT_ADDRESS: process.env.SEMAPHORE_CONTRACT_ADDRESS
     },
     publicRuntimeConfig: {
-        ETHEREUM_URL: process.env.ETHEREUM_URL,
+        DEFAULT_NETWORK: process.env.DEFAULT_NETWORK,
         FEEDBACK_CONTRACT_ADDRESS: process.env.FEEDBACK_CONTRACT_ADDRESS,
         SEMAPHORE_CONTRACT_ADDRESS: process.env.SEMAPHORE_CONTRACT_ADDRESS,
         OPENZEPPELIN_AUTOTASK_WEBHOOK: process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK,

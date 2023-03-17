@@ -30,8 +30,8 @@
     </a>
 </p>
 
-| The repository is divided into two components: [web app](./apps/web-app) and [contracts](./apps/contracts). The app allows users to create their own Semaphore identity, join a group and then send their feedback anonymously (currently on Sepolia). |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The repository is divided into two components: [web app](./apps/web-app) and [contracts](./apps/contracts). The app allows users to create their own Semaphore identity, join a group and then send their feedback anonymously (currently on Goerli). |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
 
@@ -57,17 +57,22 @@ Copy the `.env.example` file as `.env`:
 cp .env.example .env
 ```
 
-and add your environment variables.
+and add your environment variables or run the app in a local network.
 
-> **Note**  
-> You should at least set a valid Ethereum URL (e.g. Infura) and a private key with some ethers.
+### Local server
+
+You can start your app locally with:
+
+```bash
+yarn dev
+```
 
 ### Deploy the contract
 
 1. Go to the `apps/contracts` directory and deploy your contract:
 
 ```bash
-yarn deploy --semaphore <semaphore-address> --group <group-id> --network sepolia
+yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 ```
 
 2. Update your `.env` file with your new contract address, the group id and the semaphore contract address.
@@ -79,14 +84,6 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network sepolia
 
 > **Warning**  
 > The group id is a number!
-
-### Local server
-
-You can start your app locally with:
-
-```bash
-yarn dev
-```
 
 ### Code quality and formatting
 
