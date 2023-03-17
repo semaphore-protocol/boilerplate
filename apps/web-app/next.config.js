@@ -27,6 +27,7 @@ const nextConfig = withPWA({
         ETHEREUM_URL: process.env.ETHEREUM_URL,
         FEEDBACK_CONTRACT_ADDRESS: process.env.FEEDBACK_CONTRACT_ADDRESS,
         SEMAPHORE_CONTRACT_ADDRESS: process.env.SEMAPHORE_CONTRACT_ADDRESS,
+        OPENZEPPELIN_AUTOTASK_WEBHOOK: process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK,
         GROUP_ID: process.env.GROUP_ID
     },
     webpack: (config, { isServer }) => {
