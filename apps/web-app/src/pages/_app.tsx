@@ -1,5 +1,6 @@
 import { ChakraProvider, Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
+import { Network } from "@semaphore-protocol/data"
 import type { AppProps } from "next/app"
 import getNextConfig from "next/config"
 import Head from "next/head"
@@ -27,6 +28,18 @@ export default function App({ Component, pageProps }: AppProps) {
         return `${address.slice(0, 6)}...${address.slice(-4)}`
     }
 
+    function getExplorerLink(network: Network, address: string) {
+        switch (network) {
+            case "goerli":
+            case "sepolia":
+                return `https://${network}.etherscan.io/address/${address}`
+            case "arbitrum-goerli":
+                return `https://goerli.arbiscan.io/address/${address}`
+            default:
+                return ""
+        }
+    }
+
     return (
         <>
             <Head>
@@ -41,10 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
             <ChakraProvider theme={theme}>
                 <HStack align="center" justify="right" p="2">
-                    <Link
-                        href={`https://${env.DEFAULT_NETWORK}.etherscan.io/address/${env.FEEDBACK_CONTRACT_ADDRESS}`}
-                        isExternal
-                    >
+                    <Link href={getExplorerLink(env.DEFAULT_NETWORK, env.FEEDBACK_CONTRACT_ADDRESS)} isExternal>
                         <Text>{shortenAddress(env.FEEDBACK_CONTRACT_ADDRESS)}</Text>
                     </Link>
                     <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
