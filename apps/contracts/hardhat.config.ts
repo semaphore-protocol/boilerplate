@@ -1,5 +1,6 @@
-import "@nomiclabs/hardhat-ethers"
 import "@nomicfoundation/hardhat-chai-matchers"
+import "@nomiclabs/hardhat-ethers"
+import "@nomiclabs/hardhat-etherscan"
 import "@semaphore-protocol/hardhat"
 import "@typechain/hardhat"
 import { config as dotenvConfig } from "dotenv"
@@ -77,6 +78,9 @@ const hardhatConfig: HardhatUserConfig = {
     typechain: {
         outDir: config.paths.build.typechain,
         target: "ethers-v5"
+    },
+    etherscan: {
+        apiKey: process.env.ETHERSCAN_API_KEY
     }
 }
 
