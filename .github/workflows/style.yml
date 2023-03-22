@@ -3,20 +3,20 @@ name: style
 on:
     pull_request:
     push:
-        branches:
-            - main
+        branches: ["main"]
 
 jobs:
     style:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v2
+            - name: Checkout
+              uses: actions/checkout@v3
 
             - name: Install Node.js
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
-                  node-version: 16.x
+                  node-version: "16"
 
             - name: Get yarn cache directory path
               id: yarn-cache-dir-path
