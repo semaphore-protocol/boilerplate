@@ -7,6 +7,13 @@ on:
     # Allows you to run this workflow manually from the Actions tab
     workflow_dispatch:
 
+env:
+    DEFAULT_NETWORK: arbitrum-goerli
+    SEMAPHORE_CONTRACT_ADDRESS: 0xbE66454b0Fa9E6b3D53DC1b0f9D21978bb864531
+    FEEDBACK_CONTRACT_ADDRESS: 0xF5f40B12aa15286F0DE5610C4e29d87a97997ee7
+    GROUP_ID: 42
+    OPENZEPPELIN_AUTOTASK_WEBHOOK: https://api.defender.openzeppelin.com/autotasks/6e4db9d1-3451-46a4-bdfa-0e802e126aa8/runs/webhook/303216d1-fa7d-4fca-8c5b-7ba1ba544fc7/UEC3SBKDZvEGQv5m391uRU
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
     contents: read
