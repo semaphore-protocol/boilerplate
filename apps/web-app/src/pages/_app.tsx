@@ -1,5 +1,4 @@
 import { ChakraProvider, Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
-import "@fontsource/inter/400.css"
 import { Network } from "@semaphore-protocol/data"
 import type { AppProps } from "next/app"
 import getNextConfig from "next/config"
