@@ -3575,13 +3575,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/inter@npm:^4.5.14":
-  version: 4.5.14
-  resolution: "@fontsource/inter@npm:4.5.14"
-  checksum: 4e2eb9e54f8de0025bca7ad8e0822549f1873c5d9a634b8f99630d7bba750b1c86263229bae99375fc82489daa38df41e0304c77c3efda2d9a2f78d0eba3ec56
-  languageName: node
-  linkType: hard
-
 "@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -3792,6 +3785,13 @@ __metadata:
   version: 13.0.3
   resolution: "@next/env@npm:13.0.3"
   checksum: ba9cbc710c266db16f299193ac52da7ab344f3df5d9666f7010bed62d35627ba6324da896e5fdb539042787d7dddf613cf2ea499d69a614506afdb5fd4013e32
+  languageName: node
+  linkType: hard
+
+"@next/font@npm:13.0.3":
+  version: 13.0.3
+  resolution: "@next/font@npm:13.0.3"
+  checksum: 1e703a93b14129e147121589cdb3b6b19c2e473077b9fe611676d1913f5302333346cd5e7dcb1b9068aa899cb8386aa31259f58e52ee48ed5c6566ef04de0fec
   languageName: node
   linkType: hard
 
@@ -15405,7 +15405,7 @@ __metadata:
     "@chakra-ui/theme-tools": ^2.0.12
     "@emotion/react": ^11.10.5
     "@emotion/styled": ^11.10.5
-    "@fontsource/inter": ^4.5.14
+    "@next/font": 13.0.3
     "@semaphore-protocol/data": 3.6.0
     "@semaphore-protocol/group": 3.6.0
     "@semaphore-protocol/identity": 3.6.0
