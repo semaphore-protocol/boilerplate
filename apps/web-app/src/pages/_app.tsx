@@ -1,5 +1,5 @@
 import { ChakraProvider, Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
-import { Network } from "@semaphore-protocol/data"
+import { SupportedNetwork } from "@semaphore-protocol/data"
 import type { AppProps } from "next/app"
 import getNextConfig from "next/config"
 import Head from "next/head"
@@ -27,7 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
         return `${address.slice(0, 6)}...${address.slice(-4)}`
     }
 
-    function getExplorerLink(network: Network, address: string) {
+    function getExplorerLink(network: SupportedNetwork, address: string) {
         switch (network) {
             case "goerli":
             case "sepolia":
