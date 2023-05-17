@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const provider =
         ethereumNetwork === "localhost"
-            ? new providers.JsonRpcProvider()
+            ? new providers.JsonRpcProvider("http://127.0.0.1:8545")
             : new providers.InfuraProvider(ethereumNetwork, infuraApiKey)
 
     const signer = new Wallet(ethereumPrivateKey, provider)
