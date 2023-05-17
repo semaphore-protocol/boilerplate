@@ -52,7 +52,7 @@ export default function ProofsPage() {
             setLogs(`Posting your anonymous feedback...`)
 
             try {
-                const group = new Group(env.GROUP_ID, undefined, _users)
+                const group = new Group(env.GROUP_ID, 20, _users)
 
                 const signal = BigNumber.from(utils.formatBytes32String(feedback)).toString()
 
