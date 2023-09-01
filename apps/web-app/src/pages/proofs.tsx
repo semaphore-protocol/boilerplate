@@ -114,7 +114,7 @@ export default function ProofsPage() {
 
             <Text pt="2" fontSize="md">
                 Semaphore members can anonymously{" "}
-                <Link href="https://semaphore.appliedzkp.org/docs/guides/proofs" color="primary.500" isExternal>
+                <Link href="https://semaphore.pse.dev/docs/guides/proofs" color="primary.500" isExternal>
                     prove
                 </Link>{" "}
                 that they are part of a group and that they are generating their own signals. Signals could be anonymous

@@ -88,7 +88,7 @@ export default function GroupsPage() {
 
             <Text pt="2" fontSize="md">
                 Semaphore{" "}
-                <Link href="https://semaphore.appliedzkp.org/docs/guides/groups" color="primary.500" isExternal>
+                <Link href="https://semaphore.pse.dev/docs/guides/groups" color="primary.500" isExternal>
                     groups
                 </Link>{" "}
                 are binary incremental Merkle trees in which each leaf contains an identity commitment for a user.

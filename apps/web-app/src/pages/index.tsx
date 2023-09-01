@@ -44,7 +44,7 @@ export default function IdentitiesPage() {
 
             <Text pt="2" fontSize="md">
                 Users interact with the protocol using a Semaphore{" "}
-                <Link href="https://semaphore.appliedzkp.org/docs/guides/identities" color="primary.500" isExternal>
+                <Link href="https://semaphore.pse.dev/docs/guides/identities" color="primary.500" isExternal>
                     identity
                 </Link>{" "}
                 (similar to Ethereum accounts). It contains three values:
