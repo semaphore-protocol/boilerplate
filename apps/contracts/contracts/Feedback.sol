@@ -25,6 +25,6 @@ contract Feedback {
         uint256 nullifierHash,
         uint256[8] calldata proof
     ) external {
-        semaphore.verifyProof(groupId, merkleTreeRoot, feedback, nullifierHash, groupId, proof);
+        semaphore.verifyProof(groupId, merkleTreeRoot, feedback, nullifierHash, proof);
     }
 }
