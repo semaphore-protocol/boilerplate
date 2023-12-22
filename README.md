@@ -1,13 +1,6 @@
-<p align="center">
-    <h1 align="center">
-        <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon-dark.svg">
-            <source media="(prefers-color-scheme: light)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
-            <img width="40" alt="Semaphore icon." src="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
-        </picture>
-        Semaphore Boilerplate
-    </h1>
-</p>
+<h1 align="center">
+    Semaphore Boilerplate
+</h1>
 
 <p align="center">
     <a href="https://github.com/semaphore-protocol" target="_blank">
