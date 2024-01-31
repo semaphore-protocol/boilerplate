@@ -2,7 +2,7 @@ import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack }
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof } from "@semaphore-protocol/proof"
-import { BigNumber, utils } from "ethers"
+import { encodeBytes32String } from "ethers"
 import getNextConfig from "next/config"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
@@ -23,14 +23,14 @@ export default function ProofsPage() {
     const [_identity, setIdentity] = useState<Identity>()
 
     useEffect(() => {
-        const identityString = localStorage.getItem("identity")
+        const privateKey = localStorage.getItem("identity")
 
-        if (!identityString) {
+        if (!privateKey) {
             router.push("/")
             return
         }
 
-        setIdentity(new Identity(identityString))
+        setIdentity(new Identity(privateKey))
     }, [])
 
     useEffect(() => {
@@ -44,6 +44,11 @@ export default function ProofsPage() {
             return
         }
 
+        if (_users && _users.length < 2) {
+            alert("No anonymity in a group of one!")
+            return
+        }
+
         const feedback = prompt("Please enter your feedback:")
 
         if (feedback && _users) {
@@ -52,15 +57,15 @@ export default function ProofsPage() {
             setLogs(`Posting your anonymous feedback...`)
 
             try {
-                const group = new Group(env.GROUP_ID, 20, _users)
+                const group = new Group(_users)
 
-                const signal = BigNumber.from(utils.formatBytes32String(feedback)).toString()
+                const message = encodeBytes32String(feedback)
 
-                const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
+                const { points, merkleTreeDepth, merkleTreeRoot, nullifier } = await generateProof(
                     _identity,
                     group,
-                    env.GROUP_ID,
-                    signal
+                    message,
+                    env.GROUP_ID
                 )
 
                 let response: any
@@ -73,7 +78,7 @@ export default function ProofsPage() {
                             abi: Feedback.abi,
                             address: env.FEEDBACK_CONTRACT_ADDRESS,
                             functionName: "sendFeedback",
-                            functionParameters: [signal, merkleTreeRoot, nullifierHash, proof]
+                            functionParameters: [merkleTreeDepth, merkleTreeRoot, nullifier, message, points]
                         })
                     })
                 } else {
@@ -81,10 +86,11 @@ export default function ProofsPage() {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            feedback: signal,
+                            feedback: message,
+                            merkleTreeDepth,
                             merkleTreeRoot,
-                            nullifierHash,
-                            proof
+                            nullifier,
+                            points
                         })
                     })
                 }

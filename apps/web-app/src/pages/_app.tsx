@@ -29,11 +29,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
     function getExplorerLink(network: SupportedNetwork, address: string) {
         switch (network) {
-            case "goerli":
             case "sepolia":
-                return `https://${network}.etherscan.io/address/${address}`
-            case "arbitrum-goerli":
-                return `https://goerli.arbiscan.io/address/${address}`
+                return `https://sepolia.etherscan.io/address/${address}`
+            case "arbitrum-sepolia":
+                return `https://sepolia.arbiscan.io/address/${address}`
             default:
                 return ""
         }

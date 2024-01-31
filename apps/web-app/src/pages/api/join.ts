@@ -1,4 +1,4 @@
-import { Contract, providers, Wallet } from "ethers"
+import { Contract, InfuraProvider, JsonRpcProvider, Wallet } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
 import Feedback from "../../../contract-artifacts/Feedback.json"
 
@@ -26,8 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const provider =
         ethereumNetwork === "localhost"
-            ? new providers.JsonRpcProvider("http://127.0.0.1:8545")
-            : new providers.InfuraProvider(ethereumNetwork, infuraApiKey)
+            ? new JsonRpcProvider("http://127.0.0.1:8545")
+            : new InfuraProvider(ethereumNetwork, infuraApiKey)
 
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(contractAddress, Feedback.abi, signer)
