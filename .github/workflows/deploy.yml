@@ -8,11 +8,11 @@ on:
     workflow_dispatch:
 
 env:
-    DEFAULT_NETWORK: "arbitrum-goerli"
-    SEMAPHORE_CONTRACT_ADDRESS: "0x3889927F0B5Eb1a02C6E2C20b39a1Bd4EAd76131"
-    FEEDBACK_CONTRACT_ADDRESS: "0x28227B230d3945e580eD3B1c6c8ea1df658A7AA9"
-    GROUP_ID: 42
-    OPENZEPPELIN_AUTOTASK_WEBHOOK: "https://api.defender.openzeppelin.com/autotasks/6e4db9d1-3451-46a4-bdfa-0e802e126aa8/runs/webhook/303216d1-fa7d-4fca-8c5b-7ba1ba544fc7/UEC3SBKDZvEGQv5m391uRU"
+    DEFAULT_NETWORK: "sepolia"
+    SEMAPHORE_CONTRACT_ADDRESS: "0x5B8e7cC7bAC61A4b952d472b67056B2f260ba6dc"
+    FEEDBACK_CONTRACT_ADDRESS: "0xF60BB52500652193930b40A0c680e7d1a02155FE"
+    GROUP_ID: 99
+    OPENZEPPELIN_AUTOTASK_WEBHOOK: "https://api.defender.openzeppelin.com/actions/20fce2ae-844b-4ec0-a6a2-90a3350a9d2c/runs/webhook/303216d1-fa7d-4fca-8c5b-7ba1ba544fc7/2T7i9xrkZA5j37hoaQLUuw"
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
