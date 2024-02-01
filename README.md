@@ -23,7 +23,7 @@
     </a>
 </p>
 
-| The repository is divided into two components: [web app](./apps/web-app) and [contracts](./apps/contracts). The app allows users to create their own Semaphore identity, join a group and then send their feedback anonymously (currently on Arbitrum Goerli). |
+| The repository is divided into two components: [web app](./apps/web-app) and [contracts](./apps/contracts). The app allows users to create their own Semaphore identity, join a group and then send their feedback anonymously (currently on Sepolia). |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
@@ -65,18 +65,29 @@ yarn dev
 1. Go to the `apps/contracts` directory and deploy your contract:
 
 ```bash
-yarn deploy --semaphore <semaphore-address> --group <group-id> --network arbitrum-goerli
+yarn deploy --semaphore <semaphore-address> --group <group-id> --network sepolia
 ```
 
 2. Update your `.env` file with your new contract address, the group id and the semaphore contract address.
 
-3. Copy your contract artifacts from `apps/contracts/build/contracts/contracts` folder to `apps/web-app/contract-artifacts` folders manually. Or run `yarn copy:contract-artifacts` in the project root to do it automatically.
+3. Copy your contract artifacts from `apps/contracts/build/contracts/contracts` folder to `apps/web-app/contract-artifacts` folders.
 
 > **Note**  
 > Check the Semaphore contract addresses [here](https://semaphore.pse.dev/docs/deployed-contracts).
 
 > **Warning**  
 > The group id is a number!
+
+### Verify the contract
+
+Verify your contract on Etherscan:
+
+```bash
+yarn verify <your-contract-address> <semaphore-address> <group-id> --network sepolia
+```
+
+> **Note**  
+> Remember to set the Etherscan API Key in your .env file.
 
 ### Code quality and formatting
 
