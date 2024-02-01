@@ -1,11 +1,10 @@
-import { Box, Button, Divider, Heading, HStack, Link, ListItem, OrderedList, Text } from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, HStack, Link, Text } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/identity"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Stepper from "../components/Stepper"
 import LogsContext from "../context/LogsContext"
-import IconAddCircleFill from "../icons/IconAddCircleFill"
-import IconRefreshLine from "../icons/IconRefreshLine"
+import shortenString from "../utils/shortenString"
 
 export default function IdentitiesPage() {
     const router = useRouter()
@@ -20,7 +19,7 @@ export default function IdentitiesPage() {
 
             setIdentity(identity)
 
-            setLogs("Your Semaphore identity was retrieved from the browser cache 👌🏽")
+            setLogs("Your Semaphore identity has been retrieved from the browser cache 👌🏽")
         } else {
             setLogs("Create your Semaphore identity 👆🏽")
         }
@@ -43,59 +42,50 @@ export default function IdentitiesPage() {
             </Heading>
 
             <Text pt="2" fontSize="md">
-                Users interact with the protocol using a Semaphore{" "}
-                <Link href="https://semaphore.pse.dev/docs/guides/identities" color="primary.500" isExternal>
-                    identity
+                The identity of a user in the Semaphore protocol. A{" "}
+                <Link href="https://docs.semaphore.pse.dev/guides/identities" isExternal>
+                    Semaphore identity
                 </Link>{" "}
-                (similar to Ethereum accounts). It contains three values:
+                consists of an{" "}
+                <Link
+                    href="https://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/eddsa-poseidon"
+                    isExternal
+                >
+                    EdDSA
+                </Link>{" "}
+                public/private key pair and a commitment, used as the public identifier of the identity.
             </Text>
-            <OrderedList pl="20px" pt="5px" spacing="3">
-                <ListItem>Trapdoor: private, known only by user</ListItem>
-                <ListItem>Nullifier: private, known only by user</ListItem>
-                <ListItem>Commitment: public</ListItem>
-            </OrderedList>
 
             <Divider pt="5" borderColor="gray.500" />
 
-            <HStack pt="5" justify="space-between">
+            <HStack py="5">
                 <Text fontWeight="bold" fontSize="lg">
                     Identity
                 </Text>
-                {_identity && (
-                    <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={createIdentity}>
-                        New
-                    </Button>
-                )}
             </HStack>
 
-            {_identity ? (
-                <Box py="6" whiteSpace="nowrap">
-                    <Box p="5" borderWidth={1} borderColor="gray.500" borderRadius="4px">
-                        <Text textOverflow="ellipsis" overflow="hidden">
-                            Private Key: {_identity.privateKey.toString()}
-                        </Text>
-                        <Text textOverflow="ellipsis" overflow="hidden">
-                            Commitment: {_identity.commitment.toString()}
-                        </Text>
-                    </Box>
-                </Box>
-            ) : (
-                <Box py="6">
-                    <Button
-                        w="100%"
-                        fontWeight="bold"
-                        justifyContent="left"
-                        colorScheme="primary"
-                        px="4"
-                        onClick={createIdentity}
-                        leftIcon={<IconAddCircleFill />}
-                    >
-                        Create identity
-                    </Button>
+            {_identity && (
+                <Box pb="6" whiteSpace="nowrap">
+                    <Text textOverflow="ellipsis" overflow="hidden">
+                        Private Key: {_identity.privateKey.toString()}
+                    </Text>
+                    <Text textOverflow="ellipsis" overflow="hidden">
+                        Public Key: [{shortenString(_identity.publicKey[0], [8, 8])},{" "}
+                        {shortenString(_identity.publicKey[1], [8, 8])}]
+                    </Text>
+                    <Text textOverflow="ellipsis" overflow="hidden">
+                        Commitment: <b>{_identity.commitment}</b>
+                    </Text>
                 </Box>
             )}
 
-            <Divider pt="3" borderColor="gray" />
+            <Box pb="5">
+                <Button w="full" colorScheme="primary" onClick={createIdentity}>
+                    Create identity
+                </Button>
+            </Box>
+
+            <Divider pt="3" borderColor="gray.500" />
 
             <Stepper step={1} onNextClick={_identity && (() => router.push("/groups"))} />
         </>

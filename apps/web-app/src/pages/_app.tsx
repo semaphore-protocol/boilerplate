@@ -10,6 +10,7 @@ import LogsContext from "../context/LogsContext"
 import SemaphoreContext from "../context/SemaphoreContext"
 import useSemaphore from "../hooks/useSemaphore"
 import theme from "../styles/index"
+import shortenString from "../utils/shortenString"
 
 const { publicRuntimeConfig: env } = getNextConfig()
 
@@ -22,10 +23,6 @@ export default function App({ Component, pageProps }: AppProps) {
         semaphore.refreshUsers()
         semaphore.refreshFeedback()
     }, [])
-
-    function shortenAddress(address: string) {
-        return `${address.slice(0, 6)}...${address.slice(-4)}`
-    }
 
     function getExplorerLink(network: SupportedNetwork, address: string) {
         switch (network) {
@@ -42,26 +39,32 @@ export default function App({ Component, pageProps }: AppProps) {
         <>
             <Head>
                 <title>Semaphore boilerplate</title>
-                <link rel="icon" href="/favicon.ico" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <link rel="icon" href="/images/icons/favicon.ico" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png" />
+                <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png" />
                 <link rel="manifest" href="/manifest.json" />
-                <meta name="theme-color" content="#ebedff" />
+                <meta name="theme-color" content="#4771ea" />
             </Head>
 
             <ChakraProvider theme={theme}>
                 <HStack align="center" justify="right" p="2">
                     <Link href={getExplorerLink(env.DEFAULT_NETWORK, env.FEEDBACK_CONTRACT_ADDRESS)} isExternal>
-                        <Text>{shortenAddress(env.FEEDBACK_CONTRACT_ADDRESS)}</Text>
+                        <Text>{shortenString(env.FEEDBACK_CONTRACT_ADDRESS, [6, 4])}</Text>
                     </Link>
                     <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
-                        <IconButton aria-label="Github repository" icon={<Icon boxSize={6} as={FaGithub} />} />
+                        <IconButton
+                            aria-label="Github repository"
+                            variant="link"
+                            py="3"
+                            color="text.100"
+                            icon={<Icon boxSize={6} as={FaGithub} />}
+                        />
                     </Link>
                 </HStack>
 
-                <Container maxW="lg" flex="1" display="flex" alignItems="center">
-                    <Stack py="8" display="flex" width="100%">
+                <Container maxW="xl" flex="1" display="flex" alignItems="center">
+                    <Stack pt="8" pb="24" display="flex" width="100%">
                         <SemaphoreContext.Provider value={semaphore}>
                             <LogsContext.Provider
                                 value={{
@@ -77,15 +80,16 @@ export default function App({ Component, pageProps }: AppProps) {
 
                 <HStack
                     flexBasis="56px"
-                    borderTop="1px solid #8f9097"
-                    backgroundColor="#DAE0FF"
+                    borderTopWidth="1px"
+                    borderTopColor="text.600"
+                    backgroundColor="darkBlueBg"
                     align="center"
                     justify="center"
                     spacing="4"
                     p="4"
                 >
                     {_logs.endsWith("...") && <Spinner color="primary.400" />}
-                    <Text fontWeight="bold">{_logs || `Current step: ${router.route}`}</Text>
+                    <Text>{_logs || `Current step: ${router.route}`}</Text>
                 </HStack>
             </ChakraProvider>
         </>

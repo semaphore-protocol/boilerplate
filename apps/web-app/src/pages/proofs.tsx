@@ -120,50 +120,47 @@ export default function ProofsPage() {
 
             <Text pt="2" fontSize="md">
                 Semaphore members can anonymously{" "}
-                <Link href="https://semaphore.pse.dev/docs/guides/proofs" color="primary.500" isExternal>
+                <Link href="https://docs.semaphore.pse.dev/guides/proofs" isExternal>
                     prove
                 </Link>{" "}
-                that they are part of a group and that they are generating their own signals. Signals could be anonymous
-                votes, leaks, reviews, or feedback.
+                that they are part of a group and send their anonymous messages. Messages could be votes, leaks,
+                reviews, or feedback.
             </Text>
 
             <Divider pt="5" borderColor="gray.500" />
 
             <HStack py="5" justify="space-between">
                 <Text fontWeight="bold" fontSize="lg">
-                    Feedback signals ({_feedback.length})
+                    Feedback ({_feedback.length})
                 </Text>
-                <Button leftIcon={<IconRefreshLine />} variant="link" color="text.700" onClick={refreshFeedback}>
+                <Button
+                    leftIcon={<IconRefreshLine />}
+                    variant="link"
+                    color="text.300"
+                    onClick={refreshFeedback}
+                    size="lg"
+                >
                     Refresh
                 </Button>
             </HStack>
 
-            <Box pb="5">
-                <Button
-                    w="100%"
-                    fontWeight="bold"
-                    justifyContent="left"
-                    colorScheme="primary"
-                    px="4"
-                    onClick={sendFeedback}
-                    isDisabled={_loading}
-                    leftIcon={<IconAddCircleFill />}
-                >
-                    Send Feedback
-                </Button>
-            </Box>
-
             {_feedback.length > 0 && (
-                <VStack spacing="3" align="left">
+                <VStack spacing="3" pb="3" align="left" maxHeight="300px" overflowY="scroll">
                     {_feedback.map((f, i) => (
-                        <HStack key={i} p="3" borderWidth={1}>
+                        <HStack key={i} pb="3" borderBottomWidth={i < _feedback.length - 1 ? 1 : 0}>
                             <Text>{f}</Text>
                         </HStack>
                     ))}
                 </VStack>
             )}
 
-            <Divider pt="6" borderColor="gray" />
+            <Box pb="5">
+                <Button w="full" colorScheme="primary" isDisabled={_loading} onClick={sendFeedback}>
+                    Send feedback
+                </Button>
+            </Box>
+
+            <Divider pt="3" borderColor="gray" />
 
             <Stepper step={3} onPrevClick={() => router.push("/groups")} />
         </>
