@@ -32,7 +32,7 @@ export default function IdentitiesPage() {
 
         localStorage.setItem("identity", identity.privateKey.toString())
 
-        setLogs("Your new Semaphore identity was just created 🎉")
+        setLogs("Your new Semaphore identity has just been created 🎉")
     }, [])
 
     return (

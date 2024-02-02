@@ -69,7 +69,7 @@ export default function GroupsPage() {
         if (response.status === 200) {
             addUser(_identity.commitment.toString())
 
-            setLogs(`You joined the Feedback group event 🎉 Share your feedback anonymously!`)
+            setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
         } else {
             setLogs("Some error occurred, please try again!")
         }

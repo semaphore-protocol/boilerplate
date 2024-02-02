@@ -10,7 +10,6 @@ import Feedback from "../../contract-artifacts/Feedback.json"
 import Stepper from "../components/Stepper"
 import LogsContext from "../context/LogsContext"
 import SemaphoreContext from "../context/SemaphoreContext"
-import IconAddCircleFill from "../icons/IconAddCircleFill"
 import IconRefreshLine from "../icons/IconRefreshLine"
 
 const { publicRuntimeConfig: env } = getNextConfig()
@@ -98,7 +97,7 @@ export default function ProofsPage() {
                 if (response.status === 200) {
                     addFeedback(feedback)
 
-                    setLogs(`Your feedback was posted 🎉`)
+                    setLogs(`Your feedback has been posted 🎉`)
                 } else {
                     setLogs("Some error occurred, please try again!")
                 }
