@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
-import { Identity } from "@semaphore-protocol/identity"
+import { Identity } from "@semaphore-protocol/core"
 import getNextConfig from "next/config"
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
