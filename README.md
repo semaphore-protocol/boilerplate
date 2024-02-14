@@ -68,9 +68,9 @@ yarn dev
 yarn deploy --semaphore <semaphore-address> --group <group-id> --network sepolia
 ```
 
-2. Update your `.env` file with your new contract address, the group id and the semaphore contract address.
+2. Update the `apps/web-app/.env.$(NODE_ENV).local` files with your new contract address, the group id and the semaphore contract address.
 
-3. Copy your contract artifacts from `apps/contracts/build/contracts/contracts` folder to `apps/web-app/contract-artifacts` folders.
+3. Copy your contract artifacts from `apps/contracts/artifacts/contracts` folder to `apps/web-app/contract-artifacts` folder.
 
 > **Note**  
 > Check the Semaphore contract addresses [here](https://semaphore.pse.dev/docs/deployed-contracts).
@@ -89,13 +89,7 @@ yarn verify <your-contract-address> <semaphore-address> <group-id> --network sep
 > **Note**  
 > Remember to set the Etherscan API Key in your .env file.
 
-### Code quality and formatting
-
-Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
-
-```bash
-yarn lint
-```
+### Code formatting
 
 Run [Prettier](https://prettier.io/) to check formatting rules:
 

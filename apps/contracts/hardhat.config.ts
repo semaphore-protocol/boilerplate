@@ -52,6 +52,7 @@ function getNetworks(): NetworksUserConfig {
 
 const hardhatConfig: HardhatUserConfig = {
     solidity: "0.8.23",
+    defaultNetwork: process.env.DEFAULT_NETWORK || "localhost",
     networks: {
         hardhat: {
             chainId: 1337
