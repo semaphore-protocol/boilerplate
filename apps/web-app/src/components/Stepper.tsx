@@ -1,4 +1,6 @@
-import { Box, Button, HStack, Text } from "@chakra-ui/react"
+"use client"
+
+import { Button, HStack, Text } from "@chakra-ui/react"
 import IconChevronLeft from "../icons/IconChevronLeft"
 import IconChevronRight from "../icons/IconChevronRight"
 

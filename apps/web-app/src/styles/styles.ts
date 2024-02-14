@@ -1,6 +1,6 @@
 import { SystemStyleObject } from "@chakra-ui/react"
 import { Styles } from "@chakra-ui/theme-tools"
-import { Outfit } from "@next/font/google"
+import { Outfit } from "next/font/google"
 
 export const font = Outfit({ subsets: ["latin"] })
 
@@ -8,12 +8,8 @@ const styles: Styles = {
     global: (): SystemStyleObject => ({
         body: {
             bg: "darkBlueBg",
-            color: "text.100"
-        },
-        "body, #__next": {
-            minHeight: "100vh"
-        },
-        "#__next": {
+            color: "text.100",
+            minHeight: "100vh",
             display: "flex",
             flexDirection: "column"
         },

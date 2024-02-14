@@ -1,14 +1,14 @@
 import { Contract, InfuraProvider, JsonRpcProvider, Wallet } from "ethers"
-import type { NextApiRequest, NextApiResponse } from "next"
-import Feedback from "../../../contract-artifacts/Feedback.json"
+import { NextRequest } from "next/server"
+import Feedback from "../../../../contract-artifacts/Feedback.json"
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (typeof process.env.FEEDBACK_CONTRACT_ADDRESS !== "string") {
-        throw new Error("Please, define FEEDBACK_CONTRACT_ADDRESS in your .env file")
+export async function POST(req: NextRequest) {
+    if (typeof process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS !== "string") {
+        throw new Error("Please, define NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS in your .env file")
     }
 
-    if (typeof process.env.DEFAULT_NETWORK !== "string") {
-        throw new Error("Please, define DEFAULT_NETWORK in your .env file")
+    if (typeof process.env.NEXT_PUBLIC_DEFAULT_NETWORK !== "string") {
+        throw new Error("Please, define NEXT_PUBLIC_DEFAULT_NETWORK in your .env file")
     }
 
     if (typeof process.env.INFURA_API_KEY !== "string") {
@@ -20,9 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const ethereumPrivateKey = process.env.ETHEREUM_PRIVATE_KEY
-    const ethereumNetwork = process.env.DEFAULT_NETWORK
+    const ethereumNetwork = process.env.NEXT_PUBLIC_DEFAULT_NETWORK
     const infuraApiKey = process.env.INFURA_API_KEY
-    const contractAddress = process.env.FEEDBACK_CONTRACT_ADDRESS
+    const contractAddress = process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS
 
     const provider =
         ethereumNetwork === "localhost"
@@ -32,17 +32,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(contractAddress, Feedback.abi, signer)
 
-    const { feedback, merkleTreeDepth, merkleTreeRoot, nullifier, points } = req.body
+    const { identityCommitment } = await req.json()
 
     try {
-        const transaction = await contract.sendFeedback(merkleTreeDepth, merkleTreeRoot, nullifier, feedback, points)
+        const transaction = await contract.joinGroup(identityCommitment)
 
         await transaction.wait()
 
-        res.status(200).end()
+        return new Response("Success", { status: 200 })
     } catch (error: any) {
         console.error(error)
 
-        res.status(500).end()
+        return new Response(`Server error: ${error}`, {
+            status: 500
+        })
     }
 }

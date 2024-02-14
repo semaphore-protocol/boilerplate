@@ -1,16 +1,15 @@
-import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
-import { Group, Identity, generateProof } from "@semaphore-protocol/core"
-import { encodeBytes32String } from "ethers"
-import getNextConfig from "next/config"
-import { useRouter } from "next/router"
-import { useCallback, useContext, useEffect, useState } from "react"
-import Feedback from "../../contract-artifacts/Feedback.json"
-import Stepper from "../components/Stepper"
-import LogsContext from "../context/LogsContext"
-import SemaphoreContext from "../context/SemaphoreContext"
-import IconRefreshLine from "../icons/IconRefreshLine"
+"use client"
 
-const { publicRuntimeConfig: env } = getNextConfig()
+import Stepper from "@/components/Stepper"
+import LogsContext from "@/context/LogsContext"
+import SemaphoreContext from "@/context/SemaphoreContext"
+import IconRefreshLine from "@/icons/IconRefreshLine"
+import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
+import { generateProof, Group, Identity } from "@semaphore-protocol/core"
+import { encodeBytes32String } from "ethers"
+import { useRouter } from "next/navigation"
+import { useCallback, useContext, useEffect, useState } from "react"
+import Feedback from "../../../contract-artifacts/Feedback.json"
 
 export default function ProofsPage() {
     const router = useRouter()
@@ -62,18 +61,18 @@ export default function ProofsPage() {
                     _identity,
                     group,
                     message,
-                    env.GROUP_ID
+                    process.env.NEXT_PUBLIC_GROUP_ID as string
                 )
 
                 let response: any
 
-                if (env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-                    response = await fetch(env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                if (process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+                    response = await fetch(process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             abi: Feedback.abi,
-                            address: env.FEEDBACK_CONTRACT_ADDRESS,
+                            address: process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS,
                             functionName: "sendFeedback",
                             functionParameters: [merkleTreeDepth, merkleTreeRoot, nullifier, message, points]
                         })
@@ -159,7 +158,7 @@ export default function ProofsPage() {
 
             <Divider pt="3" borderColor="gray" />
 
-            <Stepper step={3} onPrevClick={() => router.push("/groups")} />
+            <Stepper step={3} onPrevClick={() => router.push("/group")} />
         </>
     )
 }

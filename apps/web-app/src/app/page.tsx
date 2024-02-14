@@ -1,6 +1,8 @@
+"use client"
+
 import { Box, Button, Divider, Heading, HStack, Link, Text } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/core"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Stepper from "../components/Stepper"
 import LogsContext from "../context/LogsContext"
@@ -87,7 +89,7 @@ export default function IdentitiesPage() {
 
             <Divider pt="3" borderColor="gray.500" />
 
-            <Stepper step={1} onNextClick={_identity && (() => router.push("/groups"))} />
+            <Stepper step={1} onNextClick={_identity && (() => router.push("/group"))} />
         </>
     )
 }

@@ -1,15 +1,14 @@
+"use client"
+
+import Stepper from "@/components/Stepper"
+import LogsContext from "@/context/LogsContext"
+import SemaphoreContext from "@/context/SemaphoreContext"
+import IconRefreshLine from "@/icons/IconRefreshLine"
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/core"
-import getNextConfig from "next/config"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
-import Feedback from "../../contract-artifacts/Feedback.json"
-import Stepper from "../components/Stepper"
-import LogsContext from "../context/LogsContext"
-import SemaphoreContext from "../context/SemaphoreContext"
-import IconRefreshLine from "../icons/IconRefreshLine"
-
-const { publicRuntimeConfig: env } = getNextConfig()
+import Feedback from "../../../contract-artifacts/Feedback.json"
 
 export default function GroupsPage() {
     const router = useRouter()
@@ -45,13 +44,13 @@ export default function GroupsPage() {
 
         let response: any
 
-        if (env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-            response = await fetch(env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+        if (process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+            response = await fetch(process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     abi: Feedback.abi,
-                    address: env.FEEDBACK_CONTRACT_ADDRESS,
+                    address: process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string,
                     functionName: "joinGroup",
                     functionParameters: [_identity.commitment.toString()]
                 })
