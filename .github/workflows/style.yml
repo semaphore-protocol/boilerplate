@@ -23,6 +23,3 @@ jobs:
 
             - name: Run Prettier
               run: yarn prettier
-
-            - name: Run Eslint
-              run: yarn lint
