@@ -2,10 +2,10 @@
 
 import withPWA from "next-pwa"
 import fs from "fs"
+import { config } from "dotenv"
 
 if (!fs.existsSync("./.env")) {
-    // eslint-disable-next-line global-require
-    require("dotenv").config({ path: "../../.env" })
+    config({ path: "../../.env" })
 }
 
 const nextConfig = withPWA({
