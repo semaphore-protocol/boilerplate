@@ -106,7 +106,7 @@ export default function ProofsPage() {
                 setLoading.off()
             }
         }
-    }, [_identity])
+    }, [_identity, _users])
 
     return (
         <>
