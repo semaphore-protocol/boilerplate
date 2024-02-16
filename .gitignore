@@ -40,10 +40,6 @@ node_modules/
 
 # dotenv environment variable files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
 
 # Optional npm cache directory
 .npm

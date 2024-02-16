@@ -45,7 +45,7 @@ export default function PageContainer({
                     )}
                     isExternal
                 >
-                    <Text>{shortenString(process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS || "", [6, 4])}</Text>
+                    <Text>{shortenString(process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string, [6, 4])}</Text>
                 </Link>
                 <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
                     <IconButton
