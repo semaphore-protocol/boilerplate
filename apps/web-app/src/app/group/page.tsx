@@ -1,5 +1,4 @@
 "use client"
-
 import Stepper from "@/components/Stepper"
 import LogsContext from "@/context/LogsContext"
 import SemaphoreContext from "@/context/SemaphoreContext"
@@ -9,6 +8,7 @@ import { Identity } from "@semaphore-protocol/core"
 import { useRouter } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Feedback from "../../../contract-artifacts/Feedback.json"
+import { ethers } from "ethers"
 
 export default function GroupsPage() {
     const router = useRouter()
@@ -42,10 +42,10 @@ export default function GroupsPage() {
         setLoading.on()
         setLogs(`Joining the Feedback group...`)
 
-        let response: any
+        let joinedGroup: boolean = false
 
         if (process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-            response = await fetch(process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+            const response = await fetch(process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -55,17 +55,46 @@ export default function GroupsPage() {
                     functionParameters: [_identity.commitment.toString()]
                 })
             })
+
+            if (response.status === 200) {
+                joinedGroup = true
+            }
+        } else if (
+            process.env.NEXT_PUBLIC_GELATO_RELAYER_ENDPOINT &&
+            process.env.NEXT_PUBLIC_GELATO_RELAYER_CHAIN_ID &&
+            process.env.GELATO_RELAYER_API_KEY
+        ) {
+            const iface = new ethers.Interface(Feedback.abi)
+            const request = {
+                chainId: process.env.NEXT_PUBLIC_GELATO_RELAYER_CHAIN_ID,
+                target: process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS,
+                data: iface.encodeFunctionData("joinGroup", [_identity.commitment.toString()]),
+                sponsorApiKey: process.env.GELATO_RELAYER_API_KEY
+            }
+            const response = await fetch(process.env.NEXT_PUBLIC_GELATO_RELAYER_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(request)
+            })
+
+            if (response.status === 201) {
+                joinedGroup = true
+            }
         } else {
-            response = await fetch("api/join", {
+            const response = await fetch("api/join", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     identityCommitment: _identity.commitment.toString()
                 })
             })
+
+            if (response.status === 200) {
+                joinedGroup = true
+            }
         }
 
-        if (response.status === 200) {
+        if (joinedGroup) {
             addUser(_identity.commitment.toString())
 
             setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)

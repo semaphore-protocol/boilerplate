@@ -6,7 +6,7 @@ import SemaphoreContext from "@/context/SemaphoreContext"
 import IconRefreshLine from "@/icons/IconRefreshLine"
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
 import { generateProof, Group, Identity } from "@semaphore-protocol/core"
-import { encodeBytes32String } from "ethers"
+import { encodeBytes32String, ethers } from "ethers"
 import { useRouter } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Feedback from "../../../contract-artifacts/Feedback.json"
@@ -64,21 +64,46 @@ export default function ProofsPage() {
                     process.env.NEXT_PUBLIC_GROUP_ID as string
                 )
 
-                let response: any
-
+                let feedbackSent: boolean = false
+                const params = [merkleTreeDepth, merkleTreeRoot, nullifier, message, points]
                 if (process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-                    response = await fetch(process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                    const response = await fetch(process.env.NEXT_PUBLIC_OPENZEPPELIN_AUTOTASK_WEBHOOK, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             abi: Feedback.abi,
                             address: process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS,
                             functionName: "sendFeedback",
-                            functionParameters: [merkleTreeDepth, merkleTreeRoot, nullifier, message, points]
+                            functionParameters: params
                         })
                     })
+
+                    if (response.status === 200) {
+                        feedbackSent = true
+                    }
+                } else if (
+                    process.env.NEXT_PUBLIC_GELATO_RELAYER_ENDPOINT &&
+                    process.env.NEXT_PUBLIC_GELATO_RELAYER_CHAIN_ID &&
+                    process.env.GELATO_RELAYER_API_KEY
+                ) {
+                    const iface = new ethers.Interface(Feedback.abi)
+                    const request = {
+                        chainId: process.env.NEXT_PUBLIC_GELATO_RELAYER_CHAIN_ID,
+                        target: process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS,
+                        data: iface.encodeFunctionData("sendFeedback", params),
+                        sponsorApiKey: process.env.GELATO_RELAYER_API_KEY
+                    }
+                    const response = await fetch(process.env.NEXT_PUBLIC_GELATO_RELAYER_ENDPOINT, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(request)
+                    })
+
+                    if (response.status === 201) {
+                        feedbackSent = true
+                    }
                 } else {
-                    response = await fetch("api/feedback", {
+                    const response = await fetch("api/feedback", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
@@ -89,9 +114,13 @@ export default function ProofsPage() {
                             points
                         })
                     })
+
+                    if (response.status === 200) {
+                        feedbackSent = true
+                    }
                 }
 
-                if (response.status === 200) {
+                if (feedbackSent) {
                     addFeedback(feedback)
 
                     setLogs(`Your feedback has been posted 🎉`)
