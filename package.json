@@ -7,7 +7,7 @@
     "bugs": "https://github.com/semaphore-protocol/boilerplate/issues",
     "private": true,
     "scripts": {
-        "dev": "yarn workspaces foreach -pi run dev",
+        "dev": "yarn workspaces foreach -A -pi run dev",
         "dev:web-app": "yarn workspace web-app dev",
         "dev:contracts": "yarn workspace contracts dev",
         "prettier": "prettier -c .",
@@ -24,7 +24,7 @@
     "workspaces": [
         "apps/*"
     ],
-    "packageManager": "yarn@3.2.1",
+    "packageManager": "yarn@4.1.0",
     "devDependencies": {
         "prettier": "^2.5.1"
     }
