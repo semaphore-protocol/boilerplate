@@ -4,7 +4,7 @@
     "private": true,
     "main": "index.js",
     "scripts": {
-        "dev": "hardhat node & yarn compile && yarn deploy --network localhost",
+        "dev": "hardhat node & yarn deploy --network localhost",
         "compile": "hardhat compile",
         "deploy": "yarn compile && hardhat deploy",
         "verify": "hardhat verify",
