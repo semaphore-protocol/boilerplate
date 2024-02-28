@@ -1,0 +1,5 @@
+# Hardhat files
+artifacts
+cache
+typechain-types
+
