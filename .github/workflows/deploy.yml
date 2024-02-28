@@ -37,7 +37,7 @@ jobs:
             - name: Install dependencies
               run: yarn
             - name: Build with Next.js
-              run: cd apps/web-app && yarn build && yarn export
+              run: cd apps/web-app && yarn build
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
               with:
