@@ -15,7 +15,8 @@ const nextConfig = withPWA({
     env: {
         INFURA_API_KEY: process.env.INFURA_API_KEY,
         ETHEREUM_PRIVATE_KEY: process.env.ETHEREUM_PRIVATE_KEY
-    }
+    },
+    output: "export"
 })
 
 export default nextConfig
