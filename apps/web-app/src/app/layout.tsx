@@ -1,6 +1,8 @@
 import PageContainer from "@/components/PageContainer"
 import type { Metadata } from "next"
 import Providers from "./providers"
+import { LogContextContextProvider } from "@/context/LogsContext"
+import { SemaphoreContextProvider } from "@/context/SemaphoreContext"
 
 export const metadata: Metadata = {
     title: "Semaphore Demo",
@@ -31,7 +33,11 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body suppressHydrationWarning>
                 <Providers>
-                    <PageContainer>{children}</PageContainer>
+                    <SemaphoreContextProvider>
+                        <LogContextContextProvider>
+                            <PageContainer>{children}</PageContainer>
+                        </LogContextContextProvider>
+                    </SemaphoreContextProvider>
                 </Providers>
             </body>
         </html>

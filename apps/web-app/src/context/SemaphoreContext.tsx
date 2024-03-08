@@ -1,14 +1,30 @@
+"use client"
+
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react"
 import { SemaphoreEthers } from "@semaphore-protocol/data"
 import { decodeBytes32String, toBeHex } from "ethers"
-import { useCallback, useState } from "react"
-import { SemaphoreContextType } from "../context/SemaphoreContext"
+
+export type SemaphoreContextType = {
+    _users: string[]
+    _feedback: string[]
+    refreshUsers: () => Promise<void>
+    addUser: (user: string) => void
+    refreshFeedback: () => Promise<void>
+    addFeedback: (feedback: string) => void
+}
+
+const SemaphoreContext = createContext<SemaphoreContextType | null>(null)
+
+interface ProviderProps {
+    children: ReactNode
+}
 
 const ethereumNetwork =
     process.env.NEXT_PUBLIC_DEFAULT_NETWORK === "localhost"
         ? "http://127.0.0.1:8545"
         : process.env.NEXT_PUBLIC_DEFAULT_NETWORK
 
-export default function useSemaphore(): SemaphoreContextType {
+export const SemaphoreContextProvider: React.FC<ProviderProps> = ({ children }) => {
     const [_users, setUsers] = useState<any[]>([])
     const [_feedback, setFeedback] = useState<string[]>([])
 
@@ -46,12 +62,31 @@ export default function useSemaphore(): SemaphoreContextType {
         [_feedback]
     )
 
-    return {
-        _users,
-        _feedback,
-        refreshUsers,
-        addUser,
-        refreshFeedback,
-        addFeedback
+    useEffect(() => {
+        refreshUsers()
+        refreshFeedback()
+    }, [refreshFeedback, refreshUsers])
+
+    return (
+        <SemaphoreContext.Provider
+            value={{
+                _users,
+                _feedback,
+                refreshUsers,
+                addUser,
+                refreshFeedback,
+                addFeedback
+            }}
+        >
+            {children}
+        </SemaphoreContext.Provider>
+    )
+}
+
+export const useSemaphoreContext = () => {
+    const context = useContext(SemaphoreContext)
+    if (context === null) {
+        throw new Error("SemaphoreContext must be used within a SemaphoreContextProvider")
     }
+    return context
 }
