@@ -2,8 +2,6 @@ import { Contract, InfuraProvider, JsonRpcProvider, Wallet } from "ethers"
 import { NextRequest } from "next/server"
 import Feedback from "../../../../contract-artifacts/Feedback.json"
 
-export const dynamic = "force-static"
-
 export async function POST(req: NextRequest) {
     if (typeof process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS !== "string") {
         throw new Error("Please, define NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS in your .env file")
