@@ -1,7 +1,7 @@
 "use client"
 
 import Stepper from "@/components/Stepper"
-import { useLogContext } from "@/context/LogsContext"
+import { useLogContext } from "@/context/LogContext"
 import { useSemaphoreContext } from "@/context/SemaphoreContext"
 import IconRefreshLine from "@/icons/IconRefreshLine"
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"

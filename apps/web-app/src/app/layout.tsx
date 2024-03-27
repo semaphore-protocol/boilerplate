@@ -1,7 +1,7 @@
 import PageContainer from "@/components/PageContainer"
 import type { Metadata } from "next"
 import Providers from "./providers"
-import { LogContextContextProvider } from "@/context/LogsContext"
+import { LogContextProvider } from "@/context/LogContext"
 import { SemaphoreContextProvider } from "@/context/SemaphoreContext"
 
 export const metadata: Metadata = {
@@ -34,9 +34,9 @@ export default function RootLayout({
             <body suppressHydrationWarning>
                 <Providers>
                     <SemaphoreContextProvider>
-                        <LogContextContextProvider>
+                        <LogContextProvider>
                             <PageContainer>{children}</PageContainer>
-                        </LogContextContextProvider>
+                        </LogContextProvider>
                     </SemaphoreContextProvider>
                 </Providers>
             </body>

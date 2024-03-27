@@ -5,7 +5,7 @@ import { Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from 
 import { SupportedNetwork } from "@semaphore-protocol/data"
 import { usePathname } from "next/navigation"
 import { FaGithub } from "react-icons/fa"
-import { useLogContext } from "@/context/LogsContext"
+import { useLogContext } from "@/context/LogContext"
 
 export default function PageContainer({
     children

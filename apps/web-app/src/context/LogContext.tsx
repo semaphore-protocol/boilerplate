@@ -2,18 +2,18 @@
 
 import React, { createContext, ReactNode, useContext, useState } from "react"
 
-export type LogsContextType = {
+export type LogContextType = {
     log: string
     setLog: (logs: string) => void
 }
 
-const LogContext = createContext<LogsContextType | null>(null)
+const LogContext = createContext<LogContextType | null>(null)
 
 interface ProviderProps {
     children: ReactNode
 }
 
-export const LogContextContextProvider: React.FC<ProviderProps> = ({ children }) => {
+export const LogContextProvider: React.FC<ProviderProps> = ({ children }) => {
     const [log, setLog] = useState<string>("")
 
     return (

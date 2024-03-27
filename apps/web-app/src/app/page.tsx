@@ -5,7 +5,7 @@ import { Identity } from "@semaphore-protocol/core"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import Stepper from "../components/Stepper"
-import { useLogContext } from "../context/LogsContext"
+import { useLogContext } from "../context/LogContext"
 import shortenString from "../utils/shortenString"
 
 export default function IdentitiesPage() {
