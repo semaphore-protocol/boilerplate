@@ -1,14 +1,11 @@
 "use client"
 
-import LogsContext from "@/context/LogsContext"
-import SemaphoreContext from "@/context/SemaphoreContext"
-import useSemaphore from "@/hooks/useSemaphore"
 import shortenString from "@/utils/shortenString"
 import { Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
 import { SupportedNetwork } from "@semaphore-protocol/data"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
 import { FaGithub } from "react-icons/fa"
+import { useLogContext } from "@/context/LogContext"
 
 export default function PageContainer({
     children
@@ -16,13 +13,7 @@ export default function PageContainer({
     children: React.ReactNode
 }>) {
     const pathname = usePathname()
-    const semaphore = useSemaphore()
-    const [_logs, setLogs] = useState<string>("")
-
-    useEffect(() => {
-        semaphore.refreshUsers()
-        semaphore.refreshFeedback()
-    }, [])
+    const { log } = useLogContext()
 
     function getExplorerLink(network: SupportedNetwork, address: string) {
         switch (network) {
@@ -60,16 +51,7 @@ export default function PageContainer({
 
             <Container maxW="xl" flex="1" display="flex" alignItems="center">
                 <Stack pt="8" pb="24" display="flex" width="100%">
-                    <SemaphoreContext.Provider value={semaphore}>
-                        <LogsContext.Provider
-                            value={{
-                                _logs,
-                                setLogs
-                            }}
-                        >
-                            {children}
-                        </LogsContext.Provider>
-                    </SemaphoreContext.Provider>
+                    {children}
                 </Stack>
             </Container>
 
@@ -83,8 +65,8 @@ export default function PageContainer({
                 spacing="4"
                 p="4"
             >
-                {_logs.endsWith("...") && <Spinner color="primary.400" />}
-                <Text>{_logs || `Current step: ${pathname}`}</Text>
+                {log.endsWith("...") && <Spinner color="primary.400" />}
+                <Text>{log || `Current step: ${pathname}`}</Text>
             </HStack>
         </>
     )

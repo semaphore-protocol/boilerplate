@@ -3,14 +3,14 @@
 import { Box, Button, Divider, Heading, HStack, Link, Text } from "@chakra-ui/react"
 import { Identity } from "@semaphore-protocol/core"
 import { useRouter } from "next/navigation"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Stepper from "../components/Stepper"
-import LogsContext from "../context/LogsContext"
+import { useLogContext } from "../context/LogContext"
 import shortenString from "../utils/shortenString"
 
 export default function IdentitiesPage() {
     const router = useRouter()
-    const { setLogs } = useContext(LogsContext)
+    const { setLog } = useLogContext()
     const [_identity, setIdentity] = useState<Identity>()
 
     useEffect(() => {
@@ -21,11 +21,11 @@ export default function IdentitiesPage() {
 
             setIdentity(identity)
 
-            setLogs("Your Semaphore identity has been retrieved from the browser cache 👌🏽")
+            setLog("Your Semaphore identity has been retrieved from the browser cache 👌🏽")
         } else {
-            setLogs("Create your Semaphore identity 👆🏽")
+            setLog("Create your Semaphore identity 👆🏽")
         }
-    }, [])
+    }, [setLog])
 
     const createIdentity = useCallback(async () => {
         const identity = new Identity()
@@ -34,8 +34,8 @@ export default function IdentitiesPage() {
 
         localStorage.setItem("identity", identity.privateKey.toString())
 
-        setLogs("Your new Semaphore identity has just been created 🎉")
-    }, [])
+        setLog("Your new Semaphore identity has just been created 🎉")
+    }, [setLog])
 
     return (
         <>

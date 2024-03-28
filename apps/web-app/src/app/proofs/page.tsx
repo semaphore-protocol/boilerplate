@@ -1,39 +1,29 @@
 "use client"
 
 import Stepper from "@/components/Stepper"
-import LogsContext from "@/context/LogsContext"
-import SemaphoreContext from "@/context/SemaphoreContext"
+import { useLogContext } from "@/context/LogContext"
+import { useSemaphoreContext } from "@/context/SemaphoreContext"
 import IconRefreshLine from "@/icons/IconRefreshLine"
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
-import { generateProof, Group, Identity } from "@semaphore-protocol/core"
+import { generateProof, Group } from "@semaphore-protocol/core"
 import { encodeBytes32String, ethers } from "ethers"
 import { useRouter } from "next/navigation"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import Feedback from "../../../contract-artifacts/Feedback.json"
+import useSemaphoreIdentity from "@/hooks/useSemaphoreIdentity"
 
 export default function ProofsPage() {
     const router = useRouter()
-    const { setLogs } = useContext(LogsContext)
-    const { _users, _feedback, refreshFeedback, addFeedback } = useContext(SemaphoreContext)
+    const { setLog } = useLogContext()
+    const { _users, _feedback, refreshFeedback, addFeedback } = useSemaphoreContext()
     const [_loading, setLoading] = useBoolean()
-    const [_identity, setIdentity] = useState<Identity>()
-
-    useEffect(() => {
-        const privateKey = localStorage.getItem("identity")
-
-        if (!privateKey) {
-            router.push("/")
-            return
-        }
-
-        setIdentity(new Identity(privateKey))
-    }, [])
+    const { _identity } = useSemaphoreIdentity()
 
     useEffect(() => {
         if (_feedback.length > 0) {
-            setLogs(`${_feedback.length} feedback retrieved from the group 🤙🏽`)
+            setLog(`${_feedback.length} feedback retrieved from the group 🤙🏽`)
         }
-    }, [_feedback])
+    }, [_feedback, setLog])
 
     const sendFeedback = useCallback(async () => {
         if (!_identity) {
@@ -50,7 +40,7 @@ export default function ProofsPage() {
         if (feedback && _users) {
             setLoading.on()
 
-            setLogs(`Posting your anonymous feedback...`)
+            setLog(`Posting your anonymous feedback...`)
 
             try {
                 const group = new Group(_users)
@@ -123,19 +113,19 @@ export default function ProofsPage() {
                 if (feedbackSent) {
                     addFeedback(feedback)
 
-                    setLogs(`Your feedback has been posted 🎉`)
+                    setLog(`Your feedback has been posted 🎉`)
                 } else {
-                    setLogs("Some error occurred, please try again!")
+                    setLog("Some error occurred, please try again!")
                 }
             } catch (error) {
                 console.error(error)
 
-                setLogs("Some error occurred, please try again!")
+                setLog("Some error occurred, please try again!")
             } finally {
                 setLoading.off()
             }
         }
-    }, [_identity, _users])
+    }, [_identity, _users, addFeedback, setLoading, setLog])
 
     return (
         <>

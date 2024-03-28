@@ -1,38 +1,27 @@
 "use client"
 import Stepper from "@/components/Stepper"
-import LogsContext from "@/context/LogsContext"
-import SemaphoreContext from "@/context/SemaphoreContext"
+import { useLogContext } from "@/context/LogContext"
+import { useSemaphoreContext } from "@/context/SemaphoreContext"
 import IconRefreshLine from "@/icons/IconRefreshLine"
 import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack } from "@chakra-ui/react"
-import { Identity } from "@semaphore-protocol/core"
 import { useRouter } from "next/navigation"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import Feedback from "../../../contract-artifacts/Feedback.json"
 import { ethers } from "ethers"
+import useSemaphoreIdentity from "@/hooks/useSemaphoreIdentity"
 
 export default function GroupsPage() {
     const router = useRouter()
-    const { setLogs } = useContext(LogsContext)
-    const { _users, refreshUsers, addUser } = useContext(SemaphoreContext)
+    const { setLog } = useLogContext()
+    const { _users, refreshUsers, addUser } = useSemaphoreContext()
     const [_loading, setLoading] = useBoolean()
-    const [_identity, setIdentity] = useState<Identity>()
-
-    useEffect(() => {
-        const privateKey = localStorage.getItem("identity")
-
-        if (!privateKey) {
-            router.push("/")
-            return
-        }
-
-        setIdentity(new Identity(privateKey))
-    }, [])
+    const { _identity } = useSemaphoreIdentity()
 
     useEffect(() => {
         if (_users.length > 0) {
-            setLogs(`${_users.length} user${_users.length > 1 ? "s" : ""} retrieved from the group 🤙🏽`)
+            setLog(`${_users.length} user${_users.length > 1 ? "s" : ""} retrieved from the group 🤙🏽`)
         }
-    }, [_users])
+    }, [_users, setLog])
 
     const joinGroup = useCallback(async () => {
         if (!_identity) {
@@ -40,7 +29,7 @@ export default function GroupsPage() {
         }
 
         setLoading.on()
-        setLogs(`Joining the Feedback group...`)
+        setLog(`Joining the Feedback group...`)
 
         let joinedGroup: boolean = false
 
@@ -97,15 +86,18 @@ export default function GroupsPage() {
         if (joinedGroup) {
             addUser(_identity.commitment.toString())
 
-            setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
+            setLog(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
         } else {
-            setLogs("Some error occurred, please try again!")
+            setLog("Some error occurred, please try again!")
         }
 
         setLoading.off()
-    }, [_identity])
+    }, [_identity, addUser, setLoading, setLog])
 
-    const userHasJoined = useCallback((identity: Identity) => _users.includes(identity.commitment.toString()), [_users])
+    const userHasJoined = useMemo(
+        () => _identity !== undefined && _users.includes(_identity.commitment.toString()),
+        [_identity, _users]
+    )
 
     return (
         <>
@@ -152,7 +144,7 @@ export default function GroupsPage() {
                 <Button
                     w="full"
                     colorScheme="primary"
-                    isDisabled={_loading || !_identity || userHasJoined(_identity)}
+                    isDisabled={_loading || !_identity || userHasJoined}
                     onClick={joinGroup}
                 >
                     Join group
@@ -164,7 +156,7 @@ export default function GroupsPage() {
             <Stepper
                 step={2}
                 onPrevClick={() => router.push("/")}
-                onNextClick={_identity && userHasJoined(_identity) ? () => router.push("/proofs") : undefined}
+                onNextClick={userHasJoined ? () => router.push("/proofs") : undefined}
             />
         </>
     )
