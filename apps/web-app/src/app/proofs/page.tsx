@@ -25,6 +25,8 @@ export default function ProofsPage() {
         }
     }, [_feedback, setLog])
 
+    const feedback = [..._feedback].reverse();
+
     const sendFeedback = useCallback(async () => {
         if (!_identity) {
             return
@@ -161,7 +163,7 @@ export default function ProofsPage() {
 
             {_feedback.length > 0 && (
                 <VStack spacing="3" pb="3" align="left" maxHeight="300px" overflowY="scroll">
-                    {_feedback.map((f, i) => (
+                    {feedback.map((f, i) => (
                         <HStack key={i} pb="3" borderBottomWidth={i < _feedback.length - 1 ? 1 : 0}>
                             <Text>{f}</Text>
                         </HStack>
