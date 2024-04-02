@@ -8,7 +8,7 @@ import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack }
 import { generateProof, Group } from "@semaphore-protocol/core"
 import { encodeBytes32String, ethers } from "ethers"
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import Feedback from "../../../contract-artifacts/Feedback.json"
 import useSemaphoreIdentity from "@/hooks/useSemaphoreIdentity"
 
@@ -24,6 +24,8 @@ export default function ProofsPage() {
             setLog(`${_feedback.length} feedback retrieved from the group 🤙🏽`)
         }
     }, [_feedback, setLog])
+
+    const feedback = useMemo(() => [..._feedback].reverse(), [_feedback])
 
     const sendFeedback = useCallback(async () => {
         if (!_identity) {
@@ -161,7 +163,7 @@ export default function ProofsPage() {
 
             {_feedback.length > 0 && (
                 <VStack spacing="3" pb="3" align="left" maxHeight="300px" overflowY="scroll">
-                    {_feedback.map((f, i) => (
+                    {feedback.map((f, i) => (
                         <HStack key={i} pb="3" borderBottomWidth={i < _feedback.length - 1 ? 1 : 0}>
                             <Text>{f}</Text>
                         </HStack>
