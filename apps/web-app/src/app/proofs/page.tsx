@@ -8,7 +8,7 @@ import { Box, Button, Divider, Heading, HStack, Link, Text, useBoolean, VStack }
 import { generateProof, Group } from "@semaphore-protocol/core"
 import { encodeBytes32String, ethers } from "ethers"
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import Feedback from "../../../contract-artifacts/Feedback.json"
 import useSemaphoreIdentity from "@/hooks/useSemaphoreIdentity"
 
@@ -25,7 +25,7 @@ export default function ProofsPage() {
         }
     }, [_feedback, setLog])
 
-    const feedback = [..._feedback].reverse();
+    const feedback = useMemo(() => [..._feedback].reverse(), [_feedback])
 
     const sendFeedback = useCallback(async () => {
         if (!_identity) {

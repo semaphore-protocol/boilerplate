@@ -23,7 +23,7 @@ export default function GroupsPage() {
         }
     }, [_users, setLog])
 
-    const users = [..._users].reverse();
+    const users = useMemo(() => [..._users].reverse(), [_users])
 
     const joinGroup = useCallback(async () => {
         if (!_identity) {
@@ -132,13 +132,12 @@ export default function GroupsPage() {
 
             {_users.length > 0 && (
                 <VStack spacing="3" pb="3" align="left" maxHeight="300px" overflowY="scroll">
-                    {users.map((user, i) =>(
+                    {users.map((user, i) => (
                         <HStack key={i} pb="3" borderBottomWidth={i < _users.length - 1 ? 1 : 0} whiteSpace="nowrap">
                             <Text textOverflow="ellipsis" overflow="hidden">
                                 {_identity?.commitment === user ? <b>{user}</b> : user}
                             </Text>
                         </HStack>
-                        
                     ))}
                 </VStack>
             )}
