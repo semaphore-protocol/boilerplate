@@ -9,7 +9,7 @@ describe("Feedback", () => {
     let feedbackContract: Feedback
     let semaphoreContract: string
 
-    const groupId = "42"
+    const groupId = 0
     const group = new Group()
     const users: Identity[] = []
 
@@ -18,7 +18,7 @@ describe("Feedback", () => {
             logs: false
         })
 
-        feedbackContract = await run("deploy", { logs: false, group: groupId, semaphore: await semaphore.getAddress() })
+        feedbackContract = await run("deploy", { logs: false, semaphore: await semaphore.getAddress() })
         semaphoreContract = semaphore
 
         users.push(new Identity())
