@@ -1,11 +1,10 @@
 "use client"
 
+import { useLogContext } from "@/context/LogContext"
 import shortenString from "@/utils/shortenString"
 import { Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
-import { SupportedNetwork } from "@semaphore-protocol/data"
 import { usePathname } from "next/navigation"
 import { FaGithub } from "react-icons/fa"
-import { useLogContext } from "@/context/LogContext"
 
 export default function PageContainer({
     children
@@ -15,7 +14,7 @@ export default function PageContainer({
     const pathname = usePathname()
     const { log } = useLogContext()
 
-    function getExplorerLink(network: SupportedNetwork, address: string) {
+    function getExplorerLink(network: string, address: string) {
         switch (network) {
             case "sepolia":
                 return `https://sepolia.etherscan.io/address/${address}`
@@ -31,7 +30,7 @@ export default function PageContainer({
             <HStack align="center" justify="right" p="2">
                 <Link
                     href={getExplorerLink(
-                        process.env.NEXT_PUBLIC_DEFAULT_NETWORK as SupportedNetwork,
+                        process.env.NEXT_PUBLIC_DEFAULT_NETWORK as string,
                         process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string
                     )}
                     isExternal
