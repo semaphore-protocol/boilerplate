@@ -72,11 +72,11 @@ export default function IdentitiesPage() {
                         Private Key: {_identity.privateKey.toString()}
                     </Text>
                     <Text textOverflow="ellipsis" overflow="hidden">
-                        Public Key: [{shortenString(_identity.publicKey[0], [8, 8])},{" "}
-                        {shortenString(_identity.publicKey[1], [8, 8])}]
+                        Public Key: [{shortenString(_identity.publicKey[0].toString(), [8, 8])},{" "}
+                        {shortenString(_identity.publicKey[1].toString(), [8, 8])}]
                     </Text>
                     <Text textOverflow="ellipsis" overflow="hidden">
-                        Commitment: <b>{_identity.commitment}</b>
+                        Commitment: <b>{_identity.commitment.toString()}</b>
                     </Text>
                 </Box>
             )}
