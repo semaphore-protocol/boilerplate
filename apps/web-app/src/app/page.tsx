@@ -15,12 +15,8 @@ export default function IdentitiesPage() {
     useEffect(() => {
         const privateKey = localStorage.getItem("identity")
 
-        console.log(privateKey)
-
         if (privateKey) {
             const identity = Identity.import(privateKey)
-
-            console.log(identity.privateKey)
 
             setIdentity(identity)
 
