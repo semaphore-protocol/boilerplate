@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import Stepper from "../components/Stepper"
 import { useLogContext } from "../context/LogContext"
-import shortenString from "../utils/shortenString"
 
 export default function IdentitiesPage() {
     const router = useRouter()
@@ -16,8 +15,12 @@ export default function IdentitiesPage() {
     useEffect(() => {
         const privateKey = localStorage.getItem("identity")
 
+        console.log(privateKey)
+
         if (privateKey) {
-            const identity = new Identity(privateKey)
+            const identity = Identity.import(privateKey)
+
+            console.log(identity.privateKey)
 
             setIdentity(identity)
 
@@ -32,7 +35,7 @@ export default function IdentitiesPage() {
 
         setIdentity(identity)
 
-        localStorage.setItem("identity", identity.privateKey.toString())
+        localStorage.setItem("identity", identity.export())
 
         setLog("Your new Semaphore identity has just been created 🎉")
     }, [setLog])
@@ -67,16 +70,16 @@ export default function IdentitiesPage() {
             </HStack>
 
             {_identity && (
-                <Box pb="6" whiteSpace="nowrap">
-                    <Text textOverflow="ellipsis" overflow="hidden">
-                        Private Key: {_identity.privateKey.toString()}
+                <Box pb="6" pl="2">
+                    <Text>
+                        <b>Private Key (base64)</b>:<br /> {_identity.export()}
                     </Text>
-                    <Text textOverflow="ellipsis" overflow="hidden">
-                        Public Key: [{shortenString(_identity.publicKey[0].toString(), [8, 8])},{" "}
-                        {shortenString(_identity.publicKey[1].toString(), [8, 8])}]
+                    <Text>
+                        <b>Public Key</b>:<br /> [{_identity.publicKey[0].toString()},{" "}
+                        {_identity.publicKey[1].toString()}]
                     </Text>
-                    <Text textOverflow="ellipsis" overflow="hidden">
-                        Commitment: <b>{_identity.commitment.toString()}</b>
+                    <Text>
+                        <b>Commitment</b>:<br /> {_identity.commitment.toString()}
                     </Text>
                 </Box>
             )}
