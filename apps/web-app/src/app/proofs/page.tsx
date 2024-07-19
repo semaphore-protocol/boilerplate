@@ -32,11 +32,6 @@ export default function ProofsPage() {
             return
         }
 
-        if (_users && _users.length < 2) {
-            alert("No anonymity in a group of one!")
-            return
-        }
-
         const feedback = prompt("Please enter your feedback:")
 
         if (feedback && _users) {
