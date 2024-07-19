@@ -68,7 +68,7 @@ yarn dev
 yarn deploy --semaphore <semaphore-address> --network sepolia
 ```
 
-2. Update the `apps/web-app/.env.production` file with your new contract address.
+2. Update the `apps/web-app/.env.production` file with your new contract address and the group id.
 
 3. Copy your contract artifacts from `apps/contracts/artifacts/contracts` folder to `apps/web-app/contract-artifacts` folder.
 
