@@ -27,7 +27,16 @@ export default function PageContainer({
 
     return (
         <>
-            <HStack align="center" justify="right" p="2">
+            <HStack align="center" justify="space-evenly" p="2">
+            <Link
+                href="/"
+                ml="2"
+                textDecoration="none"
+                _hover={{ textDecoration: "none" }}
+                _focus={{ textDecoration: "none" }}
+            >
+                Feedback
+        </Link>
                 <Link
                     href={getExplorerLink(
                         process.env.NEXT_PUBLIC_DEFAULT_NETWORK as string,
