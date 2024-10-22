@@ -2,7 +2,7 @@
 
 import { useLogContext } from "@/context/LogContext"
 import shortenString from "@/utils/shortenString"
-import { Container, HStack, Icon, IconButton,Spinner,Link, Stack, Text } from "@chakra-ui/react"
+import { Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
 import { usePathname } from "next/navigation"
 import { FaGithub } from "react-icons/fa"
 import NextLink from 'next/link'
