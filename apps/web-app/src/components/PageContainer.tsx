@@ -2,9 +2,10 @@
 
 import { useLogContext } from "@/context/LogContext"
 import shortenString from "@/utils/shortenString"
-import { Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
+import { Container, HStack, Icon, IconButton,Spinner,Link, Stack, Text } from "@chakra-ui/react"
 import { usePathname } from "next/navigation"
 import { FaGithub } from "react-icons/fa"
+import NextLink from 'next/link'
 
 export default function PageContainer({
     children
@@ -28,15 +29,11 @@ export default function PageContainer({
     return (
         <>
             <HStack align="center" justify="space-between" p="2">
-                <Link
+                <NextLink
                     href="/"
-                    ml="2"
-                    textDecoration="none"
-                    _hover={{ textDecoration: "none" }}
-                    _focus={{ textDecoration: "none" }}
                 >
                     Feedback
-                </Link>
+                </NextLink>
                 <HStack>
                     <Link
                         href={getExplorerLink(
