@@ -27,34 +27,38 @@ export default function PageContainer({
 
     return (
         <>
-            <HStack align="center" justify="space-evenly" p="2">
-            <Link
-                href="/"
-                ml="2"
-                textDecoration="none"
-                _hover={{ textDecoration: "none" }}
-                _focus={{ textDecoration: "none" }}
-            >
-                Feedback
-        </Link>
+            <HStack align="center" justify="space-between" p="2">
                 <Link
-                    href={getExplorerLink(
-                        process.env.NEXT_PUBLIC_DEFAULT_NETWORK as string,
-                        process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string
-                    )}
-                    isExternal
+                    href="/"
+                    ml="2"
+                    textDecoration="none"
+                    _hover={{ textDecoration: "none" }}
+                    _focus={{ textDecoration: "none" }}
                 >
-                    <Text>{shortenString(process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string, [6, 4])}</Text>
+                    Feedback
                 </Link>
-                <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
-                    <IconButton
-                        aria-label="Github repository"
-                        variant="link"
-                        py="3"
-                        color="text.100"
-                        icon={<Icon boxSize={6} as={FaGithub} />}
-                    />
-                </Link>
+                <HStack>
+                    <Link
+                        href={getExplorerLink(
+                            process.env.NEXT_PUBLIC_DEFAULT_NETWORK as string,
+                            process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string
+                        )}
+                        isExternal
+                    >
+                        <Text>
+                            {shortenString(process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string, [6, 4])}
+                        </Text>
+                    </Link>
+                    <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
+                        <IconButton
+                            aria-label="Github repository"
+                            variant="link"
+                            py="3"
+                            color="text.100"
+                            icon={<Icon boxSize={6} as={FaGithub} />}
+                        />
+                    </Link>
+                </HStack>
             </HStack>
 
             <Container maxW="xl" flex="1" display="flex" alignItems="center">
