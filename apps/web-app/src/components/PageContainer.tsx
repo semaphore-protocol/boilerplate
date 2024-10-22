@@ -5,7 +5,7 @@ import shortenString from "@/utils/shortenString"
 import { Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
 import { usePathname } from "next/navigation"
 import { FaGithub } from "react-icons/fa"
-import NextLink from 'next/link'
+import NextLink from "next/link"
 
 export default function PageContainer({
     children
@@ -29,11 +29,7 @@ export default function PageContainer({
     return (
         <>
             <HStack align="center" justify="space-between" p="2">
-                <NextLink
-                    href="/"
-                >
-                    Feedback
-                </NextLink>
+                <NextLink href="/">Feedback</NextLink>
                 <HStack>
                     <Link
                         href={getExplorerLink(
