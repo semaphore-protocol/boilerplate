@@ -29,7 +29,9 @@ export default function PageContainer({
     return (
         <>
             <HStack align="center" justify="space-between" p="2">
-                <NextLink href="/">Feedback</NextLink>
+                <HStack ml="4">
+                    <NextLink href="/">Feedback</NextLink>
+                </HStack>
                 <HStack>
                     <Link
                         href={getExplorerLink(
