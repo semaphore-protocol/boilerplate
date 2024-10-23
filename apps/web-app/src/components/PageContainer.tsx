@@ -5,6 +5,7 @@ import shortenString from "@/utils/shortenString"
 import { Container, HStack, Icon, IconButton, Link, Spinner, Stack, Text } from "@chakra-ui/react"
 import { usePathname } from "next/navigation"
 import { FaGithub } from "react-icons/fa"
+import NextLink from "next/link"
 
 export default function PageContainer({
     children
@@ -27,25 +28,30 @@ export default function PageContainer({
 
     return (
         <>
-            <HStack align="center" justify="right" p="2">
-                <Link
-                    href={getExplorerLink(
-                        process.env.NEXT_PUBLIC_DEFAULT_NETWORK as string,
-                        process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string
-                    )}
-                    isExternal
-                >
-                    <Text>{shortenString(process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string, [6, 4])}</Text>
-                </Link>
-                <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
-                    <IconButton
-                        aria-label="Github repository"
-                        variant="link"
-                        py="3"
-                        color="text.100"
-                        icon={<Icon boxSize={6} as={FaGithub} />}
-                    />
-                </Link>
+            <HStack align="center" justify="space-between" p="2">
+                <NextLink href="/">Feedback</NextLink>
+                <HStack>
+                    <Link
+                        href={getExplorerLink(
+                            process.env.NEXT_PUBLIC_DEFAULT_NETWORK as string,
+                            process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string
+                        )}
+                        isExternal
+                    >
+                        <Text>
+                            {shortenString(process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string, [6, 4])}
+                        </Text>
+                    </Link>
+                    <Link href="https://github.com/semaphore-protocol/boilerplate" isExternal>
+                        <IconButton
+                            aria-label="Github repository"
+                            variant="link"
+                            py="3"
+                            color="text.100"
+                            icon={<Icon boxSize={6} as={FaGithub} />}
+                        />
+                    </Link>
+                </HStack>
             </HStack>
 
             <Container maxW="xl" flex="1" display="flex" alignItems="center">
