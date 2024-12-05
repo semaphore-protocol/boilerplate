@@ -3,3 +3,7 @@ artifacts
 cache
 typechain-types
 
+# Testing
+coverage
+coverage.json
+*.lcov
